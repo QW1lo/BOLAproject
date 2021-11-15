@@ -70,6 +70,7 @@ public:
         pack.bits.SM = 0;                           //
         pack.bits.P = 0;                            //
 
+        //delete[] buffer;
         buffer = new char[sizeof(pack)];            // 
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
@@ -90,6 +91,7 @@ public:
         pack.bits.reject = 0;       // пройден
         pack.bits.P = 1;            // + функция бита четности
 
+        //delete[] buffer;
         buffer = new char[sizeof(pack)];            // 
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
@@ -114,7 +116,7 @@ public:
 
     void navigation() {
         std::cout << "navigation start\n";
-
+        buffer = new char[14 * sizeof(ARINC_BNR)];
         while (1) {
             std::normal_distribution<double> delta(0.0, 0.01);
 
@@ -134,7 +136,8 @@ public:
             mutex.lock();
 			//delete buffer;
             buff_count = 0;
-            buffer = new char[14 * sizeof(ARINC_BNR)];		// 14 - кол-во слов состояний
+            //delete[] buffer;
+            		// 14 - кол-во слов состояний
 
             ARINC_BNR pack_1;
             pack_1.bits.adress = 76;        // Формирование 1-го слова
@@ -308,6 +311,7 @@ public:
 		pack.bits.SM = 2;                           //
 		pack.bits.P = 1;                            //
 
+        //delete[] buffer;
 		buffer = new char[sizeof(pack)];            // 
 		memset(buffer, 0, sizeof(pack));            // Заполнение буфера
 		memcpy(buffer, &pack, sizeof(pack));        //
@@ -326,7 +330,7 @@ public:
             buffer[4 * buff_count + i] = buff[i];
         }
         buff_count++;
-        delete buff;
+        delete[] buff;
     }
 
     void send_pack() {
@@ -374,6 +378,7 @@ class In_NS {
 private:
     double Phi, Lambda, H, Psi, Theta, Gamma, V_ns, V_ev, V_h_inertial, A_x, A_z, A_y;
     char* buffer;
+    char buff2send[4];
     int buff_count;
     bool startup = 0;
 
@@ -421,6 +426,7 @@ public:
         pack.bits.SM = 2;                           //
         pack.bits.P = 1;                            //
 
+        //delete[] buffer;
         buffer = new char[sizeof(pack)];            // 
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
@@ -441,6 +447,7 @@ public:
         pack.bits.INS = 1;          //  пройден
         pack.bits.P = 1;            // + функция бита четности
 
+        delete[] buffer;
         buffer = new char[sizeof(pack)];            // 
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
@@ -501,6 +508,8 @@ public:
 
     void navigation() {
         std::cout << "navigation start\n";
+        delete[] buffer;
+        buffer = new char[13 * sizeof(ARINC_BNR)];
 
         while (1) {
             std::normal_distribution<double> delta(0.0, 0.01);
@@ -519,9 +528,8 @@ public:
             double a_y = A_y + delta(generator);
 
             mutex.lock();
-			delete buffer;
             buff_count = 0;
-            buffer = new char[13 * sizeof(ARINC_BNR)];		// 13 - кол-во слов состояний
+            		// 13 - кол-во слов состояний
                 
             ARINC_BNR pack_1;
             pack_1.bits.adress = 310-256; // Формирование 1-го слова
@@ -670,7 +678,7 @@ public:
 			buffer[4 * buff_count + i] = buff[i];
 		}
 		buff_count++;
-		delete buff;
+		delete[] buff;
 	}
 
     void send_pack() {
@@ -682,20 +690,20 @@ public:
                                                                 //
         }
 		else
-		{
-			char buff[4];
+		{			
 			int count_word = 0;
 			for (int i = 0; i < 13; ++i)
 			{
 				for (int j = 0; j < 4; ++j)
 				{
-					buff[j] = buffer[count_word * 4 + j];
+					buff2send[j] = buffer[count_word * 4 + j];
 				}
 
-				sendto(_s, &buff[0], sizeof(buff), 0,
+				sendto(_s, &buff2send[0], sizeof(buff2send), 0,
 					(sockaddr*)& _destAddr, sizeof(_destAddr));
 				count_word++;
 			}
+            //delete[] buff;
 
 		}
 
@@ -765,9 +773,10 @@ int main()
     }
 
     Timer timer;
-    timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
-    timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
-    timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
+    //timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
+    //timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
     timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
+    timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
+    
 	while (true) { std::this_thread::sleep_for(std::chrono::seconds(3600)); };
 };

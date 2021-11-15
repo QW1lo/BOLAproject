@@ -30,6 +30,7 @@ int bindec(double max_value, int max_digit, int digit, double value) {
 	for (int i = 0; i < max_digit; ++i) {
 		sum = sum + (arr[i] * pow(2, max_digit - (1 + i)));
 	}
+	delete[] arr;
 	return sum;
 }
 
@@ -50,6 +51,7 @@ int massdec(double max_value, int max_digit, int digit, int dec) {
 	for (int i = 0; i <= digit - 1; i++) {
 		sum = sum + arr[i] * (max_value / pow(2, i));
 	}
+	delete[] arr;
 	return sum;
 
 
