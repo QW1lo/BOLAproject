@@ -5,7 +5,7 @@
 class Timer {
 public:
 	Timer() {};
-	std::thread t1;
+	//std::thread t1;
 	void add(std::chrono::milliseconds delay, std::function<void()> callback, bool asynchronous = true)
 	{
 		if (asynchronous) {
