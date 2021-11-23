@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="aircraft.cpp" />
     <ClCompile Include="Lab2.cpp" />
     <ClCompile Include="OPS.cpp" />
     <ClCompile Include="Timer.cpp" />

@@ -77,24 +77,24 @@ public:
 	}
 };
 
-int main()
-{
-	double X_la[3] = { 0, 0, 10 };
-	double X_t[3] = { 0, 0, 0 };
-	double angles[3] = { 0, 0, 0 };
-	OPS system(X_la, X_t, angles, 45, -45, 90, 0);
-	system.get_angles();
-
-	double phi = 0;
-	double a = 10;
-	while (1) {
-		//phi += 0.0002;
-		a -= 0.001;
-		X_t[0] = a * cos(phi);
-		X_t[1] = a * sin(phi);
-		system.move_t(X_t);
-		std::cout << "a=" << a;
-		system.get_angles();
-
-	}
-}
+//int main()
+//{
+//	double X_la[3] = { 0, 0, 10 };
+//	double X_t[3] = { 0, 0, 0 };
+//	double angles[3] = { 0, 0, 0 };
+//	OPS system(X_la, X_t, angles, 45, -45, 90, 0);
+//	system.get_angles();
+//
+//	double phi = 0;
+//	double a = 10;
+//	while (1) {
+//		//phi += 0.0002;
+//		a -= 0.001;
+//		X_t[0] = a * cos(phi);
+//		X_t[1] = a * sin(phi);
+//		system.move_t(X_t);
+//		std::cout << "a=" << a;
+//		system.get_angles();
+//
+//	}
+//}
