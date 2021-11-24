@@ -1,5 +1,6 @@
 //---------------------------------------------------------------------------
 
+#pragma warning(disable : 4996)
 #ifndef modelH
 #define modelH
 
@@ -34,7 +35,7 @@ public:
     // Запись результатов (в этом методе в наследнике допустимо организовать запись в файл 
     // вместо или вместе с наполнением матрицы результатов)
 
-    void addResult(const Lin::Vector& v, double t)
+    virtual void addResult(const Lin::Vector& v, double t)
     {
         X = v;
         std::vector<double> tmp;
@@ -57,7 +58,7 @@ class Proverka : public TModel
 {
 
 public:
-    Proverka(Lin::Vector& X) :TModel(X) {};
+    Proverka(Lin::Vector& X0) :TModel(X0) {};
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
         Lin::Vector tmp(v.size());
@@ -71,9 +72,11 @@ public:
 };
 
 
-class LA : TModel
+class LA : public TModel
 {
 public:
+    FILE* output;
+    LA(Lin::Vector& X0) :TModel(X0) { output = fopen("LAoutput.txt", "w"); };
 
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
@@ -81,13 +84,35 @@ public:
         for (int i = 0; i < v.size(); ++i)
             tmp[i] = v[i];
 
-        tmp[0] = 2 * t;
+       /* tmp[0] = 2 * t;
         tmp[1] = 2 * t;
-        tmp[2] = 2 * t;
-
+        tmp[2] = 2 * t;*/
+        tmp[0] = t * t - 2*v[0];
 
         return tmp;
     }
+
+    void addResult(const Lin::Vector& v, double t)
+    {
+        X = v;
+        std::vector<double> tmp;
+
+        tmp.push_back(t);
+        for (int i = 0; i < v.size(); ++i)
+            tmp.push_back(v[i]);
+
+        Result.push_back(tmp);
+
+        //for (int i = 0; i < tmp.size(); ++i)
+        //    std::cout << tmp[i] << " ";
+        //std::cout << std::endl;
+
+        fprintf(output, "%lf  %lf\n", tmp[0], tmp[1]);
+        
+        //tmp.clear();
+
+    }
+
 };
 
 #endif

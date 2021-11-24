@@ -2,17 +2,23 @@
 #include "Lin.h"
 #include "integrator.h"
 #include <iostream>
+#include <vector>
 
 
 int main()
 {
 	double t0 = 0;
 	double tk = 25;
-	double h = 0.001;
+	double h = 0.1;
 
-	Lin::Vector vec({ 0, 0, 0 });
+	std::vector<double> test1;
+	test1 = { 0, 1 };
+
+	Lin::Vector vec;
+	vec = { 1 };
+	//vec.push_back(1);
 	std::cout << "as";
-	Proverka model(vec);
+	LA model(vec);
 	std::cout << "df";
 	TRunge integrator(t0, tk, h);
 	std::cout << "gh";

@@ -63,21 +63,21 @@ Vector::Vector(const std::vector<double>& values)
 //}
 
 
-//Vector& Vector::operator= (const std::initializer_list<double> values)
-//{
-//	size_v = values.size();
-//		v = std::vector<double>(size_v);
-//		int count = 0;
-//		for (auto& element : values)
-//		{
-//			v[count] = element;
-//			++count;
-//		}
-//		return *this;
-//#ifdef _DEBUG
-//
-//#endif
-//}
+Vector& Vector::operator= (const std::initializer_list<double> values)
+{
+	this->clear();
+	this->resize(values.size());
+	int count = 0;
+	for (auto& element : values)
+	{
+		(*this)[count] = element;
+		++count;
+	}
+	return *this;
+#ifdef _DEBUG
+
+#endif
+}
 
 Vector& Vector::operator=(const Vector& values)
 {

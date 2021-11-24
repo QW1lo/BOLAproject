@@ -36,7 +36,7 @@ namespace Lin {
 			os << vector[vector.size() - 1] << ")" << std::endl;
 			return os;
 		}
-		//Vector& operator= (const std::initializer_list<double> values);
+		Vector& operator= (const std::initializer_list<double> values);
 		Vector& operator= (const Vector& values);
 		Vector operator+ (const Vector& vector) const;
 		Vector operator- (const Vector& vector) const;
