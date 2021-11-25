@@ -1,13 +1,12 @@
 //---------------------------------------------------------------------------
-
+#include <math.h>
 #pragma warning(disable : 4996)
 #ifndef modelH
 #define modelH
-
-//---------------------------------------------------------------------------
-
-//#include "model.h"
 #include "Lin.h"
+//---------------------------------------------------------------------------
+extern double GR2RAD;
+extern double RAD2GR;
 
 //---------------------------------------------------------------------------
 class TModel
@@ -80,14 +79,23 @@ public:
 
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
+        //double V = 180;
+        double nxa = 0;
+        double g = 9.81;
+        double gamma = 10 * RAD2GR;
+        double psi = 15 * RAD2GR;
+        double theta = 0 * RAD2GR;
         Lin::Vector tmp(v.size());
-        for (int i = 0; i < v.size(); ++i)
-            tmp[i] = v[i];
 
-       /* tmp[0] = 2 * t;
-        tmp[1] = 2 * t;
-        tmp[2] = 2 * t;*/
-        tmp[0] = t * t - 2*v[0];
+        //tmp[0] = V * cos(theta) * cos(psi);
+        //tmp[1] = V * sin(theta);
+        //tmp[2] = -V * sin(theta) * sin(psi);
+        tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
+        tmp[1] = v[3] * sin(theta);                      // yg'
+        tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
+        tmp[3] = g * nxa;                             // V'
+        tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy
+
 
         return tmp;
     }
@@ -101,13 +109,13 @@ public:
         for (int i = 0; i < v.size(); ++i)
             tmp.push_back(v[i]);
 
-        Result.push_back(tmp);
+        //Result.push_back(tmp);
 
         //for (int i = 0; i < tmp.size(); ++i)
         //    std::cout << tmp[i] << " ";
         //std::cout << std::endl;
 
-        fprintf(output, "%lf  %lf\n", tmp[0], tmp[1]);
+        fprintf(output, "%lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3]);
         
         //tmp.clear();
 

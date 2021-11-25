@@ -1,11 +1,17 @@
 #pragma once
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <vector>
+#include <math.h>
+
 
 typedef std::vector<double> BaseVector;
 typedef std::vector<std::vector<double>> BaseMatrix;
 
 namespace Lin {
+	extern double GR2RAD;
+	extern double RAD2GR;;
+
 	class Matrix;
 	class Quaternion;
 

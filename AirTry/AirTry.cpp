@@ -9,13 +9,13 @@ int main()
 {
 	double t0 = 0;
 	double tk = 25;
-	double h = 0.1;
+	double h = 0.001;
 
 	std::vector<double> test1;
 	test1 = { 0, 1 };
 
 	Lin::Vector vec;
-	vec = { 1 };
+	vec = { 0, 14000, 0, 120, 0};
 	//vec.push_back(1);
 	std::cout << "as";
 	LA model(vec);

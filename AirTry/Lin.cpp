@@ -1,15 +1,14 @@
 ﻿#include <iostream>
 #include <array>
 #include <vector>
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include "Lin.h"
 
 
 using namespace Lin;
 
-double gr2rad = M_PI / 180.;
-double rad2gr = 180. / M_PI;
+double GR2RAD = M_PI / 180.;
+double RAD2GR = 180. / M_PI;
 
 //////////////////			 class: Vector				//////////////////
 //////////////////////////////////////////////////////////////////////////
