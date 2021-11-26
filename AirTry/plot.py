@@ -25,8 +25,16 @@ ax2.grid()
 
 ax1.title.set_text("Oxy")
 ax2.title.set_text("Oxz")
+
 ax1.set_xlabel("X, m")
 ax1.set_ylabel("Y, m")
-ax1.plot(x, y)
+
+ax2.set_xlabel("X, m")
+ax2.set_ylabel("Z, m")
+
+ax1.plot(z, y)
 ax2.plot(x, z)
+ax2.scatter(20000, 15000, color = 'r')
+ax2.scatter(70000, 17000, color = 'b')
+ax2.scatter(20000, 30000, color = 'g')
 plt.show()

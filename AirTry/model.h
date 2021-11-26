@@ -1,5 +1,6 @@
 //---------------------------------------------------------------------------
 #include <math.h>
+#include <array>
 #pragma warning(disable : 4996)
 #ifndef modelH
 #define modelH
@@ -73,31 +74,88 @@ public:
 
 class LA : public TModel
 {
+private:
+    std::array<Lin::Vector, 3> list_targets;
+    int count_targ = 0;
+    double gamma = 0;
+    double theta = 0;
+
 public:
     FILE* output;
-    LA(Lin::Vector& X0) :TModel(X0) { output = fopen("LAoutput.txt", "w"); };
+    LA(Lin::Vector& X0) :TModel(X0) 
+    { 
+        output = fopen("LAoutput.txt", "w"); 
+        Lin::Vector target1(3);
+        target1 = { 20000, 14000, 15000 };
+        Lin::Vector target2(3);
+        target2 = { 70000, 14000, 17000 };
+        Lin::Vector target3(3);
+        target3 = { 20000, 14000, 30000 };
+        list_targets[0] = target1;
+        list_targets[1] = target2;
+        list_targets[2] = target3;
+    };
 
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
-        //double V = 180;
+        Lin::Vector target(3);
+        target = list_targets[count_targ];
+        if (abs(v[0] - target[0]) < 10 && abs(v[2] - target[2]) < 30)
+        {
+            count_targ++;
+            if (count_targ == list_targets.size())
+            {
+                count_targ = 0;
+            }
+                
+        }
+
+        double test = (sqrt(pow(v[0] - target[0], 2) + pow(v[2] - target[2], 2)));
+        double Ra = 200 * 200 / (9.81 * tan(15 * GR2RAD));
         double nxa = 0;
         double g = 9.81;
-        double gamma = 10 * RAD2GR;
-        double psi = 15 * RAD2GR;
-        double theta = 0 * RAD2GR;
+        gamma = 0;
+        //double psi = 15 * GR2RAD;
+        theta = 0 * GR2RAD;
         Lin::Vector tmp(v.size());
 
+        Lin::Vector v_sv;
+        v_sv = { v[0], v[1], v[2] };
+
+        target = norm2svyaz(target, gamma, theta, v[4]);
+        v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
+        if (abs(v_sv[2] - target[2]) > 10)
+        {
+            if (v_sv[2] - target[2] < 0)
+            {
+                gamma = 15 * GR2RAD;
+            }
+            else
+                gamma = -15 * GR2RAD;
+        }
+        else
+            gamma = 0;
         //tmp[0] = V * cos(theta) * cos(psi);
         //tmp[1] = V * sin(theta);
         //tmp[2] = -V * sin(theta) * sin(psi);
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
-        tmp[3] = g * nxa;                             // V'
+        tmp[3] = g * nxa;                                // V'
         tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy
 
-
         return tmp;
+    }
+
+    Lin::Vector norm2svyaz(Lin::Vector v, double gamma, double theta, double psi)
+    {
+        Lin::Matrix M(3, 3);
+        
+        M = { cos(psi) * cos(theta),                                sin(theta),             -sin(psi) * cos(theta),
+        sin(psi) * sin(gamma) - cos(psi) * sin(theta) * cos(gamma), cos(theta) * cos(gamma), cos(psi) * sin(gamma) + sin(psi) * sin(theta) * cos(gamma),
+        sin(psi) * cos(gamma) + cos(psi) * sin(theta) * sin(gamma), -cos(theta) * sin(gamma), cos(psi) * cos(gamma) - sin(psi) * sin(theta) * sin(gamma) };
+        
+        return M * v;
     }
 
     void addResult(const Lin::Vector& v, double t)
@@ -111,9 +169,7 @@ public:
 
         //Result.push_back(tmp);
 
-        //for (int i = 0; i < tmp.size(); ++i)
-        //    std::cout << tmp[i] << " ";
-        //std::cout << std::endl;
+
 
         fprintf(output, "%lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3]);
         
