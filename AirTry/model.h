@@ -88,11 +88,11 @@ public:
     { 
         output = fopen("LAoutput.txt", "w"); 
         Lin::Vector target1(3);
-        target1 = { 20000, 14000, 15000};
+        target1 = { -2000, 14000, -5000};
         Lin::Vector target2(3);
-        target2 = { 70000, 14000, 17000};
+        target2 = { 700, 14000, 1000};
         Lin::Vector target3(3);
-        target3 = { 20000, 14000, 30000};
+        target3 = { 2000, 14000, -300};
         list_targets[0] = target1;
         list_targets[1] = target2;
         list_targets[2] = target3;
@@ -116,6 +116,7 @@ public:
 
             }
             target = list_targets[count_targ];
+            count = 1;
                 
         }
 
@@ -136,34 +137,31 @@ public:
         v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
         gamma = 0;
 
-        // Логика совершенияманевров todo
-        if (abs(v_sv[2] - target_sv[2]) > 10 || count == -1)
+        centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
+
+        // Логика совершения маневров todo
+        if (list_rotation[count_targ] == 1)
         {
-            if ((v_sv[2] - target_sv[2]) * count < 0)
+            if (abs(v_sv[2] - target_sv[2]) > 10)
             {
-                centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
-                gamma = 15 * GR2RAD * list_rotation[count_targ] * count;
+                if ((v_sv[2] - target_sv[2]) < 0)
+                {
+                    //centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
+                    gamma = 15 * GR2RAD;
+
+                }
+                else
+                {
+                    //centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
+                    gamma = -15 * GR2RAD;
+                }
 
             }
-            else
+            else 
             {
-                centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
-                gamma = -15 * GR2RAD *list_rotation[count_targ] * count;
-            }
-                
-        }
-        //if (abs(v_sv[2] - target_sv[2]) < 10)
-        else
-        {
-            gamma = 0;
-            if (list_rotation[count_targ] == -1)
-            {
-                list_rotation[count_targ] = 1;
-                count = -1;
-            }
-            else
-                count = 1;
+                gamma = 0;
 
+            }
         }
 
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
@@ -186,29 +184,41 @@ public:
         return M * v;
     }
 
-    int centerrad(Lin::Vector v, Lin::Vector& targ, double dPSI, int* rotation)
+    int centerrad(Lin::Vector v, Lin::Vector& targ, double dPSI, int* rotation, double error)
     {
-        if (*rotation != 0)
+        int sign = 1;
+        if (error > 0)
+            sign *= -1;
+
+        if (*rotation == 1)
             return 0;
         *rotation = 1;
         double Ra = 200 * 200 / (9.81 * tan(15 * GR2RAD));
         double dt = 0.1;
+        dPSI *= sign;
         double d = dPSI * dt;
         Lin::Vector res(3);
         Lin::Vector tc(3);
-        res[0] = v[3] * cos(theta) * cos(v[4] + d);
-        res[2] = -v[3] * cos(theta) * sin(v[4] + d);
+        res[0] = v[3] * cos(theta) * cos(v[4]);
+        res[2] = -v[3] * cos(theta) * sin(v[4]);
 
-        res[0] = res[0] * dt  / tan(d);
-        res[1] = res[1] * dt  / tan(d);
-        res[2] = res[2] * dt  / tan(d);
+        double len = res.length();
 
-        tc[0] = v[0] - res[2];
-        tc[2] = v[2] - res[0];
+        if (dPSI < 0)
+            res = res.rotateByRodrig(res, -90 * GR2RAD, 2);
+        else
+            res = res.rotateByRodrig(res, 90 * GR2RAD, 2);
+        res = res * Ra;
+
+
+        tc[0] = v[0] - res[0];
+        tc[2] = v[2] - res[2];
+        
 
         if (pow((targ[0] - tc[0]), 2) + pow((targ[2] - tc[2]), 2) < Ra * Ra)
             *rotation = -1;
-        
+        if (*rotation == 1)
+            std::cout << "";
         return 1;
     }
 
@@ -220,10 +230,6 @@ public:
         tmp.push_back(t);
         for (int i = 0; i < v.size(); ++i)
             tmp.push_back(v[i]);
-
-        //Result.push_back(tmp);
-
-
 
         fprintf(output, "%lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3]);
         

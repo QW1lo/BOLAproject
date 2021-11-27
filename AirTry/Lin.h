@@ -57,7 +57,7 @@ namespace Lin {
 		double length() const;
 		Vector norm() const;
 
-		Vector rotateByRodrig(Vector vec, const double phi);
+		Vector rotateByRodrig(const Vector& vec, const double phi, int O = 1);
 		Vector rotateByQuaternion(Quaternion Q);
 
 		//int size() const;

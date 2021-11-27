@@ -258,12 +258,29 @@ Vector Vector::norm() const
 }
 
 // TODO проверка vec и себя на размер
-Vector Vector::rotateByRodrig(const Vector vec, const double phi)
+Vector Vector::rotateByRodrig(const Vector& vec, const double phi, int O)
 {
+	Vector e(3);
+	switch (O)
+	{
+		case 1:
+			e = { 1, 0, 0 };
+			break;
+		case 2:
+			e = { 0, 1, 0 };
+			break;
+		case 3:
+			e = { 0, 0, 1 };
+			break;
+		default:
+			e = { 1, 0, 0 };
+			break;
+	}
 	Vector tmp(vec.size());
 	tmp = vec;
 	tmp = tmp.norm();
-	return tmp * (tmp * *this) * (1 - cos(phi)) + tmp.cross(*this) * sin(phi) + *this * cos(phi);
+	//return tmp * (tmp * *this) * (1 - cos(phi)) + tmp.cross(*this) * sin(phi) + *this * cos(phi);
+	return e * (e * tmp) * (1 - cos(phi)) + tmp.cross(e) * sin(phi) + tmp * cos(phi);
 }
 
 // todo проверка себя на размер
