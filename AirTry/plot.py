@@ -34,7 +34,7 @@ ax2.set_ylabel("Z, m")
 
 ax1.plot(z, y)
 ax2.plot(x, z)
-ax2.scatter(0, 5000, color = 'r')
+ax2.scatter(20000, 15000, color = 'r')
 ax2.scatter(70000, 17000, color = 'b')
 ax2.scatter(20000, 30000, color = 'g')
 plt.show()

@@ -88,7 +88,7 @@ public:
     { 
         output = fopen("LAoutput.txt", "w"); 
         Lin::Vector target1(3);
-        target1 = { 0, 14000, 5000};
+        target1 = { 20000, 14000, 15000};
         Lin::Vector target2(3);
         target2 = { 70000, 14000, 17000};
         Lin::Vector target3(3);
@@ -169,7 +169,7 @@ public:
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
-        tmp[3] = g * nxa;                                // V'
+        tmp[3] = g * nxa;                                // V' в траекторной СК
         tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy
 
         return tmp;
