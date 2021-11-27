@@ -76,9 +76,11 @@ class LA : public TModel
 {
 private:
     std::array<Lin::Vector, 3> list_targets;
+    std::array<int, 3> list_rotation;
     int count_targ = 0;
     double gamma = 0;
     double theta = 0;
+    int count = 1;
 
 public:
     FILE* output;
@@ -86,58 +88,84 @@ public:
     { 
         output = fopen("LAoutput.txt", "w"); 
         Lin::Vector target1(3);
-        target1 = { 20000, 14000, 15000 };
+        target1 = { 0, 14000, 5000};
         Lin::Vector target2(3);
-        target2 = { 70000, 14000, 17000 };
+        target2 = { 70000, 14000, 17000};
         Lin::Vector target3(3);
-        target3 = { 20000, 14000, 30000 };
+        target3 = { 20000, 14000, 30000};
         list_targets[0] = target1;
         list_targets[1] = target2;
         list_targets[2] = target3;
+        std::cout << list_rotation[0];
     };
 
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
+        // todo: костыли с каунтами - персмотреть алгоритм определени€ поворотов
         Lin::Vector target(3);
         target = list_targets[count_targ];
+
         if (abs(v[0] - target[0]) < 10 && abs(v[2] - target[2]) < 30)
         {
             count_targ++;
             if (count_targ == list_targets.size())
             {
                 count_targ = 0;
+                for (int i = 0; i < list_rotation.size(); ++i)
+                    list_rotation[i] = 0;
+
             }
+            target = list_targets[count_targ];
                 
         }
 
-        double test = (sqrt(pow(v[0] - target[0], 2) + pow(v[2] - target[2], 2)));
-        double Ra = 200 * 200 / (9.81 * tan(15 * GR2RAD));
         double nxa = 0;
         double g = 9.81;
+
         gamma = 0;
         //double psi = 15 * GR2RAD;
         theta = 0 * GR2RAD;
         Lin::Vector tmp(v.size());
-
         Lin::Vector v_sv;
-        v_sv = { v[0], v[1], v[2] };
+        Lin::Vector target_sv;
 
-        target = norm2svyaz(target, gamma, theta, v[4]);
+
+        v_sv = { v[0], v[1], v[2] };
+        
+        target_sv = norm2svyaz(target, gamma, theta, v[4]);
         v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
-        if (abs(v_sv[2] - target[2]) > 10)
+        gamma = 0;
+
+        // Ћогика совершени€маневров todo
+        if (abs(v_sv[2] - target_sv[2]) > 10 || count == -1)
         {
-            if (v_sv[2] - target[2] < 0)
+            if ((v_sv[2] - target_sv[2]) * count < 0)
             {
-                gamma = 15 * GR2RAD;
+                centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
+                gamma = 15 * GR2RAD * list_rotation[count_targ] * count;
+
             }
             else
-                gamma = -15 * GR2RAD;
+            {
+                centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
+                gamma = -15 * GR2RAD *list_rotation[count_targ] * count;
+            }
+                
         }
+        //if (abs(v_sv[2] - target_sv[2]) < 10)
         else
+        {
             gamma = 0;
-        //tmp[0] = V * cos(theta) * cos(psi);
-        //tmp[1] = V * sin(theta);
-        //tmp[2] = -V * sin(theta) * sin(psi);
+            if (list_rotation[count_targ] == -1)
+            {
+                list_rotation[count_targ] = 1;
+                count = -1;
+            }
+            else
+                count = 1;
+
+        }
+
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
@@ -147,7 +175,7 @@ public:
         return tmp;
     }
 
-    Lin::Vector norm2svyaz(Lin::Vector v, double gamma, double theta, double psi)
+    Lin::Vector norm2svyaz(Lin::Vector& v, double gamma, double theta, double psi)
     {
         Lin::Matrix M(3, 3);
         
@@ -156,6 +184,32 @@ public:
         sin(psi) * cos(gamma) + cos(psi) * sin(theta) * sin(gamma), -cos(theta) * sin(gamma), cos(psi) * cos(gamma) - sin(psi) * sin(theta) * sin(gamma) };
         
         return M * v;
+    }
+
+    int centerrad(Lin::Vector v, Lin::Vector& targ, double dPSI, int* rotation)
+    {
+        if (*rotation != 0)
+            return 0;
+        *rotation = 1;
+        double Ra = 200 * 200 / (9.81 * tan(15 * GR2RAD));
+        double dt = 0.1;
+        double d = dPSI * dt;
+        Lin::Vector res(3);
+        Lin::Vector tc(3);
+        res[0] = v[3] * cos(theta) * cos(v[4] + d);
+        res[2] = -v[3] * cos(theta) * sin(v[4] + d);
+
+        res[0] = res[0] * dt  / tan(d);
+        res[1] = res[1] * dt  / tan(d);
+        res[2] = res[2] * dt  / tan(d);
+
+        tc[0] = v[0] - res[2];
+        tc[2] = v[2] - res[0];
+
+        if (pow((targ[0] - tc[0]), 2) + pow((targ[2] - tc[2]), 2) < Ra * Ra)
+            *rotation = -1;
+        
+        return 1;
     }
 
     void addResult(const Lin::Vector& v, double t)
