@@ -31,7 +31,7 @@ int main()
 	//V1 = { 3, 3 };
 	//std::cout << M1 * V1;
 
-	vec = { 0, 14000, 0, 200, 0};
+	vec = { 0, 0, 0, 0.001, 0};
 	//vec.push_back(1);
 	std::cout << "as";
 	LA model(vec);

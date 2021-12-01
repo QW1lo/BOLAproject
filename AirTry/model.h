@@ -78,6 +78,7 @@ private:
     std::array<Lin::Vector, 3> list_targets;
     std::array<int, 3> list_rotation;
     int count_targ = 0;
+    double m = 80000;
     double gamma = 0;
     double theta = 0;
     int count = 1;
@@ -88,7 +89,7 @@ public:
     { 
         output = fopen("LAoutput.txt", "w"); 
         Lin::Vector target1(3);
-        target1 = { -2000, 14000, -5000};
+        target1 = { 200000, 14000, -5000};
         Lin::Vector target2(3);
         target2 = { 700, 14000, 1000};
         Lin::Vector target3(3);
@@ -120,12 +121,26 @@ public:
                 
         }
 
-        double nxa = 0;
+        
         double g = 9.81;
 
         gamma = 0;
         //double psi = 15 * GR2RAD;
         theta = 0 * GR2RAD;
+        double P = 120000;  // Тяга двигателей
+        //double nxa = 0;//sin(theta);
+        double nxa;
+        
+        if (v[3] < 200)
+            nxa = P / (m * g);
+        else
+            nxa = 0;
+
+        if (v[3] > 50 && v[1] < 11600)
+            theta = 20 * GR2RAD;
+        else theta = 0;
+
+        
         Lin::Vector tmp(v.size());
         Lin::Vector v_sv;
         Lin::Vector target_sv;
@@ -167,7 +182,7 @@ public:
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
-        tmp[3] = g * nxa;                                // V' в траекторной СК
+        tmp[3] = g * (nxa - sin(theta));                                // V' в траекторной СК
         tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy
 
         return tmp;
@@ -231,7 +246,7 @@ public:
         for (int i = 0; i < v.size(); ++i)
             tmp.push_back(v[i]);
 
-        fprintf(output, "%lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3]);
+        fprintf(output, "%lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
         
         //tmp.clear();
 
