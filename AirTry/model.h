@@ -75,8 +75,8 @@ public:
 class LA : public TModel
 {
 private:
-    std::array<Lin::Vector, 3> list_targets;
-    std::array<int, 3> list_rotation;
+    std::vector<Lin::Vector> list_targets;
+    std::vector<int> list_rotation;
     int count_targ = 0;
     double m = 80000;
     double gamma = 0;
@@ -85,19 +85,14 @@ private:
 
 public:
     FILE* output;
-    LA(Lin::Vector& X0) :TModel(X0) 
-    { 
-        output = fopen("LAoutput.txt", "w"); 
-        Lin::Vector target1(3);
-        target1 = { 200000, 14000, -5000};
-        Lin::Vector target2(3);
-        target2 = { 700, 14000, 1000};
-        Lin::Vector target3(3);
-        target3 = { 2000, 14000, -300};
-        list_targets[0] = target1;
-        list_targets[1] = target2;
-        list_targets[2] = target3;
-        std::cout << list_rotation[0];
+
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets) :TModel(X0)
+    {
+        output = fopen("LAoutput.txt", "w");
+        for (int i = 0; i < Init_targets.size(); i++) {
+            list_targets.push_back(Init_targets[i]);
+            list_rotation.push_back(0);
+        }
     };
 
     Lin::Vector getRight(const Lin::Vector& v, double t)

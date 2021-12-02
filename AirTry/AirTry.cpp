@@ -32,9 +32,19 @@ int main()
 	//std::cout << M1 * V1;
 
 	vec = { 0, 0, 0, 0.001, 0};
+
+	std::vector<Lin::Vector> Targets;
+	Lin::Vector target(3);
+	target = { 200000, 14000, -5000 };
+	Targets.push_back(target);
+	target = { 700, 14000, 1000 };
+	Targets.push_back(target);
+	target = { 2000, 14000, -300 };
+	Targets.push_back(target);
+
 	//vec.push_back(1);
 	std::cout << "as";
-	LA model(vec);
+	LA model(vec, Targets);
 	std::cout << "df";
 	TRunge integrator(t0, tk, h);
 	std::cout << "gh";
