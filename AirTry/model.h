@@ -83,14 +83,143 @@ private:
     double theta = 0;
     int count = 1;
 
+    int R = 6371000;										// Радиус земли, м
+    double omega = 0.00007292115;							// Угловая скорость Земли, рад
+
+    double phi0 = 0;			                            // Начальная широта, долгота и
+    double lambda0 = 0;		                                // нулевая высота т.к. стартовая
+    double h0 = 0;											// точка на поверхности Земли
+
 public:
     FILE* output;
 
-    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets) :TModel(X0)
+    Lin::Vector Rotate(char axis, Lin::Vector vec, double angle) {
+
+        Lin::Matrix R(3, 3);	// Матрица поворота
+        if (axis == 'x') {
+            R = { 1     ,     0     ,     0     ,
+                      0     , cos(angle),-sin(angle),
+                      0     , sin(angle), cos(angle) };
+        }
+        if (axis == 'y') {
+            R = { cos(angle),     0     , sin(angle),
+                      0     ,     1     ,     0     ,
+                 -sin(angle),     0     , cos(angle) };
+        }
+        if (axis == 'z') {
+            R = { cos(angle),-sin(angle),     0     ,
+                  sin(angle), cos(angle),     0     ,
+                      0     ,     0     ,     1 };
+        }
+        return vec * R;
+    }
+
+    Lin::Vector Shift(char axis, Lin::Vector vec, double val) {
+
+        if (axis == 'x') {
+            vec[0] = vec[0] - val;
+        }
+        if (axis == 'y') {
+            vec[1] = vec[1] - val;
+        }
+        if (axis == 'z') {
+            vec[2] = vec[2] - val;
+        }
+        return vec;
+    }
+
+    Lin::Vector TSK_to_ISK(Lin::Vector vec, float time) {
+
+        Lin::Vector tmp;  // Промежуточный результат
+        tmp = { 0.0, 0.0, 0.0 };
+
+        vec = Rotate('z', vec, phi0 - M_PI / 2);				// Поворот МГП до экваториальной плоскости
+
+        vec = Shift('x', vec, R * cos(phi0));					// Сдвиг с.к. на ось вращения Земли
+
+        vec = Rotate('y', vec, M_PI - (lambda0 + omega * time));// Поворот Xt до Xi
+
+        vec = Shift('y', vec, -R * sin(phi0));					// Совмещение центров двух с.к.
+
+        tmp[0] = vec[0];
+        tmp[1] = -vec[2];
+        tmp[2] = vec[1];
+
+        return tmp;
+    }
+
+    Lin::Vector ISK_to_Geo(Lin::Vector vec, float time) {
+
+        Lin::Vector tmp;  // Промежуточный результат
+        tmp = { 0, 0, 0 };
+
+        double r = sqrt(pow(vec[0], 2) + pow(vec[1], 2) + pow(vec[2], 2));
+
+        tmp[0] = atan2(vec[2], sqrt(pow(vec[0], 2) + pow(vec[1], 2)));	// Широта
+        tmp[1] = atan2(vec[1], vec[0]) - omega * time;					// Долгота
+        tmp[2] = r - R;													// Высота
+
+        return tmp;
+    }
+
+    Lin::Vector TSK_to_Geo(Lin::Vector vec, float time) {
+
+        vec = TSK_to_ISK(vec, time);
+        vec = ISK_to_Geo(vec, time);
+
+        return vec;
+    }
+
+    Lin::Vector Geo_to_ISK(Lin::Vector vec, float time) {
+
+        Lin::Vector tmp;  // Промежуточный результат
+        tmp = { 0, 0, 0 };
+
+        tmp[0] = (R + vec[2]) * cos(vec[0]) * cos(vec[1] + omega * time);
+        tmp[1] = (R + vec[2]) * cos(vec[0]) * sin(vec[1] + omega * time);
+        tmp[2] = (R + vec[2]) * sin(vec[0]);
+
+        return tmp;
+    }
+
+    Lin::Vector ISK_to_TSK(Lin::Vector vec, float time) {
+
+        Lin::Vector tmp;	// Промежуточный результат
+        tmp = { 0.0, 0.0, 0.0 };
+
+        tmp[0] = vec[0];
+        tmp[1] = vec[2];
+        tmp[2] = -vec[1];
+
+        tmp = Shift('y', tmp, R * sin(phi0));
+
+        tmp = Rotate('y', tmp, -M_PI + (lambda0 + omega * time));
+
+        tmp = Shift('x', tmp, -R * cos(phi0));
+
+        tmp = Rotate('z', tmp, M_PI / 2 - phi0);
+
+        return tmp;
+    }
+
+    Lin::Vector Geo_TSK(Lin::Vector vec, float time) {
+       
+        vec = Geo_to_ISK(vec, time);
+        vec = ISK_to_TSK(vec, time);
+
+        return vec;
+    }
+
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets, double init_phi, double init_lambda) :TModel(X0)
     {
         output = fopen("LAoutput.txt", "w");
+        phi0 = init_phi;
+        lambda0 = init_lambda;
+
         for (int i = 0; i < Init_targets.size(); i++) {
-            list_targets.push_back(Init_targets[i]);
+            Lin::Vector tmp;
+            tmp = Geo_TSK(Init_targets[i], 0);
+            list_targets.push_back(tmp);
             list_rotation.push_back(0);
         }
     };
