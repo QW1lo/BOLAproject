@@ -99,7 +99,7 @@ public:
 		//model->X[4] = -M_PI / 4;
 		//model->gamma = -90 * M_PI / 180;
 		//model->theta = 10 * M_PI / 180;
-		R = model->norm2svyaz(R, -model->gamma, model->theta, model->X[4]); //Поворот
+		R = model->norm2svyaz(R, model->gamma, model->theta, model->X[4]); //Поворот
 
 		Range = R.length();
 
