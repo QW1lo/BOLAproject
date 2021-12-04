@@ -39,7 +39,7 @@ void TRunge::integrate(TModel& Model)
 	Lin::Vector k1, k2, k3, k4;
 	double t = t0;
 	Model.addResult(X, t);
-	while (1)
+	while (not Model.end)
 	{
 		Lin::Vector input;
 		k1 = Model.getRight(X, t);

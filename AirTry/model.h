@@ -15,7 +15,7 @@ class TModel
 public:
     // Текущий вектор состояния
     Lin::Vector X;
-
+    bool end;
     // Хранилище результатов
     std::vector<std::vector<double>> Result;
 
@@ -76,11 +76,11 @@ class LA : public TModel
 {
 private:
     std::vector<Lin::Vector> list_targets;
+    
     std::vector<int> list_rotation;
     int count_targ = 0;
     double m = 80000;
-    double gamma = 0;
-    double theta = 0;
+    
     int count = 1;
 
     int R = 6371000;										// Радиус земли, м
@@ -92,6 +92,10 @@ private:
 
 public:
     FILE* output;
+
+    Lin::Vector target;
+    double gamma = 0;
+    double theta = 0;
 
     Lin::Vector Rotate(char axis, Lin::Vector vec, double angle) {
 
@@ -210,11 +214,13 @@ public:
         return vec;
     }
 
-    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets, double init_phi, double init_lambda) :TModel(X0)
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets, Lin::Vector target0, double init_phi, double init_lambda) :TModel(X0)
     {
         output = fopen("LAoutput.txt", "w");
+        end = 0;
         phi0 = init_phi;
         lambda0 = init_lambda;
+        target = Geo_TSK(target0, 0);
 
         for (int i = 0; i < Init_targets.size(); i++) {
             Lin::Vector tmp;
@@ -236,15 +242,13 @@ public:
             if (count_targ == list_targets.size())
             {
                 count_targ = 0;
+                end = 1;
                 for (int i = 0; i < list_rotation.size(); ++i)
                     list_rotation[i] = 0;
-
             }
             target = list_targets[count_targ];
-            count = 1;
-                
+            count = 1;           
         }
-
         
         double g = 9.81;
 

@@ -1,17 +1,21 @@
 #include <iostream>
+#include "Lin.h"
+#include "Lin.cpp"
+
 
 class OPS {
 private:
-	double X_la[3];
-	double X_t[3];
+	Lin::Vector X_la[3];
+	Lin::Vector X_t[3];
 	double orientation[3]; // Psi Theta Gamma последовательность поворотов крен тангаж курс
 	double Gamma, Theta; // Углы ЛВ
-	int GammaMax, GammaMin, ThetaMax, ThetaMin;
+	double Range;
+	double GammaMax, GammaMin, ThetaMax, ThetaMin, MaxRange;
 
 
 public:
 
-	OPS(double X_la0[3], double X_t0[3], double orientation0[3], int GammaMax0, int GammaMin0, int ThetaMax0, int ThetaMin0) {
+	OPS(double X_la0[3], double X_t0[3], double orientation0[3], double GammaMax0, double GammaMin0, double ThetaMax0, double ThetaMin0, double MaxRange0) {
 
 		for (int i = 0; i < 3; i++) {
 			X_la[i] = X_la0[i];
@@ -21,13 +25,15 @@ public:
 
 		Gamma = 0;
 		Theta = 0;
+		Range = 0;
 		GammaMax = GammaMax0;
 		GammaMin = GammaMin0;
 		ThetaMax = ThetaMax0;
 		ThetaMin = ThetaMin0;
+		MaxRange = MaxRange0;
 	}
 	// Нужна для отладки
-	void move_t(double X_t_cur[3]) {
+	void move_LA(Lin::Vector X_LA_cur) {
 
 		for (int i = 0; i < 3; i++) {
 
@@ -47,8 +53,7 @@ public:
 			Theta = ThetaMin;
 		}
 
-		/*if (Gamma >= GammaMax) { Gamma = GammaMax; }
-		if (Gamma <= -GammaMax) { Gamma = -GammaMax; }*/
+
 	}
 
 	void print_angles() {
@@ -70,6 +75,7 @@ public:
 		if (R[0] < 0) {
 			Theta = -Theta;
 		}
+
 
 		limit_angles();
 		print_angles();

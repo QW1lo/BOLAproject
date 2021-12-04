@@ -143,6 +143,7 @@
     <ClCompile Include="integtator.cpp" />
     <ClCompile Include="Lin.cpp" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="OPS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="integrator.h" />
