@@ -214,14 +214,24 @@ public:
         return vec;
     }
 
-    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets, Lin::Vector target0, double init_phi, double init_lambda) :TModel(X0)
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets, Lin::Vector target0) :TModel(X0)
     {
         output = fopen("LAoutput.txt", "w");
         end = 0;
-        phi0 = init_phi;
-        lambda0 = init_lambda;
+        phi0 = X[0];
+        lambda0 = X[1];
         target = Geo_TSK(target0, 0);
 
+        Lin::Vector gsk_coord;                  //
+        Lin::Vector tsk_coord;                  // Перевод координат 
+        gsk_coord = { X0[0], X0[1] ,X0[2] };    //
+        tsk_coord = { 0, 0 ,0 };                //из гск   СПРОСИ ЕЩЕ
+        tsk_coord = Geo_TSK(gsk_coord, 0);      //
+                
+        for (int i = 0; i < 3; i++) {           // в тск
+            X[i] = tsk_coord[i];                //
+        }
+        
         for (int i = 0; i < Init_targets.size(); i++) {
             Lin::Vector tmp;
             tmp = Geo_TSK(Init_targets[i], 0);
