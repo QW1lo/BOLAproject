@@ -144,9 +144,11 @@
     <ClCompile Include="Lin.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="OPS.cpp" />
+    <ClCompile Include="testkml.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="integrator.h" />
+    <ClInclude Include="kmlTransformer.h" />
     <ClInclude Include="Lin.h" />
     <ClInclude Include="model.h" />
   </ItemGroup>
