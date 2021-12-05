@@ -112,51 +112,51 @@ public:
 	}
 };
 
-int main()
-{	
-	// Точка старта в гео
-	double phi0 = 56.419363901986 * M_PI / 180;			// Начальная широта, долгота и
-	double lambda0 = 37.94472361872968 * M_PI / 180;		// нулевая высота т.к. стартовая
-	double h0 = 0;
-
-	Lin::Vector X;
-	X = { phi0, lambda0, h0, 0.001, 0};
-	
-	// Массив ппм в гео координатах
-	std::vector<Lin::Vector> Targets;
-	Lin::Vector target(3);
-	target = { 57.419363901986 * M_PI / 180, 37.94472361872968 * M_PI / 180, 12000 };
-	Targets.push_back(target);
-	target = { 57.419363901986 * M_PI / 180, 38.94472361872968 * M_PI / 180, 12000 };
-	Targets.push_back(target);
-	target = { 57.419363901986 * M_PI / 180, 36.94472361872968 * M_PI / 180, 12000 };		
-	Targets.push_back(target);
-
-	// Цель в гео координатах (под 3 ппм)
-	Lin::Vector tar;
-	tar = { 57.419363901986 * M_PI / 180, 36.94472361872968 * M_PI / 180, 0 };
-
-	LA model(X, Targets, tar);
-
-	// Характеристики ОПС
-	double gam_max = 45;
-	double gam_min = -45;
-	double th_max = 0;
-	double th_min = -90;
-	double rng_max = 20000;
-
-	OPS system(&model, gam_max, gam_min, th_max, th_min, rng_max);
-	
-//system.get_angles();
-/*double phi = 0;
-double a = 0;
-while (1) {
-	phi += 0.00032;
-	a += 1;
-	X_t[0] = a * cos(phi);
-	X_t[2] = a * sin(phi);
-	system.move_t(X_t);
-
-	system.get_angles();
-}*/
-}
+//int main()
+//{	
+//	// Точка старта в гео
+//	double phi0 = 56.419363901986 * M_PI / 180;			// Начальная широта, долгота и
+//	double lambda0 = 37.94472361872968 * M_PI / 180;		// нулевая высота т.к. стартовая
+//	double h0 = 0;
+//
+//	Lin::Vector X;
+//	X = { phi0, lambda0, h0, 0.001, 0};
+//	
+//	// Массив ппм в гео координатах
+//	std::vector<Lin::Vector> Targets;
+//	Lin::Vector target(3);
+//	target = { 57.419363901986 * M_PI / 180, 37.94472361872968 * M_PI / 180, 12000 };
+//	Targets.push_back(target);
+//	target = { 57.419363901986 * M_PI / 180, 38.94472361872968 * M_PI / 180, 12000 };
+//	Targets.push_back(target);
+//	target = { 57.419363901986 * M_PI / 180, 36.94472361872968 * M_PI / 180, 12000 };		
+//	Targets.push_back(target);
+//
+//	// Цель в гео координатах (под 3 ппм)
+//	Lin::Vector tar;
+//	tar = { 57.419363901986 * M_PI / 180, 36.94472361872968 * M_PI / 180, 0 };
+//
+//	LA model(X, Targets, tar);
+//
+//	// Характеристики ОПС
+//	double gam_max = 45;
+//	double gam_min = -45;
+//	double th_max = 0;
+//	double th_min = -90;
+//	double rng_max = 20000;
+//
+//	OPS system(&model, gam_max, gam_min, th_max, th_min, rng_max);
+//	
+////system.get_angles();
+///*double phi = 0;
+//double a = 0;
+//while (1) {
+//	phi += 0.00032;
+//	a += 1;
+//	X_t[0] = a * cos(phi);
+//	X_t[2] = a * sin(phi);
+//	system.move_t(X_t);
+//
+//	system.get_angles();
+//}*/
+//}

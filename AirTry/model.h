@@ -222,14 +222,8 @@ public:
         lambda0 = X[1];
         target = Geo_TSK(target0, 0);
 
-        Lin::Vector gsk_coord;                  //
-        Lin::Vector tsk_coord;                  // Перевод координат 
-        gsk_coord = { X0[0], X0[1] ,X0[2] };    //
-        tsk_coord = { 0, 0 ,0 };                //из гск   СПРОСИ ЕЩЕ
-        tsk_coord = Geo_TSK(gsk_coord, 0);      //
-                
-        for (int i = 0; i < 3; i++) {           // в тск
-            X[i] = tsk_coord[i];                //
+        for (int i = 0; i < 3; i++) {           
+            X[i] = 0;                
         }
         
         for (int i = 0; i < Init_targets.size(); i++) {

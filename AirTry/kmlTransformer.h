@@ -93,7 +93,7 @@ vector<vector<double>> parser(std::string filename)
 	for (int i = 0; i < coord->get_coordinates_array_size(); i++)
 	{
 		vec = coord->get_coordinates_array_at(i);
-		vec_coord.push_back({ vec.get_longitude(), vec.get_latitude(), vec.get_altitude() });
+		vec_coord.push_back({ vec.get_latitude(), vec.get_longitude(), vec.get_altitude() });
 	}
 	return vec_coord;
 };
