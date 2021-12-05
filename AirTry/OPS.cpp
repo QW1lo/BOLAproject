@@ -2,6 +2,19 @@
 #include "Lin.h"
 #include "model.h"
 
+#include <string>
+#include "kml/dom.h"
+#include "kmlTransformer.h"
+#include "integrator.h"
+
+// libkml types are in the kmldom namespace
+using kmldom::CoordinatesPtr;
+using kmldom::KmlPtr;
+using kmldom::KmlFactory;
+using kmldom::PlacemarkPtr;
+using kmldom::PointPtr;
+using std::vector;
+
 class OPS {
 private:
 	Lin::Vector X_la;
@@ -112,51 +125,41 @@ public:
 	}
 };
 
-//int main()
-//{	
-//	// Точка старта в гео
-//	double phi0 = 56.419363901986 * M_PI / 180;			// Начальная широта, долгота и
-//	double lambda0 = 37.94472361872968 * M_PI / 180;		// нулевая высота т.к. стартовая
-//	double h0 = 0;
-//
-//	Lin::Vector X;
-//	X = { phi0, lambda0, h0, 0.001, 0};
-//	
-//	// Массив ппм в гео координатах
-//	std::vector<Lin::Vector> Targets;
-//	Lin::Vector target(3);
-//	target = { 57.419363901986 * M_PI / 180, 37.94472361872968 * M_PI / 180, 12000 };
-//	Targets.push_back(target);
-//	target = { 57.419363901986 * M_PI / 180, 38.94472361872968 * M_PI / 180, 12000 };
-//	Targets.push_back(target);
-//	target = { 57.419363901986 * M_PI / 180, 36.94472361872968 * M_PI / 180, 12000 };		
-//	Targets.push_back(target);
-//
-//	// Цель в гео координатах (под 3 ппм)
-//	Lin::Vector tar;
-//	tar = { 57.419363901986 * M_PI / 180, 36.94472361872968 * M_PI / 180, 0 };
-//
-//	LA model(X, Targets, tar);
-//
-//	// Характеристики ОПС
-//	double gam_max = 45;
-//	double gam_min = -45;
-//	double th_max = 0;
-//	double th_min = -90;
-//	double rng_max = 20000;
-//
-//	OPS system(&model, gam_max, gam_min, th_max, th_min, rng_max);
-//	
-////system.get_angles();
-///*double phi = 0;
-//double a = 0;
-//while (1) {
-//	phi += 0.00032;
-//	a += 1;
-//	X_t[0] = a * cos(phi);
-//	X_t[2] = a * sin(phi);
-//	system.move_t(X_t);
-//
-//	system.get_angles();
-//}*/
-//}
+int main()
+{	
+	// Точка старта в гео
+	double phi0 = 61.0 * M_PI / 180;			// Начальная широта, долгота и
+	double lambda0 = 62.3231936777456 * M_PI / 180;			// нулевая высота т.к. стартовая
+	double h0 = 0;
+
+	// Начальынй ВС
+	Lin::Vector X;
+	X = { phi0, lambda0, h0, 0.001, 0};
+
+	// Массив ппм
+	KML_Transformer kml_trns;
+	kml_trns.CreateKML("result");
+	vector<Lin::Vector> vec_coord;
+	vec_coord = parser("pyt.kml");
+
+	// Характеристики ОПС
+	double gam_max = 45;
+	double gam_min = -45;
+	double th_max = 0;
+	double th_min = -90;
+	double rng_max = 20000;
+
+	// Цель в гео координатах
+	Lin::Vector tar;
+	tar = vec_coord[vec_coord.size()-1];
+
+	LA model(X, vec_coord, tar);
+	std::cout << "model\n";
+	
+	OPS system(&model, gam_max, gam_min, th_max, th_min, rng_max);
+	std::cout << "ops\n";
+	TRunge integrator(0, 1000, 1);
+	std::cout << "integrator\n";
+	integrator.integrate(model);
+	std::cout << "done\n";
+}

@@ -5,6 +5,7 @@
 #ifndef modelH
 #define modelH
 #include "Lin.h"
+
 //---------------------------------------------------------------------------
 extern double GR2RAD;
 extern double RAD2GR;
@@ -92,6 +93,8 @@ private:
 
 public:
     FILE* output;
+
+    //KML_Transformer* kml;
 
     Lin::Vector target;
     double gamma = 0;
@@ -228,7 +231,7 @@ public:
         
         for (int i = 0; i < Init_targets.size(); i++) {
             Lin::Vector tmp;
-            tmp = Geo_TSK(Init_targets[i], 0);
+            tmp = Geo_TSK(Init_targets[i] * M_PI / 180, 0);
             list_targets.push_back(tmp);
             list_rotation.push_back(0);
         }
@@ -240,7 +243,7 @@ public:
         Lin::Vector target(3);
         target = list_targets[count_targ];
 
-        if (abs(v[0] - target[0]) < 10 && abs(v[2] - target[2]) < 30)
+        if (abs(v[0] - target[0]) < 300 && abs(v[2] - target[2]) < 100)
         {
             count_targ++;
             if (count_targ == list_targets.size())
@@ -380,7 +383,15 @@ public:
 
         fprintf(output, "%lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
         
-        //tmp.clear();
+        /*if (kml) 
+        {
+            Lin::Vector geo;
+            geo = { tmp[1],  tmp[2] , tmp[3] };
+            geo - Geo_TSK(geo, t);
+    
+            kml->KMLNewValue(geo);
+        }*/
+      
 
     }
 

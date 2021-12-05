@@ -1,8 +1,8 @@
-﻿#include "model.h"
-#include "Lin.h"
-#include "integrator.h"
-#include <iostream>
-#include <vector>
+﻿//#include "model.h"
+//#include "Lin.h"
+//#include "integrator.h"
+//#include <iostream>
+//#include <vector>
 
 
 //int main()

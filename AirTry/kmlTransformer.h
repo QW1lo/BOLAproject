@@ -5,7 +5,9 @@
 #include "kml/base/file.h"
 
 #include <fstream>
+#include "Lin.h"
 #include <vector>
+
 
 using kmldom::CoordinatesPtr;
 using kmldom::KmlPtr;
@@ -41,9 +43,9 @@ class KML_Transformer
 		placemark->set_geometry(line);  // placemark takes ownership
 		document->add_feature(placemark);
 	};
-	public: void KMLNewValue( double input[3]) 
+public: void KMLNewValue( Lin::Vector input) 
 	{
-
+		
 		coordinates->add_latlngalt(input[0], input[1], input[2]);
 
 		xml = kmldom::SerializePretty(kml);
@@ -52,7 +54,7 @@ class KML_Transformer
 		write.write(xml.c_str(), xml.size());
 		write.close();
 	};
-	public: void KML_ops_point(int waypoint_num, double input[3])
+	public: void KML_ops_point(int waypoint_num, Lin::Vector input)
 	{
 		CoordinatesPtr coordinata = factory->CreateCoordinates();
 		PointPtr point = factory->CreatePoint();
@@ -74,7 +76,7 @@ class KML_Transformer
 };
 
 
-vector<vector<double>> parser(std::string filename)
+std::vector<Lin::Vector> parser(std::string filename)
 {
 	std::string filestr;
 	std::string errors;
@@ -89,11 +91,14 @@ vector<vector<double>> parser(std::string filename)
 	coord->get_coordinates_array_at(0);
 	kmlbase::Vec3 vec;
 
-	vector<vector<double>> vec_coord;	
+	Lin::Vector V(3);
+	std::vector<Lin::Vector> vec_coord;
 	for (int i = 0; i < coord->get_coordinates_array_size(); i++)
 	{
 		vec = coord->get_coordinates_array_at(i);
-		vec_coord.push_back({ vec.get_latitude(), vec.get_longitude(), vec.get_altitude() });
+		V = { vec.get_latitude(), vec.get_longitude(), vec.get_altitude() };
+		vec_coord.push_back(V);	
 	}
+	
 	return vec_coord;
 };
