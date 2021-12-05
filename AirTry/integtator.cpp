@@ -1,12 +1,15 @@
 #include "integrator.h"
 #include "model.h"
 #include "Lin.h"
+#include <mutex>
+
 
 TIntegrator::TIntegrator(double T0, double Tk, double H)
 {
 	t0 = T0;
 	tk = Tk;
 	h = H;
+	t = t0;
 }
 
 TEuler::TEuler(double T0, double Tk, double H):TIntegrator(T0, Tk, H)
@@ -35,12 +38,15 @@ TRunge::TRunge(double T0, double Tk, double H) :TIntegrator(T0, Tk, H)
 
 void TRunge::integrate(TModel& Model)
 {
+	mut.lock();
 	Lin::Vector X = Model.getInitialConditions();
 	Lin::Vector k1, k2, k3, k4;
-	double t = t0;
+	
 	Model.addResult(X, t);
-	while (not Model.end)
-	{
+	//while ()
+	//{	
+		
+		std::cout << t << "\n";
 		Lin::Vector input;
 		k1 = Model.getRight(X, t);
 		input = X + k1 * h / 2;
@@ -52,6 +58,7 @@ void TRunge::integrate(TModel& Model)
 		X = X + (k1 + k2 * 2 + k3 * 2 + k4) * h/6;
 		t += h;
 		Model.addResult(X, t);
-	}
+		mut.unlock();
+	//}
 
 }

@@ -33,6 +33,12 @@
     <ClCompile Include="testkml.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="atom.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="integrator.h">
@@ -46,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="kmlTransformer.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="atom.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

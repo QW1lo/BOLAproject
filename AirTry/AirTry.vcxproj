@@ -140,13 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AirTry.cpp" />
+    <ClCompile Include="atom.cpp" />
     <ClCompile Include="integtator.cpp" />
     <ClCompile Include="Lin.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="OPS.cpp" />
     <ClCompile Include="testkml.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="atom.h" />
     <ClInclude Include="integrator.h" />
     <ClInclude Include="kmlTransformer.h" />
     <ClInclude Include="Lin.h" />

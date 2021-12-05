@@ -1,10 +1,12 @@
 //---------------------------------------------------------------------------
+#pragma once
 #include <math.h>
 #include <array>
 #pragma warning(disable : 4996)
 #ifndef modelH
 #define modelH
 #include "Lin.h"
+#include "atom.h"
 
 //---------------------------------------------------------------------------
 extern double GR2RAD;
@@ -16,7 +18,6 @@ class TModel
 public:
     // Текущий вектор состояния
     Lin::Vector X;
-    bool end;
     // Хранилище результатов
     std::vector<std::vector<double>> Result;
 
@@ -227,6 +228,7 @@ public:
         phi0 = X[0];
         lambda0 = X[1];
         target = Geo_TSK(target0, 0);
+        target[0];
 
         for (int i = 0; i < 3; i++) {           
             X[i] = 0;                
@@ -258,7 +260,7 @@ public:
             if (count_targ == list_targets.size())
             {
                 count_targ = 0;
-                end = 1;
+                end.store(true);
                 for (int i = 0; i < list_rotation.size(); ++i)
                     list_rotation[i] = 0;
             }
@@ -275,7 +277,7 @@ public:
         //double nxa = 0;//sin(theta);
         double nxa;
         
-        if (v[3] < 200)
+        if (v[3] < 500)
             nxa = P / (m * g);
         else
             nxa = 0;
@@ -341,6 +343,20 @@ public:
         sin(psi) * cos(gamma) + cos(psi) * sin(theta) * sin(gamma), -cos(theta) * sin(gamma), cos(psi) * cos(gamma) - sin(psi) * sin(theta) * sin(gamma) };
         
         return M * v;
+    }
+
+    Lin::Vector svyaz_to_norm(Lin::Vector& v, double gamma, double theta, double psi)
+    {
+        Lin::Matrix M(3, 3);
+
+        M = { cos(psi) * cos(theta),                                sin(theta),             -sin(psi) * cos(theta),
+        sin(psi) * sin(gamma) - cos(psi) * sin(theta) * cos(gamma), cos(theta) * cos(gamma), cos(psi) * sin(gamma) + sin(psi) * sin(theta) * cos(gamma),
+        sin(psi) * cos(gamma) + cos(psi) * sin(theta) * sin(gamma), -cos(theta) * sin(gamma), cos(psi) * cos(gamma) - sin(psi) * sin(theta) * sin(gamma) };
+
+        M = M.T();
+
+
+        return (M * v);
     }
 
     int centerrad(Lin::Vector v, Lin::Vector& targ, double dPSI, int* rotation, double error)

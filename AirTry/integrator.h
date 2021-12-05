@@ -13,6 +13,7 @@ class TIntegrator
 		double t0;
 		double tk;
 		double h;
+		double t;
 		TIntegrator(double T0, double Tk, double H);
 		virtual void integrate(TModel& Model) = 0;		
 };
