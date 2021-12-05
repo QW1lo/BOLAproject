@@ -96,6 +96,9 @@ public:
 
     //KML_Transformer* kml;
 
+    std::vector<Lin::Vector> Way;
+    
+
     Lin::Vector target;
     double gamma = 0;
     double theta = 0;
@@ -163,7 +166,7 @@ public:
         double r = sqrt(pow(vec[0], 2) + pow(vec[1], 2) + pow(vec[2], 2));
 
         tmp[0] = atan2(vec[2], sqrt(pow(vec[0], 2) + pow(vec[1], 2)));	// Широта
-        tmp[1] = atan2(vec[1], vec[0]) - omega * time;					// Долгота
+        tmp[1] = atan2(vec[1], vec[0]);					                // Долгота
         tmp[2] = r - R;													// Высота
 
         return tmp;
@@ -245,6 +248,12 @@ public:
 
         if (abs(v[0] - target[0]) < 300 && abs(v[2] - target[2]) < 100)
         {
+            Lin::Vector geo;
+            Lin::Vector tsk;
+            tsk = { v[0],  v[1] , v[2] };
+            geo = TSK_to_Geo(tsk, 0) * 180 / M_PI;
+            Way.push_back(geo);
+
             count_targ++;
             if (count_targ == list_targets.size())
             {
@@ -383,6 +392,8 @@ public:
 
         fprintf(output, "%lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
         
+        
+
         /*if (kml) 
         {
             Lin::Vector geo;

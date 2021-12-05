@@ -138,7 +138,7 @@ int main()
 
 	// Массив ппм
 	KML_Transformer kml_trns;
-	kml_trns.CreateKML("result");
+
 	vector<Lin::Vector> vec_coord;
 	vec_coord = parser("pyt.kml");
 
@@ -162,4 +162,11 @@ int main()
 	std::cout << "integrator\n";
 	integrator.integrate(model);
 	std::cout << "done\n";
+
+	kml_trns.CreateKML("result");
+	for (int i = 0; i < model.Way.size(); i++) 
+	{
+		kml_trns.KMLNewValue(model.Way[i]);
+	}
+	std::cout << "kml writen\n";
 }
