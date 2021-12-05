@@ -77,7 +77,7 @@ public:
 class LA : public TModel
 {
 private:
-    std::vector<Lin::Vector> list_targets;
+    std::vector<Lin::Vector> list_ppm;
     
     std::vector<int> list_rotation;
     int count_targ = 0;
@@ -101,6 +101,9 @@ public:
     
 
     Lin::Vector target;
+
+    Lin::Vector ppm;
+
     double gamma = 0;
     double theta = 0;
 
@@ -221,7 +224,7 @@ public:
         return vec;
     }
 
-    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_targets, Lin::Vector target0) :TModel(X0)
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, Lin::Vector target0) :TModel(X0)
     {
         output = fopen("LAoutput.txt", "w");
         end = 0;
@@ -234,10 +237,10 @@ public:
             X[i] = 0;                
         }
         
-        for (int i = 0; i < Init_targets.size(); i++) {
+        for (int i = 0; i < Init_ppms.size(); i++) {
             Lin::Vector tmp;
-            tmp = Geo_TSK(Init_targets[i] * M_PI / 180, 0);
-            list_targets.push_back(tmp);
+            tmp = Geo_TSK(Init_ppms[i] * M_PI / 180, 0);
+            list_ppm.push_back(tmp);
             list_rotation.push_back(0);
         }
     };
@@ -245,10 +248,10 @@ public:
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
         // todo: костыли с каунтами - персмотреть алгоритм определени€ поворотов
-        Lin::Vector target(3);
-        target = list_targets[count_targ];
+        //Lin::Vector target(3);
+        ppm = list_ppm[count_targ];
 
-        if (abs(v[0] - target[0]) < 300 && abs(v[2] - target[2]) < 100)
+        if (abs(v[0] - ppm[0]) < 300 && abs(v[2] - ppm[2]) < 100)
         {
             Lin::Vector geo;
             Lin::Vector tsk;
@@ -257,14 +260,14 @@ public:
             Way.push_back(geo);
 
             count_targ++;
-            if (count_targ == list_targets.size())
+            if (count_targ == list_ppm.size())
             {
                 count_targ = 0;
                 end.store(true);
                 for (int i = 0; i < list_rotation.size(); ++i)
                     list_rotation[i] = 0;
             }
-            target = list_targets[count_targ];
+            ppm = list_ppm[count_targ];
             count = 1;           
         }
         
@@ -294,11 +297,11 @@ public:
 
         v_sv = { v[0], v[1], v[2] };
         
-        target_sv = norm2svyaz(target, gamma, theta, v[4]);
+        target_sv = norm2svyaz(ppm, gamma, theta, v[4]);
         v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
         gamma = 0;
 
-        centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
+        centerrad(v, ppm, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
 
         // Ћогика совершени€ маневров todo
         if (list_rotation[count_targ] == 1)
