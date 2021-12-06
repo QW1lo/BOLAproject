@@ -80,7 +80,7 @@ int main()
 
 	// Цель в гео координатах
 	Lin::Vector tar;
-	tar = vec_coord[1];
+	tar = vec_coord[2];
 
 	LA model(X, vec_coord, tar);
 	std::cout << "model\n";

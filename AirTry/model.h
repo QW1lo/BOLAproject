@@ -79,7 +79,7 @@ class LA : public TModel
 {
 private:
     std::vector<Lin::Vector> list_ppm;
-    
+    double last_psi = 0;
     std::vector<int> list_rotation;
     int count_targ = 0;
     double m = 80000;
@@ -251,7 +251,7 @@ public:
         //Lin::Vector target(3);
         //if (start != 2)
         //    return Lin::Vector(5);
-        if (t > 3610)
+        if (t >= 1880)
             int c1 = 0;
        ppm = list_ppm[count_targ];
 
@@ -407,6 +407,16 @@ public:
     void addResult(const Lin::Vector& v, double t)
     {
         X = v;
+        
+        if ((X[4] - last_psi) > 0)
+            gamma = -15 * GR2RAD;
+        if ((X[4] - last_psi) < 0)
+            gamma = 15 * GR2RAD;
+        if (X[4] == last_psi)
+            gamma = 0 * GR2RAD;
+        
+        last_psi = X[4];
+
         std::vector<double> tmp;
 
         tmp.push_back(t);
