@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab2", "Lab2\Lab2.vcxproj", "{2ABB7E93-0368-49E5-917E-3DDF46B1B346}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AirTry", "AirTry\AirTry.vcxproj", "{331EA74F-DF7F-4335-90BF-7EF824DB9A06}"
 EndProject
 Global
@@ -15,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Debug|x64.ActiveCfg = Debug|x64
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Debug|x64.Build.0 = Debug|x64
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Debug|x86.ActiveCfg = Debug|Win32
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Debug|x86.Build.0 = Debug|Win32
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Release|x64.ActiveCfg = Release|x64
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Release|x64.Build.0 = Release|x64
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Release|x86.ActiveCfg = Release|Win32
-		{2ABB7E93-0368-49E5-917E-3DDF46B1B346}.Release|x86.Build.0 = Release|Win32
 		{331EA74F-DF7F-4335-90BF-7EF824DB9A06}.Debug|x64.ActiveCfg = Debug|x64
 		{331EA74F-DF7F-4335-90BF-7EF824DB9A06}.Debug|x64.Build.0 = Debug|x64
 		{331EA74F-DF7F-4335-90BF-7EF824DB9A06}.Debug|x86.ActiveCfg = Debug|Win32
