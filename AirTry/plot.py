@@ -11,7 +11,7 @@ y = []
 z = []
 
 for i in range(len(data)):
-    if (len(data[i]) == 5):
+    if (len(data[i]) == 6):
         T.append(data[i][0])
         x.append(data[i][1] / 1000)
         y.append(data[i][2] / 1000)

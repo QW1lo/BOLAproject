@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath> 
 
-int* massbin(double max_value, int max_digit, int digit, double value) {
+inline int* massbin(double max_value, int max_digit, int digit, double value) {
 	// 20 - число значащих разрядов в ARINC_BNR
 	int* arr = new int[max_digit]();
 	int last_i = 0;
@@ -25,7 +25,7 @@ int* massbin(double max_value, int max_digit, int digit, double value) {
 }
 
 // Перевод десятичного числа в двоичный float на выводе int для удобной передачи
-int bindec(double max_value, int max_digit, int digit, double value) {
+inline int bindec(double max_value, int max_digit, int digit, double value) {
 	int* arr = massbin(max_value, max_digit, digit, value);
 	int sum = 0;
 	for (int i = 0; i < max_digit; ++i) {
@@ -35,7 +35,7 @@ int bindec(double max_value, int max_digit, int digit, double value) {
 	return sum;
 }
 
-double* decbin(int dec, int max_digit) {
+inline double* decbin(int dec, int max_digit) {
 	double* bin = new double[max_digit]();
 	for (int i = 0; dec > 0; i++)
 	{
@@ -45,7 +45,7 @@ double* decbin(int dec, int max_digit) {
 	return bin;
 }
 
-int massdec(double max_value, int max_digit, int digit, int dec) {
+inline int massdec(double max_value, int max_digit, int digit, int dec) {
 	// 20 - число значащих разрядов в ARINC_BNR
 	double* arr = decbin(dec, max_digit);
 	int sum = 0;

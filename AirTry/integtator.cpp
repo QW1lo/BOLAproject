@@ -42,7 +42,7 @@ void TRunge::integrate(TModel& Model)
 	Lin::Vector X = Model.getInitialConditions();
 	Lin::Vector k1, k2, k3, k4;
 	
-	Model.addResult(X, t);
+	//Model.addResult(X, t);
 	//while ()
 	//{	
 		

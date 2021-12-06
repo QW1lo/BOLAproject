@@ -16,6 +16,7 @@ extern double RAD2GR;
 class TModel
 {
 public:
+    int start = 0;
     // Текущий вектор состояния
     Lin::Vector X;
     // Хранилище результатов
@@ -248,7 +249,11 @@ public:
     {
         // todo: костыли с каунтами - персмотреть алгоритм определения поворотов
         //Lin::Vector target(3);
-        ppm = list_ppm[count_targ];
+        //if (start != 2)
+        //    return Lin::Vector(5);
+        if (t > 3610)
+            int c1 = 0;
+       ppm = list_ppm[count_targ];
 
         if (abs(v[0] - ppm[0]) < 100 && abs(v[2] - ppm[2]) < 40)
         {
@@ -408,20 +413,8 @@ public:
         for (int i = 0; i < v.size(); ++i)
             tmp.push_back(v[i]);
 
-        fprintf(output, "%lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
+        fprintf(output, "%lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], gamma, theta, tmp[5]);
         
-        
-
-        /*if (kml) 
-        {
-            Lin::Vector geo;
-            geo = { tmp[1],  tmp[2] , tmp[3] };
-            geo - Geo_TSK(geo, t);
-    
-            kml->KMLNewValue(geo);
-        }*/
-      
-
     }
 
 };

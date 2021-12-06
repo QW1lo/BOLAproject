@@ -64,23 +64,20 @@ public:
 			Lin::Vector d;
 			Lin::Vector geo;
 			d = VSK_to_svyaz();
-			mut.lock();
 			d = model->svyaz_to_norm(d, model->gamma, model->theta, model->X[4]);
 			d = d + X_la;
 			geo = model->TSK_to_Geo(d, 0) * 180 / M_PI;
-			mut.unlock();
 			Point.push_back(geo);
 		}
 
 	}
 
-	void move_LA() {
-		mut.lock();
+	void move_LA() 
+	{
 		for (int i = 0; i < 3; i++) {
 
 			X_la[i] = model->X[i];
 		}
-		mut.unlock();
 	}
 
 	void limit_angles() {
@@ -118,7 +115,7 @@ public:
 	}
 
 	void get_angles() {
-
+		mut.lock();
 		move_LA();
 
 		Lin::Vector R(3);  // Вектор цели относительно ЛА
@@ -130,9 +127,9 @@ public:
 		//model->X[4] = -M_PI / 4;
 		//model->gamma = -90 * M_PI / 180;
 		//model->theta = 10 * M_PI / 180;
-		mut.lock();
+		
 		R = model->norm2svyaz(R, model->gamma, model->theta, model->X[4]); //Поворот
-		mut.unlock();
+		
 		Range = R.length();
 
 		Theta = M_PI / 2 - atan2(R[0], R[1]);
@@ -140,6 +137,7 @@ public:
 
 		limit_angles();
 		print_kml();
+		mut.unlock();
 
 	}
 
