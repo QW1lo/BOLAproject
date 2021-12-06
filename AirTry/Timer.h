@@ -1,4 +1,4 @@
-#define TIMERHPP
+#pragma once
 #include <chrono>
 #include <thread>
 #include <functional>

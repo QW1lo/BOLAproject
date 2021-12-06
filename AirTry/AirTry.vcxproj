@@ -148,7 +148,7 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="OPS.cpp" />
     <ClCompile Include="testkml.cpp" />
-    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="atom.h" />

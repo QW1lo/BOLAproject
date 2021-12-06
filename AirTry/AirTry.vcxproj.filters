@@ -33,16 +33,16 @@
     <ClCompile Include="testkml.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="atom.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Lab2.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Timer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClCompile>
+    <ClCompile Include="Lab2.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,22 +56,22 @@
     <ClInclude Include="model.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="kmlTransformer.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="atom.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="bin.h">
-      <Filter>Исходные файлы</Filter>
+    <ClInclude Include="OPS.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="kmlTransformer.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="protocol.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Lab2.h">
+    <ClInclude Include="bin.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="OPS.h">
+    <ClInclude Include="Lab2.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,5 @@
-#include "Lab2.h"
+//#include "Lab2.h"
+#include "Timer.h"
 #include "OPS.h"
 #include "integrator.h"
 #include "atom.h"
@@ -8,50 +9,50 @@
 
 int main()
 {
-	setlocale(LC_ALL, "rus");
+	//setlocale(LC_ALL, "rus");
 
-	char buff[10 * 1014];
+	//char buff[10 * 1014];
 
-	// Шаг 1 - иницилизация библиотеки Winsocks
-	if (WSAStartup(0x202, (WSADATA*)&buff[0]))
-	{
-		printf("WSAStartup error: %d\n",
-			WSAGetLastError());
-		return -1;
-	}
+	//// Шаг 1 - иницилизация библиотеки Winsocks
+	//if (WSAStartup(0x202, (WSADATA*)&buff[0]))
+	//{
+	//	printf("WSAStartup error: %d\n",
+	//		WSAGetLastError());
+	//	return -1;
+	//}
 
-	// Шаг 2 - открытие сокета
-	_s = socket(AF_INET, SOCK_DGRAM, 0);
-	if (_s == INVALID_SOCKET)
-	{
-		printf("socket() error: %d\n", WSAGetLastError());
-		WSACleanup();
-		return -1;
-	}
+	//// Шаг 2 - открытие сокета
+	//_s = socket(AF_INET, SOCK_DGRAM, 0);
+	//if (_s == INVALID_SOCKET)
+	//{
+	//	printf("socket() error: %d\n", WSAGetLastError());
+	//	WSACleanup();
+	//	return -1;
+	//}
 
-	// Шаг 3 - обмен сообщений с сервером
-	HOSTENT* hst;
-	_destAddr;
-	_destAddr.sin_family = AF_INET;
-	_destAddr.sin_port = htons(PORT);
+	//// Шаг 3 - обмен сообщений с сервером
+	//HOSTENT* hst;
+	//_destAddr;
+	//_destAddr.sin_family = AF_INET;
+	//_destAddr.sin_port = htons(PORT);
 
-	// определение IP-адреса узла
-	if (inet_addr(SERVERADDR))
-		_destAddr.sin_addr.s_addr = inet_addr(SERVERADDR);
+	//// определение IP-адреса узла
+	//if (inet_addr(SERVERADDR))
+	//	_destAddr.sin_addr.s_addr = inet_addr(SERVERADDR);
 
-	else
-	{
-		if (hst = gethostbyname(SERVERADDR))
-			_destAddr.sin_addr.s_addr = ((unsigned long**)hst->h_addr_list)[0][0];
+	//else
+	//{
+	//	if (hst = gethostbyname(SERVERADDR))
+	//		_destAddr.sin_addr.s_addr = ((unsigned long**)hst->h_addr_list)[0][0];
 
-		else
-		{
-			printf("Unknown host: %d\n", WSAGetLastError());
-			closesocket(_s);
-			WSACleanup();
-			return -1;
-		}
-	}
+	//	else
+	//	{
+	//		printf("Unknown host: %d\n", WSAGetLastError());
+	//		closesocket(_s);
+	//		WSACleanup();
+	//		return -1;
+	//	}
+	//}
 
 	end.store(false);
 
@@ -89,8 +90,8 @@ int main()
 	std::cout << "ops\n";
 
 	// СНС
-	Sat_NS SNS(&model, 10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18);
-	In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
+	//Sat_NS SNS(&model, 10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18);
+	//In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
 
 	TRunge integrator(0, 1000, 1);
 	std::cout << "integrator\n";
@@ -100,10 +101,10 @@ int main()
 	timer.add(std::chrono::microseconds(5), [&]() {integrator.integrate(model); });
 
 
-	timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
-	timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
-	timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
-	timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
+	//timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
+	//timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
+	//timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
+	//timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
 
 	while (1) {
 		if (end.load()) {
