@@ -1,3 +1,4 @@
+#pragma once
 #include <cmath> 
 
 int* massbin(double max_value, int max_digit, int digit, double value) {

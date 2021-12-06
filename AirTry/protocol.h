@@ -1,3 +1,4 @@
+#pragma once
 #include <map>
 
 #pragma pack(push,1)

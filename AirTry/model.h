@@ -95,8 +95,6 @@ private:
 public:
     FILE* output;
 
-    //KML_Transformer* kml;
-
     std::vector<Lin::Vector> Way;
     
 

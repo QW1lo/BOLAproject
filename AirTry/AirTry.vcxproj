@@ -144,6 +144,7 @@
     <ClCompile Include="integtator.cpp" />
     <ClCompile Include="Lab2.cpp" />
     <ClCompile Include="Lin.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="OPS.cpp" />
     <ClCompile Include="testkml.cpp" />
@@ -154,8 +155,10 @@
     <ClInclude Include="bin.h" />
     <ClInclude Include="integrator.h" />
     <ClInclude Include="kmlTransformer.h" />
+    <ClInclude Include="Lab2.h" />
     <ClInclude Include="Lin.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="OPS.h" />
     <ClInclude Include="protocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

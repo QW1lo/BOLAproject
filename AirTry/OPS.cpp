@@ -1,15 +1,5 @@
-#include <iostream>
-#include "Lin.h"
-#include "model.h"
+#include "OPS.h"
 
-#include <string>
-#include "kml/dom.h"
-#include "kmlTransformer.h"
-#include "integrator.h"
-#include "Timer.cpp"
-//#include <atomic>
-//#include <mutex>
-#include "atom.h"
 
 
 // libkml types are in the kmldom namespace
@@ -164,73 +154,3 @@ public:
 	}
 	
 };
-
-int main()
-{	
-
-	end.store(false);
-
-	// Точка старта в гео
-	double phi0 = 61.0 * M_PI / 180;			// Начальная широта, долгота и
-	double lambda0 = 62.3231936777456 * M_PI / 180;			// нулевая высота т.к. стартовая
-	double h0 = 0;
-
-	// Начальынй ВС
-	Lin::Vector X;
-	X = { phi0, lambda0, h0, 0.001, 0};
-
-	// Массив ппм
-	KML_Transformer kml_trns;
-
-	vector<Lin::Vector> vec_coord;
-	vec_coord = parser("pyt.kml");
-
-	// Характеристики ОПС
-	double gam_max = 45;
-	double gam_min = -45;
-	double th_max = 0;
-	double th_min = -90;
-	double rng_max = 20000;
-
-	// Цель в гео координатах
-	Lin::Vector tar;
-	tar = vec_coord[1];
-
-	LA model(X, vec_coord, tar);
-	std::cout << "model\n";
-
-	
-	OPS system(&model, gam_max, gam_min, th_max, th_min, rng_max);
-	std::cout << "ops\n";
-	TRunge integrator(0, 1000, 1);
-	std::cout << "integrator\n";
-
-	Timer timer;
-	timer.add(std::chrono::microseconds(500), [&]() {system.get_angles(); });
-	timer.add(std::chrono::microseconds(5), [&]() {integrator.integrate(model); });
-	//std::thread thread1([&]() {integrator.integrate(model); });
-	//thread1.join();
-
-	while (1) {
-		if (end.load()) {
-			break;
-		}
-	}
-	
-	std::cout << "done\n";
-	
-	kml_trns.CreateKML("result");
-	for (int i = 0; i < model.Way.size(); i++)
-	{
-		kml_trns.KMLNewValue(model.Way[i]);
-	}
-	std::cout << "kml la writen\n";
-
-
-	for (int i = 0; i < system.Point.size(); i++)
-	{
-		kml_trns.KML_ops_point(i, system.Point[i]);
-	}
-	std::cout << "kml ops writen\n";
-	
-}

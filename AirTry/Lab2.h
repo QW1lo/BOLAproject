@@ -1,0 +1,10 @@
+#pragma once
+#include <iostream>
+//#include "Timer.cpp"
+#include <WinSock2.h>
+#include "protocol.h"
+#include "bin.h"
+//#include <mutex>
+#include <random>
+#pragma comment(lib,"Ws2_32.lib")
+#include "model.h"

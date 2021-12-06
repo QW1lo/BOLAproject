@@ -1,11 +1,5 @@
-﻿#include <iostream>
-#include "Timer.cpp"
-#include <WinSock2.h>
-#include "protocol.h"
-#include "bin.h"
-#include <mutex>
-#include <random>
-#pragma comment(lib,"Ws2_32.lib")
+﻿#include "Lab2.h"
+
 
 #define PORT 12346
 #define SERVERADDR "127.0.0.1"
@@ -13,7 +7,7 @@
 
 SOCKET _s;
 sockaddr_in _destAddr;
-std::mutex mutex;
+extern std::mutex mut;
 std::mt19937 generator;
 
 
@@ -28,9 +22,13 @@ private:
 
 public:
 
-    Sat_NS(double H0, double HDOP0, double VDOP0, double Track_angle0, double Cur_Phi0,
+    LA* model;
+
+    Sat_NS(LA* model0, double H0, double HDOP0, double VDOP0, double Track_angle0, double Cur_Phi0,
         double Cur_Phi_p0, double Cur_Lambda0, double Cur_Lambda_p0, double Delay0, double UTC_h0,
         double UTC_l0, double V_h0, int Year0, int Mounth0, int Day0) {
+
+        model = model0;
         H = H0;
         HDOP = HDOP0;
         VDOP = VDOP0;
@@ -50,7 +48,7 @@ public:
 
     void test_control() {
         std::cout << "test control start\n";
-        mutex.lock();
+        mut.lock();
 
         ARINC_FEATURES pack;                        // 
         pack.bits.adress = 273;                     // 
@@ -76,7 +74,7 @@ public:
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
 
-        mutex.unlock();
+        mut.unlock();
 
         auto start = std::chrono::system_clock::now();                  // 
         auto end = std::chrono::system_clock::now();                    // 
@@ -86,7 +84,7 @@ public:
             elapsed_seconds = end - start;                              //
         };                                                              //
 
-        mutex.lock();
+        mut.lock();
         pack.bits.mode = 1;         // Тест  
         pack.bits.submode = 1;      // контроль   
         pack.bits.reject = 0;       // пройден
@@ -97,7 +95,7 @@ public:
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
 
-        mutex.unlock();
+        mut.unlock();
         std::cout << "test control end\n";
     }
 
@@ -126,20 +124,24 @@ public:
 
         std::normal_distribution<double> delta(0.0, 0.01);
 
-        double h = H + delta(generator);                            //
+        Lin::Vector pos;
+        pos = {model->X[0], model->X[1], model->X[2] };
+        pos = model->TSK_to_Geo(pos, 0);
+
+        double h = pos[2] + delta(generator);                            //
         double hDOP = HDOP + delta(generator);                      //
         double vDOP = VDOP + delta(generator);                      // 
         double track_angle = Track_angle + delta(generator);        // 
-        double cur_Phi = Cur_Phi + delta(generator);                // 
+        double cur_Phi = pos[0] + delta(generator);                // 
         double cur_Phi_p = Cur_Phi_p + delta(generator);            // Создание 
-        double cur_Lambda = Cur_Lambda + delta(generator);          // зашумленных
+        double cur_Lambda = pos[1] + delta(generator);          // зашумленных
         double cur_Lambda_p = Cur_Lambda_p + delta(generator);      // измерений
         double delay = Delay + delta(generator);                    //
         double uTC_h = UTC_h + delta(generator);                    //
         double uTC_l = UTC_l + delta(generator);                    //  
         double v_h = V_h + delta(generator);                        //
 
-        mutex.lock();
+        mut.lock();
 		//delete buffer;
         buff_count = 0;
         //delete[] buffer;
@@ -289,12 +291,12 @@ public:
 
         fill_buff<ARINC_FEATURES>(pack_14);
 			
-        mutex.unlock();
+        mut.unlock();
 
     }
 	void test_send()
 	{
-		mutex.lock();
+        mut.lock();
 		ARINC_DISCRETE pack;                        // 
 		pack.bits.adress = 270;                     //
 		pack.bits.SDI = 1;                          //
@@ -320,7 +322,7 @@ public:
 		buffer = new char[sizeof(pack)];            // 
 		memset(buffer, 0, sizeof(pack));            // Заполнение буфера
 		memcpy(buffer, &pack, sizeof(pack));        //
-		mutex.unlock();
+        mut.unlock();
 	}
     template <class T>
     void fill_buff(T pack)
@@ -339,7 +341,7 @@ public:
     }
 
     void send_pack() {
-        mutex.lock();
+        mut.lock();
         if (not startup)
         {
             sendto(_s, &buffer[0], sizeof(buffer), 0,           //
@@ -364,7 +366,7 @@ public:
 
         }
 
-        mutex.unlock();
+        mut.unlock();
         std::cout << "send " << std::endl;
     }
 
@@ -390,9 +392,13 @@ private:
 
 public:
 	
-    In_NS(double Phi0, double Lambda0, double H0, double Psi0,
+    LA* model;
+
+    In_NS(LA* model0, double Phi0, double Lambda0, double H0, double Psi0,
         double Theta0, double Gamma0, double V_ns0, double V_ev0,
         double V_h_inertial0, double A_x0, double A_y0, double A_z0) {
+
+        model = model0;
         Phi = Phi0;
         Lambda = Lambda0;
         H = H0;
@@ -409,7 +415,7 @@ public:
 
     void test_control() {
         std::cout << "test control start\n";
-        mutex.lock();
+        mut.lock();
 
         ARINC_DISCRETE pack;                        // 
         pack.bits.adress = 270;                     //
@@ -437,7 +443,7 @@ public:
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
 
-        mutex.unlock();
+        mut.unlock();
 
         auto start = std::chrono::system_clock::now();                  // 
         auto end = std::chrono::system_clock::now();
@@ -448,7 +454,7 @@ public:
             elapsed_seconds = end - start;                              //
         };                                                              //
 
-        mutex.lock();
+        mut.lock();
         pack.bits.init_data = 0;    // тест контроль
         pack.bits.INS = 1;          //  пройден
         pack.bits.P = 1;            // + функция бита четности
@@ -458,12 +464,12 @@ public:
         memset(buffer, 0, sizeof(pack));            // Заполнение буфера
         memcpy(buffer, &pack, sizeof(pack));        //
 
-        mutex.unlock();
+        mut.unlock();
         std::cout << "test control end\n";
     }
 
     void prepare() {
-        mutex.lock();
+        mut.lock();
         std::cout << "prepare start\n";
 
         ARINC_DISCRETE pack;                        // 
@@ -487,7 +493,7 @@ public:
         pack.bits.SM = 0;                           //
         pack.bits.P = 1;                            //
 
-        mutex.unlock();
+        mut.unlock();
 
         auto start = std::chrono::system_clock::now();                  // 
         auto end = std::chrono::system_clock::now();                    //
@@ -500,16 +506,16 @@ public:
             if (elapsed_seconds.count() / (time_pr / 6.) - change > 1) 
 			{														    //
                 change += 1;                                            //
-                mutex.lock();                                           //
+                mut.lock();                                           //
                 pack.bits.scale = change;                               //
-                mutex.unlock();                                         //
+                mut.unlock();                                         //
             };                                                          //        
         };                                                              //
 
-        mutex.lock();
+        mut.lock();
         pack.bits.scale = 7;
         std::cout << "prepare end\n";
-        mutex.unlock();
+        mut.unlock();
     }
 
     void navigation() {
@@ -521,16 +527,18 @@ public:
             count_nav++;
         }
         
-
+        Lin::Vector pos;
+        pos = { model->X[0], model->X[1], model->X[2] };
+        pos = model->TSK_to_Geo(pos, 0);
        
         std::normal_distribution<double> delta(0.0, 0.01);
 
-        double phi = Phi + delta(generator);
-        double lambda = Lambda + delta(generator);
-        double h = H + delta(generator);
-        double psi = Psi + delta(generator);
-        double theta = Theta + delta(generator);
-        double gamma = Gamma + delta(generator);
+        double phi = pos[0] + delta(generator);
+        double lambda = pos[1] + delta(generator);
+        double h = pos[2] + delta(generator);
+        double psi = model->X[4] + delta(generator);
+        double theta = model->theta + delta(generator);
+        double gamma = model->gamma + delta(generator);
         double v_ns = V_ns + delta(generator);
         double v_ev = V_ev + delta(generator);
         double v_h_inertial = V_h_inertial + delta(generator);
@@ -538,7 +546,7 @@ public:
         double a_z = A_z + delta(generator);
         double a_y = A_y + delta(generator);
 
-        mutex.lock();
+        mut.lock();
         buff_count = 0;
             	// 13 - кол-во слов состояний
                 
@@ -673,7 +681,7 @@ public:
 
         fill_buff<ARINC_DISCRETE>(pack_13);
 
-        mutex.unlock();
+        mut.unlock();
       
     }
 	template <class T>
@@ -693,7 +701,7 @@ public:
 	}
 
     void send_pack() {
-        mutex.lock();
+        mut.lock();
         if (not startup)
         {
             sendto(_s, &buffer[0], sizeof(buffer), 0,           //
@@ -718,7 +726,7 @@ public:
 
 		}
 
-        mutex.unlock();
+        mut.unlock();
         std::cout << "send " << std::endl;
     }
 
@@ -734,60 +742,60 @@ public:
 };
 
 
-int main()
-{
-	setlocale(LC_ALL, "rus");
-    Sat_NS SNS(10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18); // Класс СНС
-    In_NS INS(33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
-
-    char buff[10 * 1014];
-
-    // Шаг 1 - иницилизация библиотеки Winsocks
-    if (WSAStartup(0x202, (WSADATA*)&buff[0]))
-    {
-        printf("WSAStartup error: %d\n",
-            WSAGetLastError());
-        return -1;
-    }
-
-    // Шаг 2 - открытие сокета
-    _s = socket(AF_INET, SOCK_DGRAM, 0);
-    if (_s == INVALID_SOCKET)
-    {
-        printf("socket() error: %d\n", WSAGetLastError());
-        WSACleanup();
-        return -1;
-    }
-
-    // Шаг 3 - обмен сообщений с сервером
-    HOSTENT* hst;
-    _destAddr;
-    _destAddr.sin_family = AF_INET;
-    _destAddr.sin_port = htons(PORT);
-
-    // определение IP-адреса узла
-    if (inet_addr(SERVERADDR))
-        _destAddr.sin_addr.s_addr = inet_addr(SERVERADDR);
-
-    else
-    {
-        if (hst = gethostbyname(SERVERADDR))
-            _destAddr.sin_addr.s_addr = ((unsigned long**)hst->h_addr_list)[0][0];
-
-        else
-        {
-            printf("Unknown host: %d\n", WSAGetLastError());
-            closesocket(_s);
-            WSACleanup();
-			return -1;
-        }
-    }
-
-    Timer timer;
-    timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
-    timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
-    timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
-    timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
-    
-	while (true) { std::this_thread::sleep_for(std::chrono::seconds(3600)); };
-};
+//int main()
+//{
+//	setlocale(LC_ALL, "rus");
+//    Sat_NS SNS(10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18); // Класс СНС
+//    In_NS INS(33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
+//
+//    char buff[10 * 1014];
+//
+//    // Шаг 1 - иницилизация библиотеки Winsocks
+//    if (WSAStartup(0x202, (WSADATA*)&buff[0]))
+//    {
+//        printf("WSAStartup error: %d\n",
+//            WSAGetLastError());
+//        return -1;
+//    }
+//
+//    // Шаг 2 - открытие сокета
+//    _s = socket(AF_INET, SOCK_DGRAM, 0);
+//    if (_s == INVALID_SOCKET)
+//    {
+//        printf("socket() error: %d\n", WSAGetLastError());
+//        WSACleanup();
+//        return -1;
+//    }
+//
+//    // Шаг 3 - обмен сообщений с сервером
+//    HOSTENT* hst;
+//    _destAddr;
+//    _destAddr.sin_family = AF_INET;
+//    _destAddr.sin_port = htons(PORT);
+//
+//    // определение IP-адреса узла
+//    if (inet_addr(SERVERADDR))
+//        _destAddr.sin_addr.s_addr = inet_addr(SERVERADDR);
+//
+//    else
+//    {
+//        if (hst = gethostbyname(SERVERADDR))
+//            _destAddr.sin_addr.s_addr = ((unsigned long**)hst->h_addr_list)[0][0];
+//
+//        else
+//        {
+//            printf("Unknown host: %d\n", WSAGetLastError());
+//            closesocket(_s);
+//            WSACleanup();
+//			return -1;
+//        }
+//    }
+//
+//    Timer timer;
+//    timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
+//    timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
+//    timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
+//    timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
+//    
+//	while (true) { std::this_thread::sleep_for(std::chrono::seconds(3600)); };
+//};

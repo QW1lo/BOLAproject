@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-
+#pragma once
 #ifndef integratorH
 #define integratorH
 
