@@ -249,8 +249,8 @@ public:
     {
         // todo: костыли с каунтами - персмотреть алгоритм определения поворотов
         //Lin::Vector target(3);
-        //if (start != 2)
-        //    return Lin::Vector(5);
+        if (start != 2)
+            return Lin::Vector(5);
         if (t >= 1880)
             int c1 = 0;
        ppm = list_ppm[count_targ];

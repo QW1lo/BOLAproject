@@ -101,10 +101,10 @@ int main()
 	timer.add(std::chrono::microseconds(5), [&]() {integrator.integrate(model); });
 
 
-	//timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
-	//timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
-	//timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
-	//timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
+	timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
+	timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
+	timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
+	timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
 
 	while (1) {
 		if (end.load()) {
