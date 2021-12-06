@@ -230,8 +230,9 @@ public:
         end = 0;
         phi0 = X[0];
         lambda0 = X[1];
-        target = Geo_TSK(target0, 0);
-        target[0];
+        target = Geo_TSK(target0 * M_PI / 180, 0);
+        target[1] = 0;
+        //target[2] = 1000;
 
         for (int i = 0; i < 3; i++) {           
             X[i] = 0;                
@@ -251,11 +252,11 @@ public:
         //Lin::Vector target(3);
         ppm = list_ppm[count_targ];
 
-        if (abs(v[0] - ppm[0]) < 300 && abs(v[2] - ppm[2]) < 100)
+        if (abs(v[0] - ppm[0]) < 100 && abs(v[2] - ppm[2]) < 40)
         {
             Lin::Vector geo;
             Lin::Vector tsk;
-            tsk = { v[0],  v[1] , v[2] };
+            tsk = { v[0],  0 , v[2] };
             geo = TSK_to_Geo(tsk, 0) * 180 / M_PI;
             Way.push_back(geo);
 
@@ -280,7 +281,7 @@ public:
         //double nxa = 0;//sin(theta);
         double nxa;
         
-        if (v[3] < 500)
+        if (v[3] < 300)
             nxa = P / (m * g);
         else
             nxa = 0;

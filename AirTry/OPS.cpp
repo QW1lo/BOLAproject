@@ -69,12 +69,13 @@ public:
 		
 		if (Gamma != 0.0 && Theta != 0) {
 			Lin::Vector d;
-			d = VSK_to_svyaz();
-			d = model->svyaz_to_norm(d, model->gamma, model->theta, model->X[4]);
-			d = d + X_la;
-
 			Lin::Vector geo;
+			d = VSK_to_svyaz();
+			mut.lock();
+			d = model->svyaz_to_norm(d, model->gamma, model->theta, model->X[4]);
+			d = d + X_la;	
 			geo = model->TSK_to_Geo(d, 0) * 180 / M_PI;
+			mut.unlock();
 			Point.push_back(geo);
 		}
 
@@ -131,10 +132,6 @@ public:
 		for (int i = 0; i < 3; i++) {
 
 			R[i] = X_t[i] - X_la[i];
-		}
-
-		if (R.length() < 20000) {
-			int c = 0;
 		}
 
 		//model->X[4] = -M_PI / 4;
@@ -202,15 +199,13 @@ int main()
 	std::cout << "model\n";
 
 	
-
-	
 	OPS system(&model, gam_max, gam_min, th_max, th_min, rng_max);
 	std::cout << "ops\n";
 	TRunge integrator(0, 1000, 1);
 	std::cout << "integrator\n";
 
 	Timer timer;
-	timer.add(std::chrono::microseconds(1), [&]() {system.get_angles(); });
+	timer.add(std::chrono::microseconds(500), [&]() {system.get_angles(); });
 	timer.add(std::chrono::microseconds(5), [&]() {integrator.integrate(model); });
 	//std::thread thread1([&]() {integrator.integrate(model); });
 	//thread1.join();
