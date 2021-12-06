@@ -142,6 +142,7 @@
     <ClCompile Include="AirTry.cpp" />
     <ClCompile Include="atom.cpp" />
     <ClCompile Include="integtator.cpp" />
+    <ClCompile Include="Lab2.cpp" />
     <ClCompile Include="Lin.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="OPS.cpp" />
@@ -150,10 +151,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="atom.h" />
+    <ClInclude Include="bin.h" />
     <ClInclude Include="integrator.h" />
     <ClInclude Include="kmlTransformer.h" />
     <ClInclude Include="Lin.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="protocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

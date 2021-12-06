@@ -227,7 +227,7 @@ public:
     LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, Lin::Vector target0) :TModel(X0)
     {
         output = fopen("LAoutput.txt", "w");
-        end = 0;
+       
         phi0 = X[0];
         lambda0 = X[1];
         target = Geo_TSK(target0 * M_PI / 180, 0);

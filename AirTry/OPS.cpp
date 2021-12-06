@@ -68,14 +68,14 @@ public:
 	void print_kml() {
 		
 		if (Gamma != 0.0 && Theta != 0) {
+			//mut.lock();
 			Lin::Vector d;
 			Lin::Vector geo;
 			d = VSK_to_svyaz();
-			mut.lock();
 			d = model->svyaz_to_norm(d, model->gamma, model->theta, model->X[4]);
 			d = d + X_la;	
 			geo = model->TSK_to_Geo(d, 0) * 180 / M_PI;
-			mut.unlock();
+			//mut.unlock();
 			Point.push_back(geo);
 		}
 
@@ -139,7 +139,7 @@ public:
 		//model->theta = 10 * M_PI / 180;
 		mut.lock();
 		R = model->norm2svyaz(R, model->gamma, model->theta, model->X[4]); //Поворот
-		mut.unlock();
+		
 		Range = R.length();
 
 		Theta = M_PI/2 - atan2(R[0], R[1]);
@@ -147,6 +147,7 @@ public:
 
 		limit_angles();
 		print_kml();
+		mut.unlock();
 
 	}
 
@@ -193,7 +194,7 @@ int main()
 
 	// Цель в гео координатах
 	Lin::Vector tar;
-	tar = vec_coord[0];
+	tar = vec_coord[1];
 
 	LA model(X, vec_coord, tar);
 	std::cout << "model\n";
