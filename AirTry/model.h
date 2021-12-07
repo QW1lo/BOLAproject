@@ -255,7 +255,7 @@ public:
             int c1 = 0;
        ppm = list_ppm[count_targ];
 
-        if (abs(v[0] - ppm[0]) < 100 && abs(v[2] - ppm[2]) < 40)
+        if (abs(v[0] - ppm[0]) < 150 && abs(v[2] - ppm[2]) < 70)
         {
             Lin::Vector geo;
             Lin::Vector tsk;
