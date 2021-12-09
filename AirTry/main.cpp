@@ -56,10 +56,14 @@ int main()
 
 	end.store(false);
 
-	// Точка старта в гео
-	double phi0 = 61.0 * M_PI / 180;			// Начальная широта, долгота и
-	double lambda0 = 62.3231936777456 * M_PI / 180;			// нулевая высота т.к. стартовая
-	double h0 = 0;
+	//Точка старта в гео
+	//double phi0 = 61.0 * M_PI / 180;					// Для первого маршрута
+	//double lambda0 = 62.3231936777456 * M_PI / 180;	//
+	//double h0 = 0;									//
+
+	double phi0 = 54.90 * M_PI / 180;					// Для второго маршрута
+	double lambda0 = 39.03 * M_PI / 180;				//
+	double h0 = 0;										//
 
 	// Начальынй ВС
 	Lin::Vector X;
@@ -69,7 +73,8 @@ int main()
 	KML_Transformer kml_trns;
 
 	vector<Lin::Vector> vec_coord;
-	vec_coord = parser("pyt.kml");
+	//vec_coord = parser("pyt.kml");						// Для первого маршрута
+	vec_coord = parser("pyt2.kml");					    // Для второого маршрута
 
 	// Характеристики ОПС
 	double gam_max = 45;
