@@ -82,9 +82,9 @@ private:
     double last_psi = 0;
     std::vector<int> list_rotation;
     int count_targ = 0;
-    double m = 80000;
+    double m = 80000;   // масса ВС
     
-    int count = 1;
+    int count = 1;      
 
     int R = 6371000;										// Радиус земли, м
     double omega = 0.00007292115;							// Угловая скорость Земли, рад
@@ -249,8 +249,8 @@ public:
     {
         // todo: костыли с каунтами - персмотреть алгоритм определения поворотов
         //Lin::Vector target(3);
-        if (start != 2)
-            return Lin::Vector(5);
+        /*if (start != 2)
+            return Lin::Vector(5);*/
         if (t >= 1880)
             int c1 = 0;
        ppm = list_ppm[count_targ];
@@ -289,7 +289,7 @@ public:
         else
             nxa = 0;
 
-        if (v[3] > 50 && v[1] < 11600)
+        if (v[3] > 50 && v[1] < 6000)
             theta = 20 * GR2RAD;
         else theta = 0;
 
@@ -307,7 +307,7 @@ public:
 
         centerrad(v, ppm, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
 
-        // Логика совершения маневров todo
+        // Логика совершения маневров 
         if (list_rotation[count_targ] == 1)
         {
             if (abs(v_sv[2] - target_sv[2]) > 10)
@@ -335,7 +335,7 @@ public:
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
-        tmp[3] = g * (nxa - sin(theta));                                // V' в траекторной СК
+        tmp[3] = g * (nxa - sin(theta));                 // V' в траекторной СК
         tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy
 
         return tmp;

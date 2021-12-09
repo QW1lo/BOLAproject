@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Lin.h"
 #include "model.h"
+#include "Bomb.h"
 
 #include <string>
 #include "kml/dom.h"
@@ -13,31 +14,35 @@
 #include "atom.h"
 
 
-class OPS {
+
+class OPS 
+{
 private:
-	Lin::Vector X_la;
-	Lin::Vector X_t;
+	Bomb *asp;
+	Lin::Vector X_la;	// в норм ск
+	Lin::Vector X_t;	
 
 	double Gamma, Theta;
 	double Range;
 	double GammaMax, GammaMin, ThetaMax, ThetaMin, MaxRange;
-
+	double A = 0, T = 0;		// Относ и время падения АБ
+	
 	LA* model;
-
+	
 
 public:
 
 	std::vector<Lin::Vector> Point;
+	std::vector<Lin::Vector> Point_ASP;
 
-	OPS(LA* model0, double GammaMax0, double GammaMin0, double ThetaMax0, double ThetaMin0, double MaxRange0) {
+	OPS(LA* model0, Bomb* asp0, double GammaMax0, double GammaMin0, double ThetaMax0, double ThetaMin0, double MaxRange0) {
 
 		model = model0;
 		for (int i = 0; i < 3; i++) {
 			X_la.push_back(model->X[i]);
 			X_t.push_back(model->target[i]);
-
 		}
-
+		asp = asp0;
 
 		Gamma = 0;
 		Theta = 0;
@@ -57,7 +62,7 @@ public:
 			X_t[i] = X_t_cur[i];
 		}
 	}
-	// Нужна для отладки
+	
 	void print_kml() {
 
 		if (Gamma != 0.0 && Theta != 0) {
@@ -68,6 +73,26 @@ public:
 			d = d + X_la;
 			geo = model->TSK_to_Geo(d, 0) * 180 / M_PI;
 			Point.push_back(geo);
+		}
+		if (asp->drop == 1)
+		{
+			Lin::Vector d1;
+			d1 = { X_la[0], 0, X_la[2] };
+			Lin::Vector geo_drop_point;
+			Lin::Vector geo_land_point;
+			
+			
+			
+			geo_drop_point = model->TSK_to_Geo(d1, 0) * 180 / M_PI;
+			Point_ASP.push_back(geo_drop_point);
+
+			d1 = model->norm2svyaz(d1, 0, 0, model->X[4]);
+			d1[0] += A;
+			d1 = model->svyaz_to_norm(d1, 0, 0, model->X[4]);
+			geo_land_point = model->TSK_to_Geo(d1, 0) * 180 / M_PI;
+			Point_ASP.push_back(geo_land_point);
+
+			asp->drop++;
 		}
 
 	}
@@ -119,6 +144,7 @@ public:
 		move_LA();
 
 		Lin::Vector R(3);  // Вектор цели относительно ЛА
+		
 		for (int i = 0; i < 3; i++) {
 
 			R[i] = X_t[i] - X_la[i];
@@ -129,13 +155,18 @@ public:
 		//model->theta = 10 * M_PI / 180;
 		
 		R = model->norm2svyaz(R, model->gamma, model->theta, model->X[4]); //Поворот
-		
+
 		Range = R.length();
 
 		Theta = M_PI / 2 - atan2(R[0], R[1]);
 		Gamma = atan2(R[2], R[0]);
-
+		
 		limit_angles();
+
+		A_T_ASP();
+		if (Range < 19000)
+			check(R[0]);
+		
 		print_kml();
 		mut.unlock();
 
@@ -152,5 +183,25 @@ public:
 
 		return M * D;
 	}
+
+	void A_T_ASP()
+	{
+		double g = 9.81;
+
+		double H = model->X[1];
+		A = model->X[3] * pow(2 * H / g, 0.5)  * (1 - exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000031 * H / 5.));
+		std::cout << A << "\n";
+		T = pow(2 * H / g, 0.5)  * (1 + exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000063 * H) / 5.);
+
+	}
+
+	void check(double x_range)
+	{
+		if (abs(x_range - A) < 30 && asp->drop == 0)
+		{
+			asp->drop = 1;
+		}
+	}
+
 
 };

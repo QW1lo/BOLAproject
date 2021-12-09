@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
-	<name>pyt.kml</name>
+	<name>pyt2.kml</name>
 	<Style id="s_ylw-pushpin">
 		<IconStyle>
 			<scale>1.1</scale>
@@ -31,12 +31,12 @@
 		</Pair>
 	</StyleMap>
 	<Placemark>
-		<name>pyt</name>
+		<name>pyt2</name>
 		<styleUrl>#m_ylw-pushpin</styleUrl>
 		<LineString>
 			<tessellate>1</tessellate>
 			<coordinates>
-				62.3231936777456,61.88188804103084,0 51.69595014008315,60.98223871168443,0 48.08244628203639,56.872738849898,0  
+				38.91994738046802,55.85836701079346,0 40.47150734107148,56.39151528903837,0 43.50545690410819,56.28645700432106,0
 			</coordinates>
 		</LineString>
 	</Placemark>
