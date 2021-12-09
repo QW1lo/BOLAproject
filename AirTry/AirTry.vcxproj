@@ -139,8 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AirTry.cpp" />
     <ClCompile Include="atom.cpp" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="integtator.cpp" />
     <ClCompile Include="Lab2.cpp" />
     <ClCompile Include="Lin.cpp" />
@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="atom.h" />
     <ClInclude Include="bin.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="integrator.h" />
     <ClInclude Include="kmlTransformer.h" />
     <ClInclude Include="Lab2.h" />

@@ -5,6 +5,7 @@
 #include "atom.h"
 #include "model.h"
 #include "OPS.cpp"
+#include "Bomb.h"
 
 
 int main()
@@ -57,7 +58,7 @@ int main()
 	end.store(false);
 
 	// Точка старта в гео
-	double phi0 = 61.0 * M_PI / 180;			// Начальная широта, долгота и
+	double phi0 = 61.0 * M_PI / 180;						// Начальная широта, долгота и
 	double lambda0 = 62.3231936777456 * M_PI / 180;			// нулевая высота т.к. стартовая
 	double h0 = 0;
 
@@ -69,7 +70,7 @@ int main()
 	KML_Transformer kml_trns;
 
 	vector<Lin::Vector> vec_coord;
-	vec_coord = parser("pyt.kml");
+	vec_coord = parser("pyt2.kml");
 
 	// Характеристики ОПС
 	double gam_max = 45;
@@ -78,22 +79,22 @@ int main()
 	double th_min = -90;
 	double rng_max = 20000;
 
-	// Цель в гео координатах
+	// Цель ОПС в гео координатах
 	Lin::Vector tar;
 	tar = vec_coord[2];
 
 	LA model(X, vec_coord, tar);
 	std::cout << "model\n";
+	Bomb asp(&model, 250);
 
-
-	OPS system(&model, gam_max, gam_min, th_max, th_min, rng_max);
+	OPS system(&model, &asp, gam_max, gam_min, th_max, th_min, rng_max);
 	std::cout << "ops\n";
 
 	// СНС
 	Sat_NS SNS(&model, 10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18);
 	In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
 
-	TRunge integrator(0, 1000, 1);
+	TRunge integrator(0, 1000, 0.5);
 	std::cout << "integrator\n";
 
 	Timer timer;
@@ -101,10 +102,10 @@ int main()
 	timer.add(std::chrono::microseconds(5), [&]() {integrator.integrate(model); });
 
 
-	timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
-	timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
-	timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
-	timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
+	//timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
+	//timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
+	//timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
+	//timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
 
 	while (1) {
 		if (end.load()) {
@@ -127,5 +128,11 @@ int main()
 		kml_trns.KML_ops_point(i, system.Point[i]);
 	}
 	std::cout << "kml ops writen\n";
+
+	for (int i = 0; i < system.Point_ASP.size(); i++)
+	{
+		kml_trns.KML_ops_point(99+i, system.Point_ASP[i]);
+	}
+	std::cout << "kml asp writen\n";
 
 }
