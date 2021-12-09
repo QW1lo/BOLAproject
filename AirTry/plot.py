@@ -4,11 +4,6 @@ data = []
 with open("LAoutput.txt") as f:
     for line in f:
         data.append([float(x) for x in line.split()])
-H1 = 4700
-c = 8.3e-5
-sk = (1 - math.exp(-0.000106 * H1) * c * H1 / 6. * (1 + 0.000031 * H1 / 5.))
-sk2 = (1 - c * H1 / 6)
-print((300 * (H1 / 9.81 * 2)**0.5) * sk)
 
 T = []
 x = []
@@ -16,7 +11,7 @@ y = []
 z = []
 
 for i in range(len(data)):
-    if (len(data[i]) == 8):
+    if (len(data[i]) == 6):
         T.append(data[i][0])
         x.append(data[i][1] / 1000)
         y.append(data[i][2] / 1000)

@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AirTry.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="integtator.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -40,9 +43,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClCompile>
     <ClCompile Include="Lab2.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Bomb.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,9 +72,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Lab2.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Bomb.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
