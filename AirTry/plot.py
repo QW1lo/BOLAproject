@@ -1,19 +1,36 @@
 import math
 import matplotlib.pyplot as plt
 data = []
+datab = []
 with open("LAoutput.txt") as f:
     for line in f:
         data.append([float(x) for x in line.split()])
-#H1 = 4700
-#c = 8.3e-5
-#sk = (1 - math.exp(-0.000106 * H1) * c * H1 / 6. * (1 + 0.000031 * H1 / 5.))
-#sk2 = (1 - c * H1 / 6)
-#print((300 * (H1 / 9.81 * 2)**0.5) * sk)
 
+with open("outASP.txt") as f:
+    for line in f:
+        datab.append([float(x) for x in line.split()])
+
+
+#LA
 T = []
 x = []
 y = []
 z = []
+
+#ASP
+Tb = []
+xb = []
+yb = []
+zb = []
+
+
+
+for i in range(len(datab)):
+    if (len(datab[i]) == 7):
+        Tb.append(datab[i][0])
+        xb.append(datab[i][1])
+        yb.append(datab[i][2])
+        zb.append(datab[i][3])
 
 for i in range(len(data)):
     if (len(data[i]) == 8):
@@ -22,10 +39,18 @@ for i in range(len(data)):
         y.append(data[i][2] / 1000)
         z.append(data[i][3] / 1000)
 
-ax1 = plt.subplot(1, 2, 1)
-ax2 = plt.subplot(1, 2, 2)
+fig1 = plt.figure()
+fig2 = plt.figure()
+
+ax1 = fig1.add_subplot(1, 2, 1)
+ax2 = fig1.add_subplot(1, 2, 2)
 ax1.grid()
 ax2.grid()
+
+ax_b1 = fig2.add_subplot(1, 2, 1)
+ax_b2 = fig2.add_subplot(1, 2, 2)
+ax_b1.grid()
+ax_b2.grid()
 
 x1 = 1.1 * math.sqrt(2 * 90000 * 9.81 / (0.121 * 100000 * 201))
 print(x1)
@@ -33,15 +58,30 @@ print(x1)
 ax1.title.set_text("Oxy")
 ax2.title.set_text("Oxz")
 
-ax1.set_xlabel("X, m")
-ax1.set_ylabel("Y, m")
+ax1.set_xlabel("X, km")
+ax1.set_ylabel("Y, km")
 
-ax2.set_xlabel("X, m")
-ax2.set_ylabel("Z, m")
+ax2.set_xlabel("X, km")
+ax2.set_ylabel("Z, km")
+
+ax_b1.title.set_text("Oxy")
+ax_b2.title.set_text("Oxz")
+
+ax_b1.set_xlabel("X, m")
+ax_b1.set_ylabel("Y, m")
+
+ax_b2.set_xlabel("X, m")
+ax_b2.set_ylabel("Z, m")
+
+A = abs(math.sqrt(abs(xb[-1]-xb[0])**2 + abs(zb[-1]-zb[0])**2))
+print(A)
 
 ax1.plot(x, y)
 ax2.plot(x, z)
-ax2.scatter(200000  / 1000, -5000 / 1000, color = 'r')
-ax2.scatter(700 / 1000, 1000 / 1000, color = 'b')
-ax2.scatter(2000 / 1000, -300 / 1000, color = 'g')
+ax_b1.plot(xb, yb)
+ax_b2.plot(xb, zb)
+
+# ax2.scatter(200000  / 1000, -5000 / 1000, color = 'r')
+# ax2.scatter(700 / 1000, 1000 / 1000, color = 'b')
+# ax2.scatter(2000 / 1000, -300 / 1000, color = 'g')
 plt.show()

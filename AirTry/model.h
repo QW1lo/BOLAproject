@@ -106,6 +106,28 @@ public:
     double gamma = 0;
     double theta = 0;
 
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, Lin::Vector target0) :TModel(X0)
+    {
+        output = fopen("LAoutput.txt", "w");
+
+        phi0 = X[0];
+        lambda0 = X[1];
+        target = Geo_TSK(target0 * M_PI / 180, 0);
+        target[1] = 0;
+        //target[2] = 1000;
+
+        for (int i = 0; i < 3; i++) {
+            X[i] = 0;
+        }
+
+        for (int i = 0; i < Init_ppms.size(); i++) {
+            Lin::Vector tmp;
+            tmp = Geo_TSK(Init_ppms[i] * M_PI / 180, 0);
+            list_ppm.push_back(tmp);
+            list_rotation.push_back(0);
+        }
+    };
+
     Lin::Vector Rotate(char axis, Lin::Vector vec, double angle) {
 
         Lin::Matrix R(3, 3);	// ћатрица поворота
@@ -223,36 +245,13 @@ public:
         return vec;
     }
 
-    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, Lin::Vector target0) :TModel(X0)
-    {
-        output = fopen("LAoutput.txt", "w");
-       
-        phi0 = X[0];
-        lambda0 = X[1];
-        target = Geo_TSK(target0 * M_PI / 180, 0);
-        target[1] = 0;
-        //target[2] = 1000;
-
-        for (int i = 0; i < 3; i++) {           
-            X[i] = 0;                
-        }
-        
-        for (int i = 0; i < Init_ppms.size(); i++) {
-            Lin::Vector tmp;
-            tmp = Geo_TSK(Init_ppms[i] * M_PI / 180, 0);
-            list_ppm.push_back(tmp);
-            list_rotation.push_back(0);
-        }
-    };
-
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
         // todo: костыли с каунтами - персмотреть алгоритм определени€ поворотов
         //Lin::Vector target(3);
         /*if (start != 2)
             return Lin::Vector(5);*/
-        if (t >= 1880)
-            int c1 = 0;
+        
        ppm = list_ppm[count_targ];
 
         if (abs(v[0] - ppm[0]) < 150 && abs(v[2] - ppm[2]) < 70)
@@ -267,7 +266,7 @@ public:
             if (count_targ == list_ppm.size())
             {
                 count_targ = 0;
-                end.store(true);
+                //end.store(true);
                 for (int i = 0; i < list_rotation.size(); ++i)
                     list_rotation[i] = 0;
             }

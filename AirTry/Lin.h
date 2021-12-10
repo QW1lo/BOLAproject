@@ -10,7 +10,56 @@ typedef std::vector<std::vector<double>> BaseMatrix;
 
 namespace Lin {
 	extern double GR2RAD;
-	extern double RAD2GR;;
+	extern double RAD2GR;
+
+	inline double lin_interpol(double x0, double y0, double x1, double y1, double x)
+	{
+		return (((x - x0) * (y0 - y1) / (x0 - x1) + y0));
+	}
+
+	inline double linear_search(double x, int n, double x_arr[], double y_arr[])
+	{
+		// Используется бинарный поиск по массиву векторов, находится номера векторов, между которыми "лежит" 
+		// необходимый нам вектор на заданный момент времени. 
+		size_t i_left = 0, i_right = n - 1;
+		size_t mid;
+
+		while (((i_right - i_left) != 1))
+		{
+			mid = (i_left + i_right) / 2.0;
+			if (x_arr[mid] <= x)
+			{
+				i_left = mid;
+			}
+			if (x_arr[mid] > x)
+			{
+				i_right = mid;
+			}
+		}
+
+		return lin_interpol(x_arr[i_left], y_arr[i_left], x_arr[i_right], y_arr[i_right], x);
+	}
+
+	inline double lagrange(double x, int n, double x_arr[], double y_arr[])
+	{
+		//Пусть точки отсортированы по возрастанию координаты x
+
+		if (n > 5)
+			return (x <= x_arr[n / 2]) ? lagrange(x, (n + 1) / 2, x_arr, y_arr) :
+			lagrange(x, (n + 1) / 2, &x_arr[n / 2], &y_arr[n / 2]);
+
+		double sum = 0;
+		for (int i = 0; i < n; ++i) {
+
+			double l = 1;
+			for (int j = 0; j < n; ++j)
+				if (j != i)
+					l *= (x - x_arr[j]) / (x_arr[i] - x_arr[j]);
+			sum += y_arr[i] * l;
+		}
+
+		return sum;
+	}
 
 	class Matrix;
 	class Quaternion;

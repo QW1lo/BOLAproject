@@ -76,6 +76,7 @@ public:
 		}
 		if (asp->drop == 1)
 		{
+
 			Lin::Vector d1;
 			d1 = { X_la[0], 0, X_la[2] };
 			Lin::Vector geo_drop_point;
@@ -190,15 +191,16 @@ public:
 
 		double H = model->X[1];
 		A = model->X[3] * pow(2 * H / g, 0.5)  * (1 - exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000031 * H / 5.));
-		std::cout << A << "\n";
+		//std::cout << A << "\n";
 		T = pow(2 * H / g, 0.5)  * (1 + exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000063 * H) / 5.);
 
 	}
 
 	void check(double x_range)
 	{
-		if (abs(x_range - A) < 30 && asp->drop == 0)
+		if (abs(x_range - A) < 70 && asp->drop == 0)
 		{
+			asp->get_move(model->X, model->theta);
 			asp->drop = 1;
 		}
 	}

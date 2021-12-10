@@ -88,9 +88,13 @@ int main()
 	Lin::Vector tar;
 	tar = vec_coord[2];
 
+	Lin::Vector X_asp;
+    X_asp = { 1000, 2000, 1000, 120, 45 * 3.14 / 180., 0 };
+
 	LA model(X, vec_coord, tar);
 	std::cout << "model\n";
-	Bomb asp(&model, 250);
+	
+	Bomb asp(&model, X_asp, 250, 0.0000976302, 0.0829);
 
 	OPS system(&model, &asp, gam_max, gam_min, th_max, th_min, rng_max);
 	std::cout << "ops\n";
@@ -99,13 +103,21 @@ int main()
 	Sat_NS SNS(&model, 10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18);
 	In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
 
-	TRunge integrator(0, 1000, 0.1);
+	TRunge integratorLA(0, 1000, 0.1);
+	TRunge integratorASP(0, 1000, 0.1);
 	std::cout << "integrator\n";
 
 	Timer timer;
-	timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
-	timer.add(std::chrono::microseconds(5), [&]() {integrator.integrate(model); });
 
+	timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
+	timer.add(std::chrono::microseconds(5), [&]() 
+		{
+		integratorLA.integrate(model); 
+		if (asp.drop != 0)
+			integratorASP.integrate(asp); 
+		}
+	);
+	//timer.add(std::chrono::microseconds(5), [&]() { });
 
 	//timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
 	//timer.add(std::chrono::milliseconds(1000), [&]() {SNS.send_pack(); });
