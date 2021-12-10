@@ -16,7 +16,6 @@ Lin::Vector Bomb::getRight(const Lin::Vector& v, double t)
 	 	double q = ro(v[1]) * pow(v[3], 2) / 2.;		// —коростной напор
 		
 		double Cx = Lin::linear_search(M, table_size, M_table, Cx_table);  // линейна€ интерпол€ци€ по таблицам дл€ нахлождени€ CX
-		std::cout << M;
 		double X_f = Cx * q * S_mid;						// X -  сила лоб сопротивлени€
 
 		tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
@@ -37,6 +36,15 @@ void Bomb::get_move(Lin::Vector X_la, double theta)
 
 void Bomb::addResult(const Lin::Vector& v, double t)
 {
+	if (count_move % 10 == 0)
+	{
+		Lin::Vector geo;
+		Lin::Vector tsk;
+		tsk = { v[0],  0 , v[2] };
+		geo = model->TSK_to_Geo(tsk, 0) * 180 / M_PI;
+		list_move.push_back(geo);
+	}
+	count_move++;
 	// todo запись в кмл
 	X = v;
 	if (drop != 0)

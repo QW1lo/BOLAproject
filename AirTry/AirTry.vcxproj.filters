@@ -27,9 +27,6 @@
     <ClCompile Include="OPS.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="testkml.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="atom.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -43,6 +40,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Bomb.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="testkml.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

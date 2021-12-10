@@ -89,12 +89,12 @@ int main()
 	tar = vec_coord[2];
 
 	Lin::Vector X_asp;
-    X_asp = { 1000, 2000, 1000, 120, 45 * 3.14 / 180., 0 };
+    X_asp = { 0, 6000, 0, 300, 0 * 3.14 / 180., 0 };
 
 	LA model(X, vec_coord, tar);
 	std::cout << "model\n";
 	
-	Bomb asp(&model, X_asp, 250, 0.0000976302, 0.0829);
+	Bomb asp(&model, X_asp, 270, 23.424, 0.0829);
 
 	OPS system(&model, &asp, gam_max, gam_min, th_max, th_min, rng_max);
 	std::cout << "ops\n";
@@ -104,11 +104,11 @@ int main()
 	In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
 
 	TRunge integratorLA(0, 1000, 0.1);
-	TRunge integratorASP(0, 1000, 0.1);
+	TRunge integratorASP(0, 1000, 0.01);
 	std::cout << "integrator\n";
 
 	Timer timer;
-
+	//asp.drop++;
 	timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
@@ -124,8 +124,10 @@ int main()
 	//timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
 	//timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
 
-	while (1) {
-		if (end.load()) {
+	while (1) 
+	{
+		if (end.load()) 
+		{
 			break;
 		}
 	}
@@ -150,6 +152,15 @@ int main()
 	{
 		kml_trns.KML_ops_point(999+i, system.Point_ASP[i]);
 	}
-	std::cout << "kml asp writen\n";
+	std::cout << "kml asp A writen\n";
+
+
+	KML_Transformer kml_asp;
+	kml_asp.CreateKML("resultasp");
+	for (int i = 0; i < asp.list_move.size(); i++)
+	{
+		kml_asp.KMLNewValue(asp.list_move[i]);
+	}
+	std::cout << "kml asp line writen\n";
 
 }

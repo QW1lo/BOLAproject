@@ -22,6 +22,7 @@ private:
 	Lin::Vector X_la;	// в норм ск
 	Lin::Vector X_t;	
 
+	int count_print = 0;
 	double Gamma, Theta;
 	double Range;
 	double GammaMax, GammaMin, ThetaMax, ThetaMin, MaxRange;
@@ -65,14 +66,19 @@ public:
 	
 	void print_kml() {
 
-		if (Gamma != 0.0 && Theta != 0) {
-			Lin::Vector d;
-			Lin::Vector geo;
-			d = VSK_to_svyaz();
-			d = model->svyaz_to_norm(d, model->gamma, model->theta, model->X[4]);
-			d = d + X_la;
-			geo = model->TSK_to_Geo(d, 0) * 180 / M_PI;
-			Point.push_back(geo);
+		if (Gamma != 0.0 && Theta != 0 ) 
+		{
+			if (count_print % 10 == 0) 
+			{
+				Lin::Vector d;
+				Lin::Vector geo;
+				d = VSK_to_svyaz();
+				d = model->svyaz_to_norm(d, model->gamma, model->theta, model->X[4]);
+				d = d + X_la;
+				geo = model->TSK_to_Geo(d, 0) * 180 / M_PI;
+				Point.push_back(geo);
+			}
+			count_print++;
 		}
 		if (asp->drop == 1)
 		{
@@ -81,8 +87,6 @@ public:
 			d1 = { X_la[0], 0, X_la[2] };
 			Lin::Vector geo_drop_point;
 			Lin::Vector geo_land_point;
-			
-			
 			
 			geo_drop_point = model->TSK_to_Geo(d1, 0) * 180 / M_PI;
 			Point_ASP.push_back(geo_drop_point);
@@ -191,15 +195,16 @@ public:
 
 		double H = model->X[1];
 		A = model->X[3] * pow(2 * H / g, 0.5)  * (1 - exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000031 * H / 5.));
-		//std::cout << A << "\n";
+		std::cout << A << "\n";
 		T = pow(2 * H / g, 0.5)  * (1 + exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000063 * H) / 5.);
 
 	}
 
 	void check(double x_range)
 	{
-		if (abs(x_range - A) < 70 && asp->drop == 0)
+		if (abs(x_range - A) < 30 && asp->drop == 0)
 		{
+			std::cout << "START ASP!";
 			asp->get_move(model->X, model->theta);
 			asp->drop = 1;
 		}

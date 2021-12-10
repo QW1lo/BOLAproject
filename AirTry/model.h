@@ -197,6 +197,7 @@ public:
         return tmp;
     }
 
+    // todo перевод не в географическую СК а геодезическую
     Lin::Vector TSK_to_Geo(Lin::Vector vec, float time) {
 
         vec = TSK_to_ISK(vec, time);
