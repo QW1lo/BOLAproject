@@ -66,7 +66,7 @@ int main()
 	double lambda0 = 39.03 * M_PI / 180;				//
 	double h0 = 0;										//
 
-	// Начальынй ВС
+	// Начальный вс ВС
 	Lin::Vector X;
 	X = { phi0, lambda0, h0, 0.001, 0 };
 
@@ -88,13 +88,19 @@ int main()
 	Lin::Vector tar;
 	tar = vec_coord[2];
 
+	// Нач вектор состояния АСП
 	Lin::Vector X_asp;
     X_asp = { 0, 6000, 0, 300, 0 * 3.14 / 180., 0 };
+
 
 	LA model(X, vec_coord, tar);
 	std::cout << "model\n";
 	
-	Bomb asp(&model, X_asp, 270, 23.424, 0.0829);
+	double m_bomb = 270;
+	double theta_t = 23.424;		// Характерестическое время бомбы
+	double S_mid = 0.0829;			// Площадб миделя
+
+	Bomb asp(&model, X_asp, m_bomb, theta_t, S_mid);
 
 	OPS system(&model, &asp, gam_max, gam_min, th_max, th_min, rng_max);
 	std::cout << "ops\n";

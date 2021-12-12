@@ -40,12 +40,12 @@ inline double* decbin(int dec, int max_digit) {
 	for (int i = 0; dec > 0; i++)
 	{
 		bin[max_digit - (i + 1)] = (dec % 2);
-		dec /= 2;
+		dec /= 2.;
 	}
 	return bin;
 }
 
-inline int massdec(double max_value, int max_digit, int digit, int dec) {
+inline double massdec(double max_value, int max_digit, int digit, int dec) {
 	// 20 - число значащих разрядов в ARINC_BNR
 	double* arr = decbin(dec, max_digit);
 	int sum = 0;

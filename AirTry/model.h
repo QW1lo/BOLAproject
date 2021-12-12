@@ -27,7 +27,7 @@ public:
     TModel(Lin::Vector& X0) { X = X0; }
     // Абстрактная перегружаемая функция правых частей ДУ (X - вектор состояния, t - независимый аргумент)
     virtual Lin::Vector getRight(const Lin::Vector& v, double t) = 0;
-    // Получение начальных условий
+    // Получение текущего вектора состояния
     inline Lin::Vector getInitialConditions() const { return X; }
     // Порядок системы - по размерности вектора начальных условий
     inline int getOrder() const { return X.size(); }
@@ -96,12 +96,12 @@ private:
 public:
     FILE* output;
 
-    std::vector<Lin::Vector> Way;
+    std::vector<Lin::Vector> Way;                           // Для КМЛ путь в ГСК
     
 
-    Lin::Vector target;
+    Lin::Vector target;                                     // Вектор В ТСК цели
 
-    Lin::Vector ppm;
+    Lin::Vector ppm;                                        // Вектор в ТСК текущего ппм
 
     double gamma = 0;
     double theta = 0;
@@ -375,7 +375,7 @@ public:
         if (*rotation == 1)
             return 0;
         *rotation = 1;
-        double Ra = 200 * 200 / (9.81 * tan(15 * GR2RAD));
+        double Ra = 200. * 200 / (9.81 * tan(15 * GR2RAD));
         double dt = 0.1;
         dPSI *= sign;
         double d = dPSI * dt;

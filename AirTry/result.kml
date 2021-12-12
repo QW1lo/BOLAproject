@@ -13,7 +13,7 @@
       <name>Waypoint0</name>
       <Point>
         <coordinates>
-          43.4996323454337,56.2849884503525,461541.211797407
+          43.4996323454491,56.2849884503512,461541.211923339
         </coordinates>
       </Point>
     </Placemark>
@@ -21,7 +21,7 @@
       <name>Waypoint1</name>
       <Point>
         <coordinates>
-          43.4996323451914,56.2849884503737,461541.209842906
+          43.499632345291,56.284988450365,461541.210639637
         </coordinates>
       </Point>
     </Placemark>
@@ -29,7 +29,7 @@
       <name>Waypoint2</name>
       <Point>
         <coordinates>
-          43.4996323449443,56.2849884503951,461541.207902172
+          43.4996323450882,56.2849884503827,461541.209025471
         </coordinates>
       </Point>
     </Placemark>
@@ -37,7 +37,7 @@
       <name>Waypoint3</name>
       <Point>
         <coordinates>
-          43.4996323446747,56.2849884504182,461541.205839775
+          43.4996323449073,56.2849884503983,461541.20761525
         </coordinates>
       </Point>
     </Placemark>
@@ -45,7 +45,7 @@
       <name>Waypoint4</name>
       <Point>
         <coordinates>
-          43.4996323444018,56.2849884504413,461541.203806993
+          43.4996323446545,56.2849884504199,461541.205687536
         </coordinates>
       </Point>
     </Placemark>
@@ -53,7 +53,7 @@
       <name>Waypoint5</name>
       <Point>
         <coordinates>
-          43.499632344081,56.2849884504682,461541.20148094
+          43.4996323443578,56.284988450445,461541.20348368
         </coordinates>
       </Point>
     </Placemark>
@@ -61,7 +61,7 @@
       <name>Waypoint6</name>
       <Point>
         <coordinates>
-          43.4996323437292,56.2849884504975,461541.199000995
+          43.4996323441049,56.2849884504663,461541.201652015
         </coordinates>
       </Point>
     </Placemark>
@@ -69,7 +69,7 @@
       <name>Waypoint7</name>
       <Point>
         <coordinates>
-          43.4996323433134,56.2849884505316,461541.196158462
+          43.4996323438074,56.284988450491,461541.199546022
         </coordinates>
       </Point>
     </Placemark>
@@ -77,7 +77,7 @@
       <name>Waypoint8</name>
       <Point>
         <coordinates>
-          43.4996323429799,56.2849884505587,461541.193941852
+          43.4996323435404,56.284988450513,461541.197699363
         </coordinates>
       </Point>
     </Placemark>
@@ -85,7 +85,7 @@
       <name>Waypoint9</name>
       <Point>
         <coordinates>
-          43.4996323425166,56.2849884505961,461541.190945587
+          43.4996323431347,56.2849884505462,461541.194963819
         </coordinates>
       </Point>
     </Placemark>
@@ -93,7 +93,7 @@
       <name>Waypoint10</name>
       <Point>
         <coordinates>
-          43.4996323420045,56.2849884506369,461541.187736839
+          43.499632342754,56.284988450577,461541.192469199
         </coordinates>
       </Point>
     </Placemark>
@@ -101,7 +101,7 @@
       <name>Waypoint11</name>
       <Point>
         <coordinates>
-          43.4996323414371,56.2849884506816,461541.184296504
+          43.4996323423755,56.2849884506074,461541.190051312
         </coordinates>
       </Point>
     </Placemark>
@@ -109,7 +109,7 @@
       <name>Waypoint12</name>
       <Point>
         <coordinates>
-          43.4996323409939,56.2849884507162,461541.181685558
+          43.4996323419269,56.284988450643,461541.187260059
         </coordinates>
       </Point>
     </Placemark>
@@ -117,7 +117,7 @@
       <name>Waypoint13</name>
       <Point>
         <coordinates>
-          43.4996323404157,56.2849884507609,461541.178370088
+          43.4996323413942,56.284988450685,461541.184041333
         </coordinates>
       </Point>
     </Placemark>
@@ -125,7 +125,7 @@
       <name>Waypoint14</name>
       <Point>
         <coordinates>
-          43.4996323396131,56.2849884508224,461541.173923101
+          43.4996323408543,56.284988450727,461541.18087586
         </coordinates>
       </Point>
     </Placemark>
@@ -133,7 +133,7 @@
       <name>Waypoint15</name>
       <Point>
         <coordinates>
-          43.4996323388986,56.2849884508765,461541.170102037
+          43.4996323403651,56.2849884507648,461541.178084394
         </coordinates>
       </Point>
     </Placemark>
@@ -141,7 +141,7 @@
       <name>Waypoint16</name>
       <Point>
         <coordinates>
-          43.4996323379724,56.2849884509459,461541.165320265
+          43.4996323397256,56.2849884508138,461541.174536538
         </coordinates>
       </Point>
     </Placemark>
@@ -149,7 +149,7 @@
       <name>Waypoint17</name>
       <Point>
         <coordinates>
-          43.4996323370108,56.2849884510171,461541.160539719
+          43.4996323391444,56.2849884508579,461541.171403082
         </coordinates>
       </Point>
     </Placemark>
@@ -157,7 +157,7 @@
       <name>Waypoint18</name>
       <Point>
         <coordinates>
-          43.4996323357611,56.2849884511086,461541.154576537
+          43.4996323384488,56.2849884509103,461541.167756561
         </coordinates>
       </Point>
     </Placemark>
@@ -165,7 +165,7 @@
       <name>Waypoint19</name>
       <Point>
         <coordinates>
-          43.4996323344383,56.2849884512042,461541.148535822
+          43.4996323377597,56.2849884509617,461541.164247231
         </coordinates>
       </Point>
     </Placemark>
@@ -173,7 +173,7 @@
       <name>Waypoint20</name>
       <Point>
         <coordinates>
-          43.4996323328254,56.2849884513194,461541.141501634
+          43.4996323369323,56.2849884510229,461541.160157549
         </coordinates>
       </Point>
     </Placemark>
@@ -181,7 +181,7 @@
       <name>Waypoint21</name>
       <Point>
         <coordinates>
-          43.4996323311068,56.2849884514405,461541.134358217
+          43.4996323358495,56.2849884511021,461541.154989817
         </coordinates>
       </Point>
     </Placemark>
@@ -189,7 +189,7 @@
       <name>Waypoint22</name>
       <Point>
         <coordinates>
-          43.4996323291469,56.284988451577,461541.126599495
+          43.4996323349296,56.2849884511688,461541.150748803
         </coordinates>
       </Point>
     </Placemark>
@@ -197,7 +197,7 @@
       <name>Waypoint23</name>
       <Point>
         <coordinates>
-          43.4996323272436,56.284988451708,461541.119413282
+          43.4996323338192,56.2849884512486,461541.145795155
         </coordinates>
       </Point>
     </Placemark>
@@ -205,7 +205,7 @@
       <name>Waypoint24</name>
       <Point>
         <coordinates>
-          43.4996323243286,56.284988451906,461541.108986465
+          43.4996323325933,56.2849884513358,461541.140516699
         </coordinates>
       </Point>
     </Placemark>
@@ -213,7 +213,7 @@
       <name>Waypoint25</name>
       <Point>
         <coordinates>
-          43.4996323213598,56.2849884521049,461541.098993525
+          43.4996323312371,56.2849884514314,461541.134888143
         </coordinates>
       </Point>
     </Placemark>
@@ -221,7 +221,7 @@
       <name>Waypoint26</name>
       <Point>
         <coordinates>
-          43.499632318447,56.2849884522977,461541.089721169
+          43.4996323297337,56.2849884515363,461541.128882486
         </coordinates>
       </Point>
     </Placemark>
@@ -229,7 +229,7 @@
       <name>Waypoint27</name>
       <Point>
         <coordinates>
-          43.4996323148404,56.2849884525335,461541.07887691
+          43.4996323280637,56.2849884516517,461541.122470539
         </coordinates>
       </Point>
     </Placemark>
@@ -237,7 +237,7 @@
       <name>Waypoint28</name>
       <Point>
         <coordinates>
-          43.4996323103363,56.2849884528241,461541.066193196
+          43.4996323256615,56.2849884518159,461541.113672669
         </coordinates>
       </Point>
     </Placemark>
@@ -245,7 +245,7 @@
       <name>Waypoint29</name>
       <Point>
         <coordinates>
-          43.4996323058686,56.2849884531085,461541.054427661
+          43.4996323235234,56.2849884519602,461541.106217784
         </coordinates>
       </Point>
     </Placemark>
@@ -253,7 +253,7 @@
       <name>Waypoint30</name>
       <Point>
         <coordinates>
-          43.4996322978845,56.284988453609,461541.035108364
+          43.4996323208995,56.2849884521356,461541.097494992
         </coordinates>
       </Point>
     </Placemark>
@@ -261,7 +261,7 @@
       <name>Waypoint31</name>
       <Point>
         <coordinates>
-          43.4996322891844,56.2849884541447,461541.016129136
+          43.4996323181872,56.2849884523148,461541.088917288
         </coordinates>
       </Point>
     </Placemark>
@@ -269,7 +269,7 @@
       <name>Waypoint32</name>
       <Point>
         <coordinates>
-          43.4996322821175,56.2849884545734,461541.002036642
+          43.4996323154289,56.2849884524952,461541.08060196
         </coordinates>
       </Point>
     </Placemark>
@@ -277,7 +277,7 @@
       <name>Waypoint33</name>
       <Point>
         <coordinates>
-          43.4996322715517,56.2849884552055,461540.982822839
+          43.4996323113615,56.2849884527583,461541.069003071
         </coordinates>
       </Point>
     </Placemark>
@@ -285,7 +285,7 @@
       <name>Waypoint34</name>
       <Point>
         <coordinates>
-          43.4996322607944,56.2849884558394,461540.965192147
+          43.4996323074264,56.2849884530097,461541.05844488
         </coordinates>
       </Point>
     </Placemark>
@@ -293,7 +293,7 @@
       <name>Waypoint35</name>
       <Point>
         <coordinates>
-          43.4996322481047,56.2849884565764,461540.946485913
+          43.4996323033925,56.2849884532648,461541.048217312
         </coordinates>
       </Point>
     </Placemark>
@@ -301,7 +301,7 @@
       <name>Waypoint36</name>
       <Point>
         <coordinates>
-          43.4996322302541,56.2849884575966,461540.923327836
+          43.4996322978845,56.284988453609,461541.035108364
         </coordinates>
       </Point>
     </Placemark>
@@ -309,7 +309,7 @@
       <name>Waypoint37</name>
       <Point>
         <coordinates>
-          43.4996322081963,56.2849884588346,461540.898796625
+          43.4996322903677,56.2849884540724,461541.01859857
         </coordinates>
       </Point>
     </Placemark>
@@ -317,7 +317,7 @@
       <name>Waypoint38</name>
       <Point>
         <coordinates>
-          43.4996321760352,56.2849884606026,461540.869205897
+          43.4996322834766,56.2849884544914,461541.004663917
         </coordinates>
       </Point>
     </Placemark>
@@ -325,7 +325,7 @@
       <name>Waypoint39</name>
       <Point>
         <coordinates>
-          43.4996321393951,56.2849884625734,461540.842063313
+          43.4996322723723,56.2849884551567,461540.984243519
         </coordinates>
       </Point>
     </Placemark>
@@ -333,7 +333,7 @@
       <name>Waypoint40</name>
       <Point>
         <coordinates>
-          43.4996321064,56.284988464315,461540.821973805
+          43.4996322588243,56.2849884559545,461540.962148871
         </coordinates>
       </Point>
     </Placemark>
@@ -341,7 +341,7 @@
       <name>Waypoint41</name>
       <Point>
         <coordinates>
-          43.4996320462423,56.2849884674229,461540.792689369
+          43.4996322469468,56.2849884566432,461540.944878951
         </coordinates>
       </Point>
     </Placemark>
@@ -349,7 +349,7 @@
       <name>Waypoint42</name>
       <Point>
         <coordinates>
-          43.4996319604014,56.2849884717306,461540.761268685
+          43.4996322288316,56.2849884576772,461540.921620129
         </coordinates>
       </Point>
     </Placemark>
@@ -357,7 +357,7 @@
       <name>Waypoint43</name>
       <Point>
         <coordinates>
-          43.4996318149166,56.2849884787432,461540.722271506
+          43.4996322064266,56.2849884589329,461540.896994255
         </coordinates>
       </Point>
     </Placemark>
@@ -365,7 +365,7 @@
       <name>Waypoint44</name>
       <Point>
         <coordinates>
-          43.4996316348306,56.2849884869755,461540.684830277
+          43.4996321849103,56.2849884601186,461540.876750855
         </coordinates>
       </Point>
     </Placemark>
@@ -373,7 +373,7 @@
       <name>Waypoint45</name>
       <Point>
         <coordinates>
-          43.4996312566786,56.2849885027505,461540.61881207
+          43.4996321535902,56.2849884618148,461540.851886832
         </coordinates>
       </Point>
     </Placemark>
@@ -381,7 +381,63 @@
       <name>Waypoint46</name>
       <Point>
         <coordinates>
-          43.4996301403894,56.284988537713,461540.441455429
+          43.4996321170206,56.2849884637575,461540.82806484
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Waypoint47</name>
+      <Point>
+        <coordinates>
+          43.4996320829714,56.284988465535,461540.809611376
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Waypoint48</name>
+      <Point>
+        <coordinates>
+          43.4996320304935,56.2849884682237,461540.786184521
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Waypoint49</name>
+      <Point>
+        <coordinates>
+          43.49963197485,56.284988471015,461540.765953181
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Waypoint50</name>
+      <Point>
+        <coordinates>
+          43.4996318617193,56.2849884765241,461540.733556313
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Waypoint51</name>
+      <Point>
+        <coordinates>
+          43.4996316750785,56.2849884851769,461540.692618987
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Waypoint52</name>
+      <Point>
+        <coordinates>
+          43.4996313434475,56.2849884993087,461540.633258613
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Waypoint53</name>
+      <Point>
+        <coordinates>
+          43.4996303112012,56.284988533479,461540.468275181
         </coordinates>
       </Point>
     </Placemark>
@@ -389,7 +445,7 @@
       <name>Waypoint999</name>
       <Point>
         <coordinates>
-          43.3754662564973,56.2915735854679,443051.218307815
+          43.3749832222409,56.2915993068546,442980.396886542
         </coordinates>
       </Point>
     </Placemark>
@@ -397,7 +453,7 @@
       <name>Waypoint1000</name>
       <Point>
         <coordinates>
-          43.4998434121854,56.2848868158033,461560.041598338
+          43.4993605957753,56.2849130185583,461487.140915136
         </coordinates>
       </Point>
     </Placemark>
