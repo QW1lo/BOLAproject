@@ -22,6 +22,7 @@ Tb = []
 xb = []
 yb = []
 zb = []
+vb = []
 
 
 
@@ -31,6 +32,7 @@ for i in range(len(datab)):
         xb.append(datab[i][1])
         yb.append(datab[i][2])
         zb.append(datab[i][3])
+        vb.append(datab[i][4])
 
 for i in range(len(data)):
     if (len(data[i]) == 8):
@@ -47,8 +49,9 @@ ax2 = fig1.add_subplot(1, 2, 2)
 ax1.grid()
 ax2.grid()
 
-ax_b1 = fig2.add_subplot(1, 2, 1)
-ax_b2 = fig2.add_subplot(1, 2, 2)
+ax_b1 = fig2.add_subplot(1, 3, 1)
+ax_b2 = fig2.add_subplot(1, 3, 2)
+ax_b3 = fig2.add_subplot(1, 3, 3)
 ax_b1.grid()
 ax_b2.grid()
 
@@ -80,6 +83,7 @@ ax1.plot(x, y)
 ax2.plot(x, z)
 ax_b1.plot(xb, yb)
 ax_b2.plot(xb, zb)
+ax_b3.plot(Tb, vb)
 
 # ax2.scatter(200000  / 1000, -5000 / 1000, color = 'r')
 # ax2.scatter(700 / 1000, 1000 / 1000, color = 'b')

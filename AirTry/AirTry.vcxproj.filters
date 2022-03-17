@@ -65,9 +65,6 @@
     <ClInclude Include="kmlTransformer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="protocol.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="bin.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -77,5 +74,11 @@
     <ClInclude Include="Bomb.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="protocol.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

@@ -12,17 +12,17 @@ Lin::Vector Bomb::getRight(const Lin::Vector& v, double t)
 		double g = 9.81;
 		
 		
-		double M = v[3] / accel(v[1]);					// Мах
+		double M = v[3] / a_N(v[1]);					// Мах
 	 	double q = ro(v[1]) * pow(v[3], 2) / 2.;		// Скоростной напор
 		
 		double Cx = Lin::linear_search(M, table_size, M_table, Cx_table);  // линейная интерполяция по таблицам для нахлождения CX
 		double X_f = Cx * q * S_mid;						// X -  сила лоб сопротивления
 
-		tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
-		tmp[1] = v[3] * sin(theta);                      // yg'
-		tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
-		tmp[3] = -(X_f + m*g * sin(theta)) / m;            // V' в траекторной СК
-		tmp[4] = 0;										// PSI' = wy
+		tmp[0] = v[3] * cos(theta) * cos(v[4]);				// xg'
+		tmp[1] = v[3] * sin(theta);							// yg'
+		tmp[2] = -v[3] * cos(theta) * sin(v[4]);			// zg'
+		tmp[3] = -(X_f + m*g * sin(theta)) / m;             // V' в траекторной СК
+		tmp[4] = 0;											// PSI' = wy
 		tmp[5] = -g / v[3] * cos(theta);				    // theta'
 	}
 	//std::cout << tmp;

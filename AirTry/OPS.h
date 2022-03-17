@@ -163,8 +163,8 @@ public:
 
 		Range = R.length();
 
-		Theta = M_PI / 2 - atan2(R[0], R[1]);
-		Gamma = atan2(R[2], R[0]);
+		Theta = M_PI / 2 - atan2(R[0], R[1]);   // Elevation
+		Gamma = atan2(R[2], R[0]);			    // Az
 		
 		limit_angles();
 
@@ -195,16 +195,16 @@ public:
 
 		double H = model->X[1];
 		A = model->X[3] * pow(2 * H / g, 0.5)  * (1 - exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000031 * H / 5.));
-		std::cout << A << "\n";
+		//std::cout << A << "\n";
 		T = pow(2 * H / g, 0.5)  * (1 + exp(-0.000106 * H) * asp->c * H / 6. * (1 + 0.000063 * H) / 5.);
 
 	}
 
 	void check(double x_range)
 	{
-		if (abs(x_range - A) < 30 && asp->drop == 0)
+		if (abs(x_range - A) < 50 && asp->drop == 0)
 		{
-			std::cout << "START ASP!";
+			//std::cout << "START ASP!";
 			asp->get_move(model->X, model->theta);
 			asp->drop = 1;
 		}

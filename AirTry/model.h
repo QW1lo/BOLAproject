@@ -106,6 +106,9 @@ public:
     double gamma = 0;
     double theta = 0;
 
+    // todo конструктор для программы с ВПП, начало ТСК на ВПП
+    // todo Управление по отклонению с глиссады
+
     LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, Lin::Vector target0) :TModel(X0)
     {
         output = fopen("LAoutput.txt", "w");
@@ -245,11 +248,15 @@ public:
 
         return vec;
     }
+    
+
 
     Lin::Vector getRight(const Lin::Vector& v, double t)
     {
         // todo: костыли с каунтами - персмотреть алгоритм определения поворотов
         //Lin::Vector target(3);
+        
+        // начало разбега ВС после выставки СНС и БИНС
         /*if (start != 2)
             return Lin::Vector(5);*/
         
@@ -341,6 +348,11 @@ public:
         return tmp;
     }
 
+    Lin::Vector getRightLand(const Lin::Vector& v, double t)
+    {
+        // 
+    }
+
     Lin::Vector norm2svyaz(Lin::Vector& v, double gamma, double theta, double psi)
     {
         Lin::Matrix M(3, 3);
@@ -427,6 +439,32 @@ public:
         
     }
 
+    // beta_la - угол отклонения от глиссады ЛА в азимутальной плоскости, D_la - Дистанция до ЛА от ВПП, K_land - Курс ВПП
+    void start_coord_LA(double K_land, double D_La, double H_La, double beta_La)
+    {
+        Lin::Vector X;
+        X = { 0, 0, 0, 0, 0 };
+        double gamma = K_land - beta_La;
+        
+        X[0] = D_La * cos(gamma);
+        X[1] = H_La;
+        X[2] = D_La * sin(gamma);
+    }
+    // theta - угол наклона глиссады
+    // K_land - курс ВПП
+    Lin::Vector glissade(double K_land ,double theta_land)
+    {
+        Lin::Vector X_la;
+        Lin::Vector Glissade;
+        X_la = { X[0], X[1], X[2] };
+        double R = X_la.length();
+        Glissade = { R, 0 ,0 };
+        Glissade = Rotate('z', Glissade, K_land);
+        Glissade = Rotate('y', Glissade, theta);
+
+        return Glissade;
+        
+    }
 };
 
 #endif

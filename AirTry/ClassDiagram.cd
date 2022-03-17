@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Timer" Collapsed="true">
+    <Position X="8" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAA=</HashCode>
+      <FileName>Timer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bomb" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAiAAgAIAAEAAAABACCAQAKCCAAgggAAAMIAA=</HashCode>
+      <FileName>Bomb.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TIntegrator" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAQQQAAEACAAA=</HashCode>
+      <FileName>integrator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TEuler" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAQAA=</HashCode>
+      <FileName>integrator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRunge" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>integrator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KML_Transformer" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAABAAAggBAQAAAAgAAAACAIAAAEAAQAAAAAABAA=</HashCode>
+      <FileName>kmlTransformer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sat_NS" Collapsed="true">
+    <Position X="11.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>A0gBAABAJAEAAABgAAgAEABgEAAKACAAEABADEAMAAA=</HashCode>
+      <FileName>Lab2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="In_NS" Collapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkgAAAJAAEIAAAAgAAAAFEEgACECAAAAAABAAEEJAAA=</HashCode>
+      <FileName>Lab2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TModel" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAgAAAAIAgAAAAAAQAAAAASAAAAAAAAAAAQAE=</HashCode>
+      <FileName>model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Proverka" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LA" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AA0ABEiAgABCAAoAJAEACAAQWAAQCgAEAkAAYAAACQA=</HashCode>
+      <FileName>model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OPS" Collapsed="true">
+    <Position X="8" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABACAIEEAAIiAABBgwAAABACAAAQAAAAEQAoAANAAQ=</HashCode>
+      <FileName>OPS.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lin::Matrix" Collapsed="true">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAIAAAAAAAAAAAEAAAgQACIAAgAAAAABAgAAAEAAA=</HashCode>
+      <FileName>Lin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lin::Quaternion" Collapsed="true">
+    <Position X="9.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAEEAAAAAAAGEAAAAAACAgAAAQAAE=</HashCode>
+      <FileName>Lin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lin::Vector" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAEAAAAAAAAAAAIAEAEAgAAAAAAE=</HashCode>
+      <FileName>Lin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Value" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAEAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>atom.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="BaseVector" Collapsed="true">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lin.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="BaseMatrix" Collapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lin.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

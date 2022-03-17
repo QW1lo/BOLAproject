@@ -45,12 +45,13 @@ public:
 		return (288.15 - 6.5 * pow(10, -3) * H);
 	}
 	
+	// Рассчет баллистического коэф-та
 	double c_ball(double theta_t)
 	{
 		return 0.0001486 * (theta_t - 20.193);
 	}
 
-	double accel(double H) 
+	double a_N(double H) 
 	{
 		return 20.05 * pow(T(H), 0.5);
 	}

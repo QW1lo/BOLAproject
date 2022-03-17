@@ -10,6 +10,8 @@
 
 int main()
 {
+	std::cout << "HI\n";
+	
 	//setlocale(LC_ALL, "rus");
 
 	char buff[10 * 1014];
@@ -57,6 +59,15 @@ int main()
 
 	end.store(false);
 
+	// Начальные координаты ВПП Аэропорта
+
+	double phiL = 56.1448638889 * M_PI / 180;
+	double lambdaL = 34.9926805556 * M_PI / 180;
+	double hL = 0;
+	double KL = 67.05457948536832 * M_PI / 180;		// Курс ВПП
+
+	// Начальные координаты ЛА
+
 	//Точка старта в гео
 	//double phi0 = 61.0 * M_PI / 180;					// Для первого маршрута
 	//double lambda0 = 62.3231936777456 * M_PI / 180;	//
@@ -66,17 +77,18 @@ int main()
 	double lambda0 = 39.03 * M_PI / 180;				//
 	double h0 = 0;										//
 
-	// Начальный вс ВС
+	// Начальный ВС : {phi0, lbd0, h0, V0, PSI0}
 	Lin::Vector X;
 	X = { phi0, lambda0, h0, 0.001, 0 };
-
+	
 	// Массив ппм
 	KML_Transformer kml_trns;
-
+	
 	vector<Lin::Vector> vec_coord;
-	//vec_coord = parser("pyt.kml");						// Для первого маршрута
-	vec_coord = parser("pyt3.kml");					    // Для второого маршрута
-
+	//vec_coord = parser("pyt.kml");	
+	// Для первого маршрута
+	vec_coord = parser("pyt5.kml");					    // Для второого маршрута
+	
 	// Характеристики ОПС
 	double gam_max = 45;
 	double gam_min = -45;
@@ -86,6 +98,7 @@ int main()
 
 	// Цель ОПС в гео координатах
 	Lin::Vector tar;
+
 	tar = vec_coord[2];
 
 	// Нач вектор состояния АСП
@@ -109,7 +122,7 @@ int main()
 	Sat_NS SNS(&model, 10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18);
 	In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
 
-	TRunge integratorLA(0, 1000, 0.1);
+	TRunge integratorLA(0, 1000, 1);
 	TRunge integratorASP(0, 1000, 0.01);
 	std::cout << "integrator\n";
 
@@ -130,8 +143,11 @@ int main()
 	//timer.add(std::chrono::milliseconds(10), [&]() {INS.send_pack(); });
 	//timer.add(std::chrono::microseconds(2500), [&]() {INS.run_ins(); });
 
+	std::vector<int> myvec;
+
 	while (1) 
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 		if (end.load()) 
 		{
 			break;
@@ -169,4 +185,5 @@ int main()
 	}
 	std::cout << "kml asp line writen\n";
 
+	return 0;
 }
