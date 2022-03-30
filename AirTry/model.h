@@ -92,12 +92,18 @@ private:
     double phi0 = 0;			                            // Начальная широта, долгота и
     double lambda0 = 0;		                                // нулевая высота т.к. стартовая
     double h0 = 0;											// точка на поверхности Земли
+    int mode = 0;                                           // Режим полета 0 - ППМ, 1 - посадка по глиссаде
+    double K_land = 0;                                      // Курс ВПП
+    double theta_land = 0;                                  // Угол наклона глиссады
+
+    
 
 public:
     FILE* output;
 
     std::vector<Lin::Vector> Way;                           // Для КМЛ путь в ГСК
     
+    std::vector<Lin::Vector> Way_glis;
 
     Lin::Vector target;                                     // Вектор В ТСК цели
 
@@ -106,11 +112,14 @@ public:
     double gamma = 0;
     double theta = 0;
 
+    Lin::Vector del_glissade{ 3 };                               // невязки координат и глиссады
+
     // todo конструктор для программы с ВПП, начало ТСК на ВПП
     // todo Управление по отклонению с глиссады
 
     LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, Lin::Vector target0) :TModel(X0)
     {
+        // X0 - ВС формата {phi0, lbd0, h0, V0, PSI0}
         output = fopen("LAoutput.txt", "w");
 
         phi0 = X[0];
@@ -129,6 +138,24 @@ public:
             list_ppm.push_back(tmp);
             list_rotation.push_back(0);
         }
+        mode = 0;
+    };
+
+    LA(Lin::Vector& X0, Lin::Vector& Land, double K_land0, double theta_land0, double D_La0, double H_La0, double beta_La0) :TModel(X0)
+    {
+        // beta_la - угол отклонения от глиссады ЛА в азимутальной плоскости, D_la - Дистанция до ЛА от ВПП, K_land - Курс ВПП
+        // theta_land- наклон глиссады
+        // X0 - ВС формата {phi0, lbd0, h0, V0, PSI0}
+        output = fopen("LAoutput.txt", "w");
+
+        phi0 = Land[0];
+        lambda0 = Land[1];
+      
+        K_land = K_land0;
+        theta_land = theta_land0;
+        // Определение нач координат ЛА в ТСК 
+        start_coord_LA(K_land, D_La0, H_La0, beta_La0);
+        mode = 1;
     };
 
     Lin::Vector Rotate(char axis, Lin::Vector vec, double angle) {
@@ -259,29 +286,8 @@ public:
         // начало разбега ВС после выставки СНС и БИНС
         /*if (start != 2)
             return Lin::Vector(5);*/
-        
-       ppm = list_ppm[count_targ];
+        Lin::Vector tmp(v.size());
 
-        if (abs(v[0] - ppm[0]) < 150 && abs(v[2] - ppm[2]) < 70)
-        {
-            Lin::Vector geo;
-            Lin::Vector tsk;
-            tsk = { v[0],  0 , v[2] };
-            geo = TSK_to_Geo(tsk, 0) * 180 / M_PI;
-            Way.push_back(geo);
-
-            count_targ++;
-            if (count_targ == list_ppm.size())
-            {
-                count_targ = 0;
-                //end.store(true);
-                for (int i = 0; i < list_rotation.size(); ++i)
-                    list_rotation[i] = 0;
-            }
-            ppm = list_ppm[count_targ];
-            count = 1;           
-        }
-        
         double g = 9.81;
 
         gamma = 0;
@@ -290,53 +296,156 @@ public:
         double P = 120000;  // Тяга двигателей
         //double nxa = 0;//sin(theta);
         double nxa;
+        nxa = 0;
         
-        if (v[3] < 300)
-            nxa = P / (m * g);
-        else
-            nxa = 0;
 
-        if (v[3] > 50 && v[1] < 6000)
-            theta = 20 * GR2RAD;
-        else theta = 0;
-
-        
-        Lin::Vector tmp(v.size());
-        Lin::Vector v_sv;
-        Lin::Vector target_sv;
-
-
-        v_sv = { v[0], v[1], v[2] };
-        
-        target_sv = norm2svyaz(ppm, gamma, theta, v[4]);
-        v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
-        gamma = 0;
-
-        centerrad(v, ppm, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
-
-        // Логика совершения маневров 
-        if (list_rotation[count_targ] == 1)
+        if (mode == 0)
         {
-            if (abs(v_sv[2] - target_sv[2]) > 10)
+            ppm = list_ppm[count_targ];
+
+            if (abs(v[0] - ppm[0]) < 150 && abs(v[2] - ppm[2]) < 70)
             {
-                if ((v_sv[2] - target_sv[2]) < 0)
+                Lin::Vector geo;
+                Lin::Vector tsk;
+                tsk = { v[0],  0 , v[2] };
+                geo = TSK_to_Geo(tsk, 0) * 180 / M_PI;
+                Way.push_back(geo);
+
+                count_targ++;
+                if (count_targ == list_ppm.size())
                 {
-                    //centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
-                    gamma = 15 * GR2RAD;
+                    count_targ = 0;
+                    //end.store(true);
+                    for (int i = 0; i < list_rotation.size(); ++i)
+                        list_rotation[i] = 0;
+                }
+                ppm = list_ppm[count_targ];
+                count = 1;
+            }
+
+
+
+            if (v[3] > 50 && v[1] < 6000)
+                theta = 20 * GR2RAD;
+            else theta = 0;
+
+            if (v[3] < 300)
+                nxa = P / (m * g);
+            else
+                nxa = 0;
+            
+            Lin::Vector v_sv;
+            Lin::Vector target_sv;
+
+
+            v_sv = { v[0], v[1], v[2] };
+
+            target_sv = norm2svyaz(ppm, gamma, theta, v[4]);
+            v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
+            gamma = 0;
+
+
+            centerrad(v, ppm, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
+
+            // Логика совершения маневров 
+            if (list_rotation[count_targ] == 1)
+            {
+                if (abs(v_sv[2] - target_sv[2]) > 10)
+                {
+                    if ((v_sv[2] - target_sv[2]) < 0)
+                    {
+                        //centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
+                        gamma = 15 * GR2RAD;
+
+                    }
+                    else
+                    {
+                        //centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
+                        gamma = -15 * GR2RAD;
+                    }
 
                 }
                 else
                 {
-                    //centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
-                    gamma = -15 * GR2RAD;
+                    gamma = 0;
                 }
-
             }
-            else 
+        }
+        else
+        {
+            Lin::Vector v_sv;
+            Lin::Vector target_sv;
+            //
+            ppm = glissade();
+            //
+            v_sv = { v[0], v[1], v[2] };
+            //target_sv = ppm - v_sv;
+
+            //double kurse = atan2(v[2], v[0]);
+            //if (abs(K_land + M_PI - v[4]) > 0.002)
+            //{
+            //    if ((K_land + M_PI - v[4]) > 0)
+            //    {
+            //        gamma = -4 * GR2RAD;
+            //    }
+            //    else
+            //    {
+            //        gamma = 4 * GR2RAD;
+            //    }
+            //}
+            //else
+            //{
+            //    gamma = 0;
+            //    
+            //}
+
+            if (abs(X[1] - ppm[1]) > 0.5)
+            {
+                if ((X[1] - ppm[1]) < 0)
+                {
+                    theta = 6 * GR2RAD;
+            
+                }
+                else
+                {
+                    theta = -6 * GR2RAD;
+                }
+            
+            }
+            else
+            {
+                theta = -3 * GR2RAD;
+            }
+            
+            target_sv = norm2svyaz(ppm, 0, 0, v[4]);
+            v_sv = norm2svyaz(v_sv, 0, 0, v[4]);
+            gamma = 0;
+            
+            //todo логика управления на глиссаду
+            
+            if (abs(v_sv[2] - target_sv[2]) > 1)
+            {
+                if ((v_sv[2] - target_sv[2]) < 0)
+                {
+                    gamma = 20 * GR2RAD;
+            
+                }
+                else
+                {
+                    gamma = -20 * GR2RAD;
+                }
+            
+            }
+            else
             {
                 gamma = 0;
-
             }
+
+            
+            del_glissade = target_sv - v_sv;
+            std::cout  << del_glissade[2] << "  " << del_glissade[1] << "\n";
+            
+
         }
 
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
@@ -435,15 +544,24 @@ public:
         for (int i = 0; i < v.size(); ++i)
             tmp.push_back(v[i]);
 
-        fprintf(output, "%lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], gamma, theta, tmp[5]);
+        // TODO if mode
+
+        fprintf(output, "%lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], gamma, theta, tmp[5] * RAD2GR, del_glissade[2], del_glissade[1]);
+        if (X[1] < 1)
+            end.store(true);
+
+        Lin::Vector geo;
+        Lin::Vector tsk;
+        tsk = { v[0],  0 , v[2] };
+        geo = TSK_to_Geo(tsk, 0) * 180 / M_PI;
+        geo[2] = v[1];
+        Way.push_back(geo);
         
     }
 
     // beta_la - угол отклонения от глиссады ЛА в азимутальной плоскости, D_la - Дистанция до ЛА от ВПП, K_land - Курс ВПП
     void start_coord_LA(double K_land, double D_La, double H_La, double beta_La)
     {
-        Lin::Vector X;
-        X = { 0, 0, 0, 0, 0 };
         double gamma = K_land - beta_La;
         
         X[0] = D_La * cos(gamma);
@@ -452,18 +570,34 @@ public:
     }
     // theta - угол наклона глиссады
     // K_land - курс ВПП
-    Lin::Vector glissade(double K_land ,double theta_land)
+    Lin::Vector glissade()
     {
         Lin::Vector X_la;
         Lin::Vector Glissade;
         X_la = { X[0], X[1], X[2] };
         double R = X_la.length();
         Glissade = { R, 0 ,0 };
-        Glissade = Rotate('z', Glissade, K_land);
-        Glissade = Rotate('y', Glissade, theta);
+        Glissade = Rotate('z', Glissade, -theta_land);
+        Glissade = Rotate('y', Glissade, K_land);
 
-        return Glissade;
+        double h = Glissade[1];
         
+        Lin::Vector geo;
+        Lin::Vector tsk;
+        tsk = { Glissade[0],  0 , Glissade[2] };
+
+        geo = TSK_to_Geo(tsk, 0) * 180 / M_PI;
+        geo[2] = h;
+        Way_glis.push_back(geo);
+        
+        Glissade[0] = R-100;
+        Glissade[1] = 0;
+        Glissade[2] = 0;
+        Glissade = Rotate('z', Glissade, -theta_land);
+        Glissade = Rotate('y', Glissade, K_land);
+        Glissade[1] = h;
+
+        return Glissade;     
     }
 };
 

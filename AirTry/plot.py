@@ -37,9 +37,9 @@ for i in range(len(datab)):
 for i in range(len(data)):
     if (len(data[i]) == 8):
         T.append(data[i][0])
-        x.append(data[i][1] / 1000)
-        y.append(data[i][2] / 1000)
-        z.append(data[i][3] / 1000)
+        x.append(data[i][1]) #/ 1000)
+        y.append(data[i][2]) #/ 1000)
+        z.append(data[i][3]) #/ 1000)
 
 fig1 = plt.figure()
 fig2 = plt.figure()
@@ -76,8 +76,8 @@ ax_b1.set_ylabel("Y, m")
 ax_b2.set_xlabel("X, m")
 ax_b2.set_ylabel("Z, m")
 
-A = abs(math.sqrt(abs(xb[-1]-xb[0])**2 + abs(zb[-1]-zb[0])**2))
-print(A)
+#A = abs(math.sqrt(abs(xb[-1]-xb[0])**2 + abs(zb[-1]-zb[0])**2))
+#print(A)
 
 ax1.plot(x, y)
 ax2.plot(x, z)

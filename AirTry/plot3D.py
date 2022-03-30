@@ -6,7 +6,7 @@ data = []
 with open("LAoutput.txt") as f:
     for line in f:
         data.append([float(x) for x in line.split()])
-
+print((math.atan2(9000, 4000) * 180 / 3.14))
 T = []
 x = []
 y = []

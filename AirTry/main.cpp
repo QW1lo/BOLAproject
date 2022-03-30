@@ -65,6 +65,7 @@ int main()
 	double lambdaL = 34.9926805556 * M_PI / 180;
 	double hL = 0;
 	double KL = 67.05457948536832 * M_PI / 180;		// Курс ВПП
+	double thetaL = 3 * GR2RAD;
 
 	// Начальные координаты ЛА
 
@@ -77,10 +78,16 @@ int main()
 	double lambda0 = 39.03 * M_PI / 180;				//
 	double h0 = 0;										//
 
+	Lin::Vector X_land;
+	//X = { phi0, lambda0, h0, 0.001, 0 };
+	X_land = { phiL, lambdaL, hL, 0, KL };
+
 	// Начальный ВС : {phi0, lbd0, h0, V0, PSI0}
 	Lin::Vector X;
-	X = { phi0, lambda0, h0, 0.001, 0 };
+	X = { phi0, lambda0, h0, 50, M_PI - KL + 2 * GR2RAD};
 	
+
+
 	// Массив ппм
 	KML_Transformer kml_trns;
 	
@@ -106,36 +113,42 @@ int main()
     X_asp = { 0, 6000, 0, 300, 0 * 3.14 / 180., 0 };
 
 
-	LA model(X, vec_coord, tar);
+	//LA model(X, vec_coord, tar);
+	LA model(X, X_land, KL, thetaL, 8000, 400, 3 * GR2RAD);
 	std::cout << "model\n";
 	
 	double m_bomb = 270;
 	double theta_t = 23.424;		// Характерестическое время бомбы
 	double S_mid = 0.0829;			// Площадб миделя
 
-	Bomb asp(&model, X_asp, m_bomb, theta_t, S_mid);
+	//Bomb asp(&model, X_asp, m_bomb, theta_t, S_mid);
 
-	OPS system(&model, &asp, gam_max, gam_min, th_max, th_min, rng_max);
+	//OPS system(&model, &asp, gam_max, gam_min, th_max, th_min, rng_max);
 	std::cout << "ops\n";
 
 	// СНС
 	Sat_NS SNS(&model, 10, 10.0, 10.0, 5.0, 55, 3, 35, 4, 13.3, 6.0, 2.0, 1.0, 21, 10, 18);
 	In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
 
-	TRunge integratorLA(0, 1000, 1);
+	TEuler integratorLA(0, 1000, 0.1);
 	TRunge integratorASP(0, 1000, 0.01);
 	std::cout << "integrator\n";
 
 	Timer timer;
 	//asp.drop++;
-	timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
+	// 
+	// Работа ОПС
+	//timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
+
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
 		integratorLA.integrate(model); 
-		if (asp.drop != 0)
-			integratorASP.integrate(asp); 
+		/*if (asp.drop != 0)
+			integratorASP.integrate(asp);*/ 
 		}
 	);
+
+
 	//timer.add(std::chrono::microseconds(5), [&]() { });
 
 	//timer.add(std::chrono::milliseconds(100), [&]() {SNS.run_sns(); });
@@ -164,26 +177,35 @@ int main()
 	std::cout << "kml la writen\n";
 
 
-	for (int i = 0; i < system.Point.size(); i++)
-	{
-		kml_trns.KML_ops_point(i, system.Point[i]);
-	}
-	std::cout << "kml ops writen\n";
+	//for (int i = 0; i < system.Point.size(); i++)
+	//{
+	//	kml_trns.KML_ops_point(i, system.Point[i]);
+	//}
+	//std::cout << "kml ops writen\n";
 
-	for (int i = 0; i < system.Point_ASP.size(); i++)
-	{
-		kml_trns.KML_ops_point(999+i, system.Point_ASP[i]);
-	}
-	std::cout << "kml asp A writen\n";
+	//for (int i = 0; i < system.Point_ASP.size(); i++)
+	//{
+	//	kml_trns.KML_ops_point(999+i, system.Point_ASP[i]);
+	//}
+	//std::cout << "kml asp A writen\n";
 
 
-	KML_Transformer kml_asp;
-	kml_asp.CreateKML("resultasp");
-	for (int i = 0; i < asp.list_move.size(); i++)
+	//KML_Transformer kml_asp;
+	//kml_asp.CreateKML("resultasp");
+	//for (int i = 0; i < asp.list_move.size(); i++)
+	//{
+	//	kml_asp.KMLNewValue(asp.list_move[i]);
+	//}
+	//std::cout << "kml asp line writen\n";
+
+	// KML glissade
+	KML_Transformer kml_gliss;
+	kml_gliss.CreateKML("resultgliss");
+	for (int i = 0; i < model.Way_glis.size(); i++)
 	{
-		kml_asp.KMLNewValue(asp.list_move[i]);
+		kml_gliss.KMLNewValue(model.Way_glis[i]);
 	}
-	std::cout << "kml asp line writen\n";
+	std::cout << "kml gliss writen\n";
 
 	return 0;
 }

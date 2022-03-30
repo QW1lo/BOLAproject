@@ -19,15 +19,17 @@ TEuler::TEuler(double T0, double Tk, double H):TIntegrator(T0, Tk, H)
 
 void TEuler::integrate(TModel& Model)
 {	
+	mut.lock();
+	std::cout << t << "\n";
 	Lin::Vector X = Model.getInitialConditions();
-	double t = t0;
+	//Model.addResult(X, t);
+	//while (t <= tk)
+	//{
+	X = X + Model.getRight(X,t) * h;
+	t += h;
 	Model.addResult(X, t);
-	while (t <= tk)
-	{
-		X = X + Model.getRight(X,t) * h;
-		t += h;
-		Model.addResult(X, t);
-	}
+	//}
+	mut.unlock();
 	
 }
 

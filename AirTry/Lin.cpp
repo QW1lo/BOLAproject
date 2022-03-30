@@ -16,14 +16,12 @@ double RAD2GR = 180. / M_PI;
 
 //Vector::Vector() {}
 //
-//Vector::Vector(const int size_vec)
+//Vector::Vector(const int size_vec) // Реализовано на основе базового вектора в .h
 //{
-//	this->data[]
-//	v = std::vector<double>(size_v);
-//	size_v = size_vec;
-//	for (int i = 0; i < size_v; ++i)
+//	this->clear();
+//	for (int i = 0; i < size_vec; ++i)
 //	{
-//		v[i] = 0;
+//		this->push_back(0);
 //	}
 //}
 
