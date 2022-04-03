@@ -7,9 +7,19 @@
 #include "OPS.cpp"
 #include "Bomb.h"
 
+#include "gnuplot-iostream.h"
+
 
 int main()
 {
+
+	Gnuplot gp;//("\"C:\\Program Files\\gnuplot\\bin\\gnuplot.exe\"");
+	gp << "set title 'graph'\n";
+
+	Gnuplot gp2("\"C:\\Program Files\\gnuplot\\bin\\gnuplot.exe\"");
+	gp2 << "set title 'graph'\n";
+	gp2 << "plot '-' with lines title 'zxc1'\n";
+
 	std::cout << "HI\n";
 	
 	//setlocale(LC_ALL, "rus");
@@ -170,12 +180,19 @@ int main()
 	std::cout << "done\n";
 
 	kml_trns.CreateKML("result");
+	//vector<double> zxc1; //(model.Way.size());
+	
 	for (int i = 0; i < model.Way.size(); i++)
-	{
+	{	
+		//zxc1.push_back(sin(i*0.1));
+		//gp << "plot '-' with lines title 'zxc1'\n";
+		//gp.send1d(zxc1);
+		//gp.flush();
 		kml_trns.KMLNewValue(model.Way[i]);
+		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	std::cout << "kml la writen\n";
-
+	//gp2.send(zxc1);
 
 	//for (int i = 0; i < system.Point.size(); i++)
 	//{
