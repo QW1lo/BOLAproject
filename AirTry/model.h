@@ -100,9 +100,9 @@ private:
 
 public:
     FILE* output;
-
+    int N;
     std::vector<Lin::Vector> Way;                           // Для КМЛ путь в ГСК
-    
+    int stop_integ = 0;
     std::vector<Lin::Vector> Way_glis;
 
     Lin::Vector target;                                     // Вектор В ТСК цели
@@ -141,12 +141,13 @@ public:
         mode = 0;
     };
 
-    LA(Lin::Vector& X0, Lin::Vector& Land, double K_land0, double theta_land0, double D_La0, double H_La0, double beta_La0) :TModel(X0)
+    LA(Lin::Vector& X0, Lin::Vector& Land, double K_land0, double theta_land0, double D_La0, double H_La0, double beta_La0, int number) :TModel(X0)
     {
         // beta_la - угол отклонения от глиссады ЛА в азимутальной плоскости, D_la - Дистанция до ЛА от ВПП, K_land - Курс ВПП
         // theta_land- наклон глиссады
         // X0 - ВС формата {phi0, lbd0, h0, V0, PSI0}
         output = fopen("LAoutput.txt", "w");
+        //gps_output = fopen("gps.txt", "w");
 
         phi0 = Land[0];
         lambda0 = Land[1];
@@ -156,6 +157,7 @@ public:
         // Определение нач координат ЛА в ТСК 
         start_coord_LA(K_land, D_La0, H_La0, beta_La0);
         mode = 1;
+        N = number;
     };
 
     Lin::Vector Rotate(char axis, Lin::Vector vec, double angle) {
@@ -443,11 +445,10 @@ public:
 
             
             del_glissade = target_sv - v_sv;
-            std::cout  << del_glissade[2] << "  " << del_glissade[1] << "\n";
+            std::cout  << N << "  " << del_glissade[2] << "  " << del_glissade[1] << "\n";
             
 
         }
-
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
@@ -528,7 +529,6 @@ public:
     void addResult(const Lin::Vector& v, double t)
     {
         X = v;
-        
         if ((X[4] - last_psi) > 0)
             gamma = -15 * GR2RAD;
         if ((X[4] - last_psi) < 0)
@@ -548,7 +548,12 @@ public:
 
         fprintf(output, "%lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], gamma, theta, tmp[5] * RAD2GR, del_glissade[2], del_glissade[1]);
         if (X[1] < 1)
-            end.store(true);
+        {
+            stop_integ = 1;
+            //end.store(true);
+            
+        }
+            
 
         Lin::Vector geo;
         Lin::Vector tsk;

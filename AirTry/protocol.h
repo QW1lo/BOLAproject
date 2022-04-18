@@ -99,6 +99,15 @@ union ARINC_FEATURES {
 };
 #pragma pack(pop)
 
+#pragma pack(push,1)
+struct Plot_Python 
+{
+    int Number;     // Борт номер
+    double phi;        // Широта
+    double lbd;        // Долгота
+};
+#pragma pack(pop)
+
 
 //struct Value {
 //	std::string name;

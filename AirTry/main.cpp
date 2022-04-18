@@ -7,19 +7,23 @@
 #include "OPS.cpp"
 #include "Bomb.h"
 
-#include "gnuplot-iostream.h"
+void fill_struct_py(LA& obj, Plot_Python& struc)
+{
+	struc.Number = obj.N;
+	
+	Lin::Vector geo;
+	Lin::Vector tsk;
+	tsk = { obj.X[0],  0 , obj.X[2] };
+	geo = obj.TSK_to_Geo(tsk, 0) * 180 / M_PI;
+	geo[2] = obj.X[1];
+
+	struc.phi = geo[1];
+	struc.lbd = geo[0];
+}
 
 
 int main()
 {
-
-	Gnuplot gp;//("\"C:\\Program Files\\gnuplot\\bin\\gnuplot.exe\"");
-	gp << "set title 'graph'\n";
-
-	Gnuplot gp2("\"C:\\Program Files\\gnuplot\\bin\\gnuplot.exe\"");
-	gp2 << "set title 'graph'\n";
-	gp2 << "plot '-' with lines title 'zxc1'\n";
-
 	std::cout << "HI\n";
 	
 	//setlocale(LC_ALL, "rus");
@@ -124,7 +128,7 @@ int main()
 
 
 	//LA model(X, vec_coord, tar);
-	LA model(X, X_land, KL, thetaL, 8000, 400, 3 * GR2RAD);
+	LA model(X, X_land, KL, thetaL, 80000, 4200, 3 * GR2RAD, 1);
 	std::cout << "model\n";
 	
 	double m_bomb = 270;
@@ -141,18 +145,65 @@ int main()
 	In_NS INS(&model, 33, 55, 130, 15.3, 3.5, 6.3245, 400, 200, 6400, 0, 0, 0);
 
 	TEuler integratorLA(0, 1000, 0.1);
+	TEuler integratorLA2(0, 1000, 0.1);
 	TRunge integratorASP(0, 1000, 0.01);
-	std::cout << "integrator\n";
+	
 
 	Timer timer;
 	//asp.drop++;
 	// 
 	// Работа ОПС
 	//timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
+	LA model2(X, X_land, KL, thetaL, 40000, 2000, 0.5 * GR2RAD, 2);
 
+	Lin::Vector X1;
+	X1 = { phi0, lambda0, h0, 50, KL + 2 * GR2RAD };
+
+	LA model3(X1, X_land,  KL + M_PI, thetaL, 20000, 1000, (0.5) * GR2RAD, 3);
+
+
+	vector<LA*> listLA;
+	listLA.push_back(&model);
+	listLA.push_back(&model2);
+	listLA.push_back(&model3);
+
+	vector<TEuler*> listInteg;
+	for (int i = 0; i < listLA.size(); ++i)
+	{
+		//TEuler *X = new TEuler(0, 1000, 0.1);
+		listInteg.push_back(new TEuler(0, 1000, 0.1));
+	}
+	std::cout << "integrators\n";
+
+	//timer.add(std::chrono::microseconds(1), [&]() {system("python Server.py");});
+	//std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
-		integratorLA.integrate(model); 
+			std::string str;
+			Plot_Python p1;
+		
+			for (int i = 0; i < listLA.size(); ++i)
+			{
+				if (listLA[i]->stop_integ != 1)
+				{
+					listInteg[i]->integrate(*listLA[i]);
+					fill_struct_py(*listLA[i], p1);
+					str = std::to_string(p1.Number) + "|" + std::to_string(p1.phi) + "|" + std::to_string(p1.lbd);
+					const char* buff = str.c_str();
+					for (int j = 0; j < sizeof(str); ++j)
+					{
+						std::cout << buff[j];
+					}
+					std::cout << "\n";
+					mut.lock();
+					sendto(_s, &buff[0], str.size(), 0,
+						(sockaddr*)&_destAddr, sizeof(_destAddr));
+					mut.unlock();
+				}		
+			}
+
+		//delete[] buff;
+		
 		/*if (asp.drop != 0)
 			integratorASP.integrate(asp);*/ 
 		}
@@ -180,19 +231,12 @@ int main()
 	std::cout << "done\n";
 
 	kml_trns.CreateKML("result");
-	//vector<double> zxc1; //(model.Way.size());
 	
 	for (int i = 0; i < model.Way.size(); i++)
 	{	
-		//zxc1.push_back(sin(i*0.1));
-		//gp << "plot '-' with lines title 'zxc1'\n";
-		//gp.send1d(zxc1);
-		//gp.flush();
 		kml_trns.KMLNewValue(model.Way[i]);
-		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	std::cout << "kml la writen\n";
-	//gp2.send(zxc1);
 
 	//for (int i = 0; i < system.Point.size(); i++)
 	//{
