@@ -105,6 +105,8 @@ struct Plot_Python
     int Number;     // Борт номер
     double phi;        // Широта
     double lbd;        // Долгота
+    double Az;          
+    double D;          // Дистанция от ВПП до ЛА
 };
 #pragma pack(pop)
 
