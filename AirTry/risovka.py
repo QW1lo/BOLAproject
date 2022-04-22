@@ -27,9 +27,10 @@ class GPSVis(object):
         canvas.axes1.grid()
 
         canvas.axes2.set_theta_zero_location('N')
-        canvas.axes2.set_theta_direction(-1)  
+        canvas.axes2.set_theta_direction(-1)
         for LA in coord:
-            az, d = self.polar_coord((float(LA[1])*math.pi/180,   float(LA[2])*math.pi/180))
+            d = float(LA[3]) / 1000 #self.polar_coord((float(LA[1])*math.pi/180,   float(LA[2])*math.pi/180))
+            az = float(LA[4]) #* 180 / math.pi
             canvas.axes2.scatter(az, d)
 
 

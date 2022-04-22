@@ -132,7 +132,7 @@ int main()
 
 
 	//LA model(X, vec_coord, tar);
-	LA model(X, X_land, KL, thetaL, 80000, 4200, 3 * GR2RAD, 1);
+	LA model(X, X_land, KL, thetaL, 80000, 4200, 2 * GR2RAD, 1);
 	std::cout << "model\n";
 	
 	double m_bomb = 270;
@@ -159,17 +159,21 @@ int main()
 	// Работа ОПС
 	//timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
 	LA model2(X, X_land, KL, thetaL, 40000, 2000, 0.5 * GR2RAD, 2);
+	LA model3(X, X_land, KL, thetaL, 60000, 3100, -0.5 * GR2RAD, 3);
 
 	Lin::Vector X1;
 	X1 = { phi0, lambda0, h0, 50, KL + 2 * GR2RAD };
 
-	LA model3(X1, X_land,  KL + M_PI, thetaL, 20000, 1000, (0.5) * GR2RAD, 3);
+	LA model4(X1, X_land,  KL + M_PI, thetaL, 20000, 1000, (0.5) * GR2RAD, 4);
+	LA model5(X1, X_land, KL + M_PI, thetaL, 8000, 400, (-0.5)* GR2RAD, 5);
 
 
 	vector<LA*> listLA;
 	listLA.push_back(&model);
 	listLA.push_back(&model2);
 	listLA.push_back(&model3);
+	listLA.push_back(&model4);
+	listLA.push_back(&model5);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)
@@ -184,7 +188,7 @@ int main()
 	python_plot.detach();
 	
 	//timer.add(std::chrono::microseconds(1), [&]() {system("python main.py");});
-	std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
 			std::string str;
@@ -199,11 +203,11 @@ int main()
 					str = std::to_string(p1.Number) + "|" + std::to_string(p1.phi) + "|" + std::to_string(p1.lbd) +
 						"|" + std::to_string(p1.D) + "|" + std::to_string(p1.Az);
 					const char* buff = str.c_str();
-					for (int j = 0; j < sizeof(str); ++j)
+					for (int j = 0; j < str.size(); ++j)
 					{
 						std::cout << buff[j];
 					}
-					std::cout << "\n";
+					std::cout << " c \n";
 					mut.lock();
 					sendto(_s, &buff[0], str.size(), 0,
 						(sockaddr*)&_destAddr, sizeof(_destAddr));
@@ -219,8 +223,8 @@ int main()
 				sendto(_s, &buff[0], str.size(), 0,
 					(sockaddr*)&_destAddr, sizeof(_destAddr));
 				mut.unlock();
+				end.load();
 			}
-
 		//delete[] buff;
 		
 		/*if (asp.drop != 0)

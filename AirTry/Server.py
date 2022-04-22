@@ -16,8 +16,10 @@ class serv():
             return 0
         data_split = data.split("|")
         n = data_split[0]
-        phi = data_split[2]
         lmb = data_split[1]
+        phi = data_split[2]
+        dal = data_split[3]
+        az = data_split[4]
 
         ch = False
 
@@ -25,6 +27,8 @@ class serv():
             if LA[0] == n:
                 LA[1] = phi
                 LA[2] = lmb
+                LA[3] = dal
+                LA[4] = az
                 ch = True
 
         if not ch:
@@ -36,7 +40,7 @@ class serv():
             while True:
                 data = self.listener.recvfrom(1024) #.decode("utf8")
                 data = bytes.decode(data[0])
-                print(data)
+                #print("s ", data)
                 if data == 'pause':
                     self.flag_stop = True
                 else:
