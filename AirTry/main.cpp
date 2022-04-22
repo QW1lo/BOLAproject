@@ -175,8 +175,8 @@ int main()
 	}
 	std::cout << "integrators\n";
 
-	//timer.add(std::chrono::microseconds(1), [&]() {system("python Server.py");});
-	//std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+	timer.add(std::chrono::microseconds(1), [&]() {system("python main.py");});
+	std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
 			std::string str;
@@ -199,7 +199,17 @@ int main()
 					sendto(_s, &buff[0], str.size(), 0,
 						(sockaddr*)&_destAddr, sizeof(_destAddr));
 					mut.unlock();
-				}		
+				}	
+				
+			}
+			if (std::all_of(std::begin(listLA), std::end(listLA), [](LA* x) {return x->stop_integ == 1;}))
+			{
+				str = "pause";
+				const char* buff = str.c_str();
+				mut.lock();
+				sendto(_s, &buff[0], str.size(), 0,
+					(sockaddr*)&_destAddr, sizeof(_destAddr));
+				mut.unlock();
 			}
 
 		//delete[] buff;
