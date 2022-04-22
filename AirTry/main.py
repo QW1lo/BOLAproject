@@ -18,7 +18,7 @@ class MatplotlibWidget(QMainWindow):
         
         QMainWindow.__init__(self)
 
-        loadUi("form.ui",self)
+        loadUi("form.ui", self)
 
         self.setWindowTitle("RADAR")
         self.addToolBar(NavigationToolbar(self.wdg1.canvas, self))

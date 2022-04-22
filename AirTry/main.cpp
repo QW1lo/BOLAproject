@@ -175,7 +175,11 @@ int main()
 	}
 	std::cout << "integrators\n";
 
-	timer.add(std::chrono::microseconds(1), [&]() {system("python main.py");});
+	std::thread python_plot([&]() {system("python main.py"); });
+	
+	python_plot.detach();
+	
+	//timer.add(std::chrono::microseconds(1), [&]() {system("python main.py");});
 	std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
