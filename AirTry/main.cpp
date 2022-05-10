@@ -4,6 +4,7 @@
 #include "integrator.h"
 #include "atom.h"
 #include "model.h"
+#include "TCAS.h"
 #include "OPS.cpp"
 #include "Bomb.h"
 
@@ -159,12 +160,14 @@ int main()
 	// Работа ОПС
 	//timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
 	LA model2(X, X_land, KL, thetaL, 40000, 2000, 0.5 * GR2RAD, 2);
-	LA model3(X, X_land, KL, thetaL, 60000, 3100, -0.5 * GR2RAD, 3);
+	//LA model3(X, X_land, KL, thetaL, 60000, 3100, -0.5 * GR2RAD, 3);
+	LA model3(X, X_land, KL, thetaL, 41000, 2100, 0.5 * GR2RAD, 3);
+	LA model6(X, X_land, KL, thetaL, 42000, 2200, 0.5 * GR2RAD, 6);
 
 	Lin::Vector X1;
 	X1 = { phi0, lambda0, h0, 50, KL + 2 * GR2RAD };
 
-	LA model4(X1, X_land,  KL + M_PI, thetaL, 20000, 1000, (0.5) * GR2RAD, 4);
+	LA model4(X1, X_land,  KL + M_PI, thetaL, 20000, 1000, (5.5) * GR2RAD, 4);
 	LA model5(X1, X_land, KL + M_PI, thetaL, 8000, 400, (-0.5)* GR2RAD, 5);
 
 
@@ -174,6 +177,7 @@ int main()
 	listLA.push_back(&model3);
 	listLA.push_back(&model4);
 	listLA.push_back(&model5);
+	listLA.push_back(&model6);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)
@@ -188,12 +192,22 @@ int main()
 	python_plot.detach();
 	
 	//timer.add(std::chrono::microseconds(1), [&]() {system("python main.py");});
-	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
+	auto tcas = TCAS(listLA);
+	int delay_tcas = 110;
+
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
 			std::string str;
 			Plot_Python p1;
-		
+			
+			if (delay_tcas > 100)
+			{
+				tcas.run();
+				delay_tcas = 0;
+			}
+
 			for (int i = 0; i < listLA.size(); ++i)
 			{
 				if (listLA[i]->stop_integ != 1)
@@ -215,6 +229,7 @@ int main()
 				}	
 				
 			}
+			delay_tcas++;
 			if (std::all_of(std::begin(listLA), std::end(listLA), [](LA* x) {return x->stop_integ == 1;}))
 			{
 				str = "pause";
@@ -223,7 +238,8 @@ int main()
 				sendto(_s, &buff[0], str.size(), 0,
 					(sockaddr*)&_destAddr, sizeof(_destAddr));
 				mut.unlock();
-				end.load();
+				end.store(true);
+
 			}
 		//delete[] buff;
 		

@@ -78,9 +78,9 @@ public:
 class LA : public TModel
 {
 private:
-    std::vector<Lin::Vector> list_ppm;
+    
     double last_psi = 0;
-    std::vector<int> list_rotation;
+    
     int count_targ = 0;
     double m = 80000;   // масса ВС
     
@@ -92,19 +92,21 @@ private:
     double phi0 = 0;			                            // Начальная широта, долгота и
     double lambda0 = 0;		                                // нулевая высота т.к. стартовая
     double h0 = 0;											// точка на поверхности Земли
-    int mode = 0;                                           // Режим полета 0 - ППМ, 1 - посадка по глиссаде
+                                              // Режим полета 0 - ППМ, 1 - посадка по глиссаде
     double K_land = 0;                                      // Курс ВПП
     double theta_land = 0;                                  // Угол наклона глиссады
 
     
 
 public:
+    std::vector<int> list_rotation{ 1};
+    std::vector<Lin::Vector> list_ppm;
     FILE* output;
     int N;
     std::vector<Lin::Vector> Way;                           // Для КМЛ путь в ГСК
     int stop_integ = 0;
     std::vector<Lin::Vector> Way_glis;
-
+    int mode = 0;
     Lin::Vector target;                                     // Вектор В ТСК цели
 
     Lin::Vector ppm;                                        // Вектор в ТСК текущего ппм
@@ -301,7 +303,7 @@ public:
         nxa = 0;
         
 
-        if (mode == 0)
+        if (mode == 0 || mode == 2)
         {
             ppm = list_ppm[count_targ];
 
@@ -314,6 +316,13 @@ public:
                 Way.push_back(geo);
 
                 count_targ++;
+
+                if (mode == 2 && count_targ == list_ppm.size())
+                {
+                    count_targ = 0;
+                    mode = 1;
+                }
+
                 if (count_targ == list_ppm.size())
                 {
                     count_targ = 0;
@@ -322,16 +331,18 @@ public:
                         list_rotation[i] = 0;
                 }
                 ppm = list_ppm[count_targ];
+                
+               
                 count = 1;
             }
 
 
 
-            if (v[3] > 50 && v[1] < 6000)
+            if (v[3] > 50 && v[1] < ppm[1])
                 theta = 20 * GR2RAD;
             else theta = 0;
 
-            if (v[3] < 300)
+            if (v[3] < 200)
                 nxa = P / (m * g);
             else
                 nxa = 0;
@@ -424,18 +435,40 @@ public:
             gamma = 0;
             
             //todo логика управления на глиссаду
+            double delZ = v_sv[2] - target_sv[2];
             
-            if (abs(v_sv[2] - target_sv[2]) > 1)
+            if (abs(delZ) > 1)
             {
-                if ((v_sv[2] - target_sv[2]) < 0)
+                if ((delZ) < 0)
                 {
+                    if (delZ < 0)
                     gamma = 20 * GR2RAD;
-            
                 }
                 else
                 {
                     gamma = -20 * GR2RAD;
                 }
+
+                /*if ((delZ) < 0)
+                {
+                    if (delZ < -400)
+                        gamma = 20 * GR2RAD;
+                    else
+                        gamma = delZ * 0.1 * GR2RAD;
+                    
+                    if (gamma < 5 * GR2RAD)
+                        gamma = 3;
+                }
+                else
+                {
+                    if (delZ > 400)
+                        gamma = -20 * GR2RAD;
+                    else
+                        gamma = -delZ * 0.1 * GR2RAD;
+                    
+                    if (gamma > -5 * GR2RAD)
+                        gamma = 3;
+                }*/
             
             }
             else
@@ -458,10 +491,6 @@ public:
         return tmp;
     }
 
-    Lin::Vector getRightLand(const Lin::Vector& v, double t)
-    {
-        // 
-    }
 
     Lin::Vector norm2svyaz(Lin::Vector& v, double gamma, double theta, double psi)
     {
@@ -547,7 +576,7 @@ public:
         // TODO if mode
 
         fprintf(output, "%lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf  %lf\n", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], gamma, theta, tmp[5] * RAD2GR, del_glissade[2], del_glissade[1]);
-        if (X[1] < 1)
+        if (X[1] < 0.6)
         {
             stop_integ = 1;
             //end.store(true);
@@ -595,7 +624,7 @@ public:
         geo[2] = h;
         Way_glis.push_back(geo);
         
-        Glissade[0] = R-100;
+        Glissade[0] = R-3000;
         Glissade[1] = 0;
         Glissade[2] = 0;
         Glissade = Rotate('z', Glissade, -theta_land);
