@@ -37,6 +37,9 @@ class MatplotlibWidget(QMainWindow):
     def update(self):
         self.wdg1.canvas.axes1.clear()
         self.wdg1.canvas.axes2.clear()
+        self.listH.clear()
+        for LA in self.servak.coord:
+            self.listH.addItem(LA[0]+' - '+LA[5])
         self.graph.create_image(self.servak.coord, color=(0, 0, 255))
         self.graph.plot_map(self.wdg1.canvas, self.servak.coord)
         self.wdg1.canvas.draw()

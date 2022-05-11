@@ -20,7 +20,7 @@ class serv():
         phi = data_split[2]
         dal = data_split[3]
         az = data_split[4]
-
+        h = data_split[5]
         ch = False
 
         for LA in self.coord:
@@ -29,6 +29,7 @@ class serv():
                 LA[2] = lmb
                 LA[3] = dal
                 LA[4] = az
+                LA[5] = h
                 ch = True
 
         if not ch:

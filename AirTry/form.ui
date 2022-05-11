@@ -6,17 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1618</width>
-    <height>955</height>
+    <width>1385</width>
+    <height>1054</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="MplWidget" name="wdg1" native="true"/>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="MplWidget" name="wdg1" native="true"/>
+      </item>
+      <item>
+       <widget class="QListWidget" name="listH">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -25,7 +39,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1618</width>
+     <width>1385</width>
      <height>21</height>
     </rect>
    </property>

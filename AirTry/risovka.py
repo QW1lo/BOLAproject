@@ -31,7 +31,8 @@ class GPSVis(object):
         for LA in coord:
             d = float(LA[3]) / 1000 #self.polar_coord((float(LA[1])*math.pi/180,   float(LA[2])*math.pi/180))
             az = float(LA[4]) #* 180 / math.pi
-            canvas.axes2.scatter(az, d)
+            canvas.axes2.scatter(az, d, s=150)
+            canvas.axes2.text(az, d, LA[0], horizontalalignment='center', verticalalignment='center', fontdict={'color':'black'}, size=10)
 
 
     
