@@ -49,17 +49,13 @@ public:
 	{
 		for (int i = 0; i < listLA.size(); ++i)
 		{
-			if (listLA[i]->stop_integ == 1)
-				continue;
-
 			Xi = { listLA[i]->X[0], listLA[i]->X[1], listLA[i]->X[2] };
-			if (Xi.length() < 3000)
+			if (Xi.length() < 10000)
 				continue;
 			for (int j = 0; j < listLA.size(); ++j)
 			{
-				if (i == j || listLA[j]->stop_integ == 1)
+				if (i == j)
 					continue;
-
 
 				Xtarget = { listLA[j]->X[0], listLA[j]->X[1], listLA[j]->X[2] };
 				

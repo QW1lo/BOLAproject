@@ -159,7 +159,7 @@ int main()
 	// 
 	// Работа ОПС
 	//timer.add(std::chrono::microseconds(50), [&]() {system.get_angles(); });
-	LA model2(X, X_land, KL, thetaL, 40000, 2000, 0.5 * GR2RAD, 2);
+	LA model2(X, X_land, KL, thetaL, 40000, 2000, -60 * GR2RAD, 2);
 	//LA model3(X, X_land, KL, thetaL, 60000, 3100, -0.5 * GR2RAD, 3);
 	LA model3(X, X_land, KL, thetaL, 41000, 2100, 0.5 * GR2RAD, 3);
 	LA model6(X, X_land, KL, thetaL, 42000, 2200, 0.5 * GR2RAD, 6);
@@ -167,8 +167,32 @@ int main()
 	Lin::Vector X1;
 	X1 = { phi0, lambda0, h0, 50, KL + 2 * GR2RAD };
 
-	LA model4(X1, X_land,  KL + M_PI, thetaL, 20000, 1000, (5.5) * GR2RAD, 4);
+	LA model4(X1, X_land,  KL + M_PI, thetaL, 50000, 1000, (65) * GR2RAD, 4);
 	LA model5(X1, X_land, KL + M_PI, thetaL, 8000, 400, (-0.5)* GR2RAD, 5);
+	LA model7(X1, X_land, KL + M_PI, thetaL, 8100, 500, (-0.5)* GR2RAD, 7);
+	LA model8(X1, X_land, KL + M_PI, thetaL, 12000, 630, 0.3 * GR2RAD, 8);
+	LA model9(X1, X_land, KL + M_PI, thetaL, 40000, 3000, (-0.8)* GR2RAD, 9);
+	LA model10(X1, X_land, KL + M_PI, thetaL, 15000, 800, 1 * GR2RAD, 10);
+	LA model11(X1, X_land, KL + M_PI, thetaL, 60000, 3000, (-0.2)* GR2RAD, 11);
+	LA model12(X1, X_land, KL + M_PI, thetaL, 54000, 3000, 0.3 * GR2RAD, 12);
+	LA model13(X1, X_land, KL + M_PI, thetaL, 50000, 2500, (-0.5)* GR2RAD, 13);
+	LA model14(X1, X_land, KL + M_PI, thetaL, 45000, 2500, 0.3 * GR2RAD, 14);
+	LA model15(X1, X_land, KL + M_PI, thetaL, 30000, 1500, 0.6 * GR2RAD, 15);
+	LA model16(X1, X_land, KL + M_PI, thetaL, 25000, 1500, (-0.1)* GR2RAD, 16);
+	LA model17(X1, X_land, KL + M_PI, thetaL, 30000, 1500, (-0.6) * GR2RAD, 17);
+	LA model18(X1, X_land, KL + M_PI, thetaL, 25000, 1400, 0.6 * GR2RAD, 18);
+	LA model19(X, X_land, KL, thetaL, 54000, 3000, (-0.2)* GR2RAD, 19);
+	LA model20(X, X_land, KL, thetaL, 50000, 2500, 0.2 * GR2RAD, 20);
+	LA model21(X, X_land, KL, thetaL, 30000, 1500, 0.6 * GR2RAD, 21);
+	LA model22(X, X_land, KL, thetaL, 31000, 1600, 0.5 * GR2RAD, 22);
+	LA model23(X, X_land, KL, thetaL, 25000, 1500, (-0.5)* GR2RAD, 23);
+	LA model24(X, X_land, KL, thetaL, 20000, 1000, 0.2 * GR2RAD, 24);
+	LA model25(X, X_land, KL, thetaL, 20000, 1000, (-0.5)* GR2RAD, 25);
+	LA model26(X, X_land, KL, thetaL, 30000, 1500, (-0.5)* GR2RAD, 26);
+	LA model27(X, X_land, KL, thetaL, 8000, 410, 0.5 * GR2RAD, 27);
+	LA model28(X, X_land, KL, thetaL, 10000, 500, (-0.5)* GR2RAD, 28);
+	LA model29(X, X_land, KL, thetaL, 46000, 3000, 0.3 * GR2RAD, 29);
+	LA model30(X, X_land, KL, thetaL, 78000, 5000, 0.5 * GR2RAD, 30);
 
 
 	vector<LA*> listLA;
@@ -178,6 +202,32 @@ int main()
 	listLA.push_back(&model4);
 	listLA.push_back(&model5);
 	listLA.push_back(&model6);
+	listLA.push_back(&model7);
+	listLA.push_back(&model8);
+	listLA.push_back(&model9);
+	listLA.push_back(&model10);
+	listLA.push_back(&model11);
+	listLA.push_back(&model12);
+	listLA.push_back(&model13);
+	listLA.push_back(&model14);
+	listLA.push_back(&model15);
+	listLA.push_back(&model16);
+	listLA.push_back(&model17);
+	listLA.push_back(&model18);
+	listLA.push_back(&model19);
+	listLA.push_back(&model20);
+	listLA.push_back(&model21);
+	listLA.push_back(&model22);
+	listLA.push_back(&model23);
+	listLA.push_back(&model24);
+	listLA.push_back(&model25);
+	listLA.push_back(&model26);
+	listLA.push_back(&model27);
+	listLA.push_back(&model28);
+	listLA.push_back(&model29);
+	listLA.push_back(&model30);
+	
+	
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)

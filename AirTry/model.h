@@ -82,7 +82,7 @@ private:
     double last_psi = 0;
     
     int count_targ = 0;
-    double m = 80000;   // масса ВС
+    double m = 40000;   // масса ВС
     
     int count = 1;      
 
@@ -336,16 +336,11 @@ public:
                 count = 1;
             }
 
-
-
             if (v[3] > 50 && v[1] < ppm[1])
                 theta = 20 * GR2RAD;
             else theta = 0;
 
-            if (v[3] < 200)
-                nxa = P / (m * g);
-            else
-                nxa = 0;
+            
             
             Lin::Vector v_sv;
             Lin::Vector target_sv;
@@ -368,13 +363,13 @@ public:
                     if ((v_sv[2] - target_sv[2]) < 0)
                     {
                         //centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
-                        gamma = 15 * GR2RAD;
+                        gamma = 45 * GR2RAD;
 
                     }
                     else
                     {
                         //centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
-                        gamma = -15 * GR2RAD;
+                        gamma = -45 * GR2RAD;
                     }
 
                 }
@@ -416,12 +411,12 @@ public:
             {
                 if ((X[1] - ppm[1]) < 0)
                 {
-                    theta = 6 * GR2RAD;
+                    theta = 15 * GR2RAD;
             
                 }
                 else
                 {
-                    theta = -6 * GR2RAD;
+                    theta = -15 * GR2RAD;
                 }
             
             }
@@ -439,36 +434,36 @@ public:
             
             if (abs(delZ) > 1)
             {
+                //if ((delZ) < 0)
+                //{
+                //    if (delZ < 0)
+                //    gamma = 45 * GR2RAD;
+                //}
+                //else
+                //{
+                //    gamma = -45 * GR2RAD;
+                //}
+
                 if ((delZ) < 0)
                 {
-                    if (delZ < 0)
-                    gamma = 20 * GR2RAD;
-                }
-                else
-                {
-                    gamma = -20 * GR2RAD;
-                }
-
-                /*if ((delZ) < 0)
-                {
                     if (delZ < -400)
-                        gamma = 20 * GR2RAD;
+                        gamma = 45 * GR2RAD;
                     else
-                        gamma = delZ * 0.1 * GR2RAD;
+                        gamma = -delZ * 0.2 * GR2RAD;
                     
                     if (gamma < 5 * GR2RAD)
-                        gamma = 3;
+                        gamma = 5 * GR2RAD;
                 }
                 else
                 {
                     if (delZ > 400)
-                        gamma = -20 * GR2RAD;
+                        gamma = -45 * GR2RAD;
                     else
-                        gamma = -delZ * 0.1 * GR2RAD;
+                        gamma = -delZ * 0.2 * GR2RAD;
                     
                     if (gamma > -5 * GR2RAD)
-                        gamma = 3;
-                }*/
+                        gamma = -5 * GR2RAD;
+                }
             
             }
             else
@@ -482,6 +477,12 @@ public:
             
 
         }
+
+        if (v[3] < 100)
+            nxa = P / (m * g);
+        else
+            nxa = 0;
+
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
@@ -526,7 +527,7 @@ public:
         if (*rotation == 1)
             return 0;
         *rotation = 1;
-        double Ra = 200. * 200 / (9.81 * tan(15 * GR2RAD));
+        double Ra = v[3] * v[3] / (9.81 * tan(45 * GR2RAD));
         double dt = 0.1;
         dPSI *= sign;
         double d = dPSI * dt;
@@ -624,7 +625,7 @@ public:
         geo[2] = h;
         Way_glis.push_back(geo);
         
-        Glissade[0] = R-3000;
+        Glissade[0] = R-1000;
         Glissade[1] = 0;
         Glissade[2] = 0;
         Glissade = Rotate('z', Glissade, -theta_land);
