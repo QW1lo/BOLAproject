@@ -102,11 +102,12 @@ union ARINC_FEATURES {
 #pragma pack(push,1)
 struct Plot_Python 
 {
-    int Number;     // Борт номер
-    double phi;        // Широта
-    double lbd;        // Долгота
+    int Number;         // Борт номер
+    double phi;         // Широта
+    double lbd;         // Долгота
     double Az;          
-    double D;          // Дистанция от ВПП до ЛА
+    double D;           // Дистанция от ВПП до ЛА
+    double h;           // Высота ДА
 };
 #pragma pack(pop)
 
