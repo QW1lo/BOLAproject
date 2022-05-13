@@ -66,7 +66,7 @@ public:
 				Lin::Vector delX = (Xi - Xtarget);
 				double D = delX.length();
 				// TODO Если курс встречный набор высоты и отворот, курс можно посчитать по разности векторов высчитав угол как арктангенс
-				if (D < 1200 && abs(delX[2] < 200))
+				if (D < 2200 && abs(delX[2] < 200))
 				{
 					if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
 					{

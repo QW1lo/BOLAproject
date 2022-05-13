@@ -108,6 +108,7 @@ struct Plot_Python
     double Az;          
     double D;           // Дистанция от ВПП до ЛА
     double h;           // Высота ДА
+    double delY;        // Отклонение по высоте от глиссады ЛА
 };
 #pragma pack(pop)
 

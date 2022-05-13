@@ -25,6 +25,7 @@ void fill_struct_py(LA& obj, Plot_Python& struc)
 	struc.D = tsk.length();
 	struc.Az = atan2(tsk[2], tsk[0]);
 	struc.h = obj.X[1];
+	struc.delY = obj.del_glissade[1];
 }
 
 
@@ -266,7 +267,8 @@ int main()
 					listInteg[i]->integrate(*listLA[i]);
 					fill_struct_py(*listLA[i], p1);
 					str = std::to_string(p1.Number) + "|" + std::to_string(p1.phi) + "|" + std::to_string(p1.lbd) +
-						"|" + std::to_string(p1.D) + "|" + std::to_string(p1.Az) + "|" + std::to_string(p1.h);
+						"|" + std::to_string(p1.D) + "|" + std::to_string(p1.Az) + "|" + std::to_string(p1.h) 
+						+ "|" + std::to_string(p1.delY);
 					const char* buff = str.c_str();
 					for (int j = 0; j < str.size(); ++j)
 					{
