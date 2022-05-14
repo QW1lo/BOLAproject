@@ -37,6 +37,7 @@ class MatplotlibWidget(QMainWindow):
     def update(self):
         self.wdg1.canvas.axes1.clear()
         self.wdg1.canvas.axes2.clear()
+        self.wdg1.canvas.axes3.clear()
         self.listH.clear()
         for LA in self.servak.coord:
             self.listH.addItem(LA[0]+' - '+LA[5])

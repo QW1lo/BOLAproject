@@ -1,12 +1,13 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 
 class GPSVis(object):
     def __init__(self, map_path, points, coord_centr):
 
+        self.color_list = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
         self.points = points
         self.map_path = map_path
 
@@ -28,11 +29,20 @@ class GPSVis(object):
 
         canvas.axes2.set_theta_zero_location('N')
         canvas.axes2.set_theta_direction(-1)
+
+        canvas.axes3.set_xlabel('Distacnce')
+        canvas.axes3.set_ylabel('△Y')
+        canvas.axes3.grid()
         for LA in coord:
             d = float(LA[3]) / 1000 #self.polar_coord((float(LA[1])*math.pi/180,   float(LA[2])*math.pi/180))
             az = float(LA[4]) #* 180 / math.pi
             canvas.axes2.scatter(az, d, s=150)
             canvas.axes2.text(az, d, LA[0], horizontalalignment='center', verticalalignment='center', fontdict={'color':'black'}, size=10)
+            
+            if az<0:
+                d = -d
+            canvas.axes3.scatter(d, float(LA[6]), s=150)
+            canvas.axes3.text(d, float(LA[6]), LA[0], horizontalalignment='center', verticalalignment='center', fontdict={'color':'black'}, size=10)
 
 
     
@@ -41,10 +51,16 @@ class GPSVis(object):
 
         self.result_image = Image.open(self.map_path, 'r')
         draw = ImageDraw.Draw(self.result_image)
+        ind_color = 0
         for LA in coord:
                 x1, y1 = self.scale_to_img((float(LA[1]),float(LA[2])), (self.result_image.size[0], self.result_image.size[1]))
-                size = 5
-                draw.ellipse((x1-size,y1-size,x1+size,y1+size), fill=color)
+                size = 10
+                draw.ellipse((x1-size,y1-size,x1+size,y1+size), fill=self.color_list[ind_color])
+                draw.text((x1-8,y1-8),LA[0],fill='#FFFFFF',font=ImageFont.truetype("arial.ttf", 15))
+                ind_color += 1
+                if ind_color > 9:
+                    ind_color = 0
+                
 
 
     def scale_to_img(self, lat_lon, h_w):
@@ -148,3 +164,4 @@ class GPSVis(object):
     #     return az, d
 
 
+print(plt.rcParams['axes.prop_cycle'].by_key()['color'])

@@ -20,6 +20,7 @@ class MplWidget(QWidget):
         vertical_layout = QVBoxLayout()
         vertical_layout.addWidget(self.canvas)
         
-        self.canvas.axes1 = self.canvas.figure.add_subplot(1,2,1)
+        self.canvas.axes1 = self.canvas.figure.add_subplot(2,2,1)
         self.canvas.axes2 = self.canvas.figure.add_subplot(1,2,2, projection='polar')
+        self.canvas.axes3 = self.canvas.figure.add_subplot(2,2,3)
         self.setLayout(vertical_layout)
