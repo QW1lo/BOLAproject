@@ -170,7 +170,7 @@ int main()
 	X1 = { phi0, lambda0, h0, 50, KL + 2 * GR2RAD };
 
 	LA model4(X1, X_land,  KL + M_PI, thetaL, 50000, 1000, (65) * GR2RAD, 4);
-	LA model5(X1, X_land, KL + M_PI, thetaL, 8000, 400, (-0.5)* GR2RAD, 5);
+	LA model5(X1, X_land, KL + M_PI, thetaL, 18000, 1000, (-0.5)* GR2RAD, 5);
 	LA model7(X1, X_land, KL + M_PI, thetaL, 8100, 500, (-0.5)* GR2RAD, 7);
 	LA model8(X1, X_land, KL + M_PI, thetaL, 12000, 630, 0.3 * GR2RAD, 8);
 	LA model9(X1, X_land, KL + M_PI, thetaL, 40000, 3000, (-0.8)* GR2RAD, 9);
@@ -181,7 +181,7 @@ int main()
 	LA model14(X1, X_land, KL + M_PI, thetaL, 45000, 2500, 0.3 * GR2RAD, 14);
 	LA model15(X1, X_land, KL + M_PI, thetaL, 30000, 1500, 0.6 * GR2RAD, 15);
 	LA model16(X1, X_land, KL + M_PI, thetaL, 25000, 1500, (-0.1)* GR2RAD, 16);
-	LA model17(X1, X_land, KL + M_PI, thetaL, 30000, 1500, (-0.6) * GR2RAD, 17);
+	LA model17(X1, X_land, KL + M_PI, thetaL, 80000, 4000, (-0.6) * GR2RAD, 17);
 	LA model18(X1, X_land, KL + M_PI, thetaL, 25000, 1400, 0.6 * GR2RAD, 18);
 	LA model19(X, X_land, KL, thetaL, 54000, 3000, (-0.2)* GR2RAD, 19);
 	LA model20(X, X_land, KL, thetaL, 50000, 2500, 0.2 * GR2RAD, 20);
@@ -235,7 +235,7 @@ int main()
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.1));
+		listInteg.push_back(new TEuler(0, 1000, 0.5));
 	}
 	std::cout << "integrators\n";
 

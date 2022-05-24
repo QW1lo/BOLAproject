@@ -52,9 +52,19 @@ class GPSVis(object):
         self.result_image = Image.open(self.map_path, 'r')
         draw = ImageDraw.Draw(self.result_image)
         ind_color = 0
+        drom1 = (56.1439, 34.9885)
+        drom2 = (56.1424, 34.9824)
+        x_droml1, y_droml1 = self.scale_to_img((56.0545, 34.6232), (self.result_image.size[0], self.result_image.size[1]))
+        x_droml2, y_droml2 = self.scale_to_img((56.4184, 36.1558), (self.result_image.size[0], self.result_image.size[1]))
+        x_drom, y_drom = self.scale_to_img((56.1439, 34.9885), (self.result_image.size[0], self.result_image.size[1]))
+        size = 8
+        draw.line([x_droml1, y_droml1, x_droml2, y_droml2], fill='red', width=3)
+        draw.ellipse((x_drom-size,y_drom-size,x_drom+size,y_drom+size), fill='red')
+        
         for LA in coord:
                 x1, y1 = self.scale_to_img((float(LA[1]),float(LA[2])), (self.result_image.size[0], self.result_image.size[1]))
                 size = 10
+
                 draw.ellipse((x1-size,y1-size,x1+size,y1+size), fill=self.color_list[ind_color])
                 draw.text((x1-8,y1-8),LA[0],fill='#FFFFFF',font=ImageFont.truetype("arial.ttf", 15))
                 ind_color += 1
