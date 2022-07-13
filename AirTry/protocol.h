@@ -109,6 +109,14 @@ struct Plot_Python
     double D;           // Дистанция от ВПП до ЛА
     double h;           // Высота ДА
     double delY;        // Отклонение по высоте от глиссады ЛА
+    
+    double X;           // координаты в тск
+    double Z;           // 
+    double V;           // Скорость ЛА в траекторной
+    double PSI;         // угол рысканья
+
+    int TCAS;
+
 };
 #pragma pack(pop)
 

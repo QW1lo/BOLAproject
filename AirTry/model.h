@@ -378,6 +378,15 @@ public:
                     gamma = 0;
                 }
             }
+            if (mode == 2)
+            {
+                Lin::Vector ppmgl;
+                ppmgl = glissade();
+                v_sv = { v[0], v[1], v[2] };
+                target_sv = norm2svyaz(ppm, 0, 0, v[4]);
+                v_sv = norm2svyaz(v_sv, 0, 0, v[4]);
+                del_glissade = target_sv - v_sv;
+            }
         }
         else
         {

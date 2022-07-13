@@ -26,6 +26,11 @@ void fill_struct_py(LA& obj, Plot_Python& struc)
 	struc.Az = atan2(tsk[2], tsk[0]);
 	struc.h = obj.X[1];
 	struc.delY = obj.del_glissade[1];
+	struc.X = obj.X[0];
+	struc.Z = obj.X[2];
+
+	struc.V = obj.X[3];
+	struc.TCAS = 0;
 }
 
 
@@ -204,30 +209,30 @@ int main()
 	listLA.push_back(&model4);
 	listLA.push_back(&model5);
 	listLA.push_back(&model6);
-	listLA.push_back(&model7);
-	listLA.push_back(&model8);
-	listLA.push_back(&model9);
-	listLA.push_back(&model10);
-	listLA.push_back(&model11);
-	listLA.push_back(&model12);
-	listLA.push_back(&model13);
-	listLA.push_back(&model14);
-	listLA.push_back(&model15);
-	listLA.push_back(&model16);
-	listLA.push_back(&model17);
-	listLA.push_back(&model18);
-	listLA.push_back(&model19);
-	listLA.push_back(&model20);
-	listLA.push_back(&model21);
-	listLA.push_back(&model22);
-	listLA.push_back(&model23);
-	listLA.push_back(&model24);
-	listLA.push_back(&model25);
-	listLA.push_back(&model26);
-	listLA.push_back(&model27);
-	listLA.push_back(&model28);
-	listLA.push_back(&model29);
-	listLA.push_back(&model30);
+	//listLA.push_back(&model7);
+	//listLA.push_back(&model8);
+	//listLA.push_back(&model9);
+	//listLA.push_back(&model10);
+	//listLA.push_back(&model11);
+	//listLA.push_back(&model12);
+	//listLA.push_back(&model13);
+	//listLA.push_back(&model14);
+	//listLA.push_back(&model15);
+	//listLA.push_back(&model16);
+	//listLA.push_back(&model17);
+	//listLA.push_back(&model18);
+	//listLA.push_back(&model19);
+	//listLA.push_back(&model20);
+	//listLA.push_back(&model21);
+	//listLA.push_back(&model22);
+	//listLA.push_back(&model23);
+	//listLA.push_back(&model24);
+	//listLA.push_back(&model25);
+	//listLA.push_back(&model26);
+	//listLA.push_back(&model27);
+	//listLA.push_back(&model28);
+	//listLA.push_back(&model29);
+	//listLA.push_back(&model30);
 	
 	
 
@@ -268,7 +273,8 @@ int main()
 					fill_struct_py(*listLA[i], p1);
 					str = std::to_string(p1.Number) + "|" + std::to_string(p1.phi) + "|" + std::to_string(p1.lbd) +
 						"|" + std::to_string(p1.D) + "|" + std::to_string(p1.Az) + "|" + std::to_string(p1.h) 
-						+ "|" + std::to_string(p1.delY);
+						+ "|" + std::to_string(p1.delY) + "|" + std::to_string(p1.X) + "|" + std::to_string(p1.Z)
+						+ "|" + std::to_string(p1.V) + "|" + std::to_string(p1.TCAS);
 					const char* buff = str.c_str();
 					for (int j = 0; j < str.size(); ++j)
 					{

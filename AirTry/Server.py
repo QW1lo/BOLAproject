@@ -22,6 +22,12 @@ class serv():
         az = data_split[4]
         h = data_split[5]
         dy = data_split[6]
+        X = data_split[7]
+        Z = data_split[8]
+        V = data_split[9]
+        TCAS = data_split[10]
+
+
         ch = False
 
         for LA in self.coord:
@@ -32,6 +38,10 @@ class serv():
                 LA[4] = az
                 LA[5] = h
                 LA[6] = dy
+                LA[7] = X
+                LA[8] = Z
+                LA[9] = V
+                LA[10]= TCAS
                 ch = True
 
         if not ch:
