@@ -1,13 +1,17 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from PIL import Image, ImageDraw, ImageFont
 
 
 class GPSVis(object):
+    X0 = 0
+    Z0 = 0
     def __init__(self, map_path, points, coord_centr):
 
         self.color_list = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+        self.color_list_TCAS = ['green', 'yellow', 'red', 'black']
         self.points = points
         self.map_path = map_path
 
@@ -43,6 +47,67 @@ class GPSVis(object):
                 d = -d
             canvas.axes3.scatter(d, float(LA[6]), s=150)
             canvas.axes3.text(d, float(LA[6]), LA[0], horizontalalignment='center', verticalalignment='center', fontdict={'color':'black'}, size=10)
+
+    def plot2(self, canvas, coord):
+        canvas.axes1.grid()
+        canvas.axes2.grid()
+
+        for LA in coord:
+            if LA[0] == '3':          # Номер ЛА как начало координат
+                self.X0 = LA[7]
+                self.Z0 = LA[8]
+                break
+
+
+        for LA in coord:
+            d = math.sqrt((LA[7] - self.X0)**2 + (LA[8] - self.Z0)**2)
+            h = LA[5]
+            if (LA[0] == '3'):
+                d = 0
+                self.X0 = LA[7]
+                self.Z0 = LA[8]
+            x = LA[7]
+            z = LA[8]
+            a = (LA[9] * 30)                # длина прм-ка
+            anglePsi = math.pi + (-LA[10] + math.pi/4) / math.pi * 180
+            if (abs(LA[10]) > math.pi/2):
+                anglePsi = (LA[10] + math.pi /4 * 3)
+            else:
+                anglePsi = (-LA[10])
+            canvas.axes1.scatter(z, x, s=150)
+
+            circle = patches.Circle((z,x), a, color=self.color_list_TCAS[LA[11]], fill = False)
+            ellipse = patches.Ellipse(
+                xy=(z, x),
+                width=a,
+                height=a,
+                angle= anglePsi / math.pi * 180,                    # TODO Рахмер эллипса и поворот
+                color=self.color_list_TCAS[LA[11]],
+                fill = False
+            )
+            arrow = patches.Arrow(
+                x = z,
+                y = x,
+                dx = LA[9] * 30 * math.sin(anglePsi),
+                dy = LA[9] * 30 * math.cos(anglePsi),
+                color= self.color_list_TCAS[LA[11]],
+                fill=False
+            )
+
+            canvas.axes1.add_patch(circle)
+            canvas.axes1.add_patch(arrow)
+
+
+
+            canvas.axes2.scatter(d, h, s=150)
+            rectan = patches.Rectangle(
+                    (d - a / 2, h - 500 / 2),
+                    a,
+                    500,
+                    edgecolor=self.color_list_TCAS[LA[11]],
+                    fill=False
+            )
+            canvas.axes2.add_patch(rectan)
 
 
     

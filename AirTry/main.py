@@ -38,12 +38,23 @@ class MatplotlibWidget(QMainWindow):
         self.wdg1.canvas.axes1.clear()
         self.wdg1.canvas.axes2.clear()
         self.wdg1.canvas.axes3.clear()
+
+        self.wdg2.canvas.axes1.clear()
+        self.wdg2.canvas.axes2.clear()
+        # self.wdg2.canvas.axes1.scatter(0, 0, s=150)
+        # self.wdg2.canvas.axes1.set_xlabel('Longitude')
+        # self.wdg2.canvas.axes1.set_ylabel('Latitude')
+        # self.wdg2.canvas.axes1.grid()
+        # self.wdg2.canvas.draw()
         self.listH.clear()
         for LA in self.servak.coord:
-            self.listH.addItem(LA[0]+' - '+LA[5])
+            self.listH.addItem(LA[0]+' - '+str(LA[5]))
         self.graph.create_image(self.servak.coord, color=(0, 0, 255))
         self.graph.plot_map(self.wdg1.canvas, self.servak.coord)
+        self.graph.plot2(self.wdg2.canvas, self.servak.coord)
+
         self.wdg1.canvas.draw()
+        self.wdg2.canvas.draw()
         if self.servak.flag_stop:
             self.timer.stop()
 

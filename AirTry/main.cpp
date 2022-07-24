@@ -30,7 +30,8 @@ void fill_struct_py(LA& obj, Plot_Python& struc)
 	struc.Z = obj.X[2];
 
 	struc.V = obj.X[3];
-	struc.TCAS = 0;
+	struc.PSI = obj.X[4];
+	struc.TCAS = obj.TCAS;
 }
 
 
@@ -240,7 +241,7 @@ int main()
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.5));
+		listInteg.push_back(new TEuler(0, 1000, 0.1));
 	}
 	std::cout << "integrators\n";
 
@@ -274,7 +275,7 @@ int main()
 					str = std::to_string(p1.Number) + "|" + std::to_string(p1.phi) + "|" + std::to_string(p1.lbd) +
 						"|" + std::to_string(p1.D) + "|" + std::to_string(p1.Az) + "|" + std::to_string(p1.h) 
 						+ "|" + std::to_string(p1.delY) + "|" + std::to_string(p1.X) + "|" + std::to_string(p1.Z)
-						+ "|" + std::to_string(p1.V) + "|" + std::to_string(p1.TCAS);
+						+ "|" + std::to_string(p1.V) + "|" + std::to_string(p1.PSI) + "|" + std::to_string(p1.TCAS);
 					const char* buff = str.c_str();
 					for (int j = 0; j < str.size(); ++j)
 					{

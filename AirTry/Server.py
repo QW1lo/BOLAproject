@@ -25,23 +25,25 @@ class serv():
         X = data_split[7]
         Z = data_split[8]
         V = data_split[9]
-        TCAS = data_split[10]
+        PSI = data_split[10]
+        TCAS = data_split[11]
 
 
         ch = False
 
         for LA in self.coord:
             if LA[0] == n:
-                LA[1] = phi
-                LA[2] = lmb
-                LA[3] = dal
-                LA[4] = az
-                LA[5] = h
-                LA[6] = dy
-                LA[7] = X
-                LA[8] = Z
-                LA[9] = V
-                LA[10]= TCAS
+                LA[1] = float(phi)
+                LA[2] = float(lmb)
+                LA[3] = float(dal)
+                LA[4] = float(az)
+                LA[5] = float(h)
+                LA[6] = float(dy)
+                LA[7] = float(X)
+                LA[8] = float(Z)
+                LA[9] = float(V)
+                LA[10] = float(PSI)
+                LA[11]= int(TCAS)
                 ch = True
 
         if not ch:

@@ -113,6 +113,7 @@ public:
 
     double gamma = 0;
     double theta = 0;
+    int TCAS;
 
     Lin::Vector del_glissade{ 3 };                               // невязки координат и глиссады
 
@@ -490,7 +491,8 @@ public:
         if (v[3] < 100)
             nxa = P / (m * g);
         else
-            nxa = 0;
+            //nxa = 0;
+            nxa = sin(theta);
 
         tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
         tmp[1] = v[3] * sin(theta);                      // yg'

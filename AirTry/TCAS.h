@@ -49,35 +49,72 @@ public:
 	{
 		for (int i = 0; i < listLA.size(); ++i)
 		{
+			listLA[i]->TCAS = 0;
 			if (listLA[i]->stop_integ == 1)
 				continue;
 
 			Xi = { listLA[i]->X[0], listLA[i]->X[1], listLA[i]->X[2] };
-			if (Xi.length() < 3000)
-				continue;
+			//if (Xi.length() < 3000)
+			//	continue;
+			
 			for (int j = 0; j < listLA.size(); ++j)
 			{
 				if (i == j || listLA[j]->stop_integ == 1)
 					continue;
 
+				
 
 				Xtarget = { listLA[j]->X[0], listLA[j]->X[1], listLA[j]->X[2] };
 				
 				Lin::Vector delX = (Xi - Xtarget);
 				double D = delX.length();
-				// TODO Если курс встречный набор высоты и отворот, курс можно посчитать по разности векторов высчитав угол как арктангенс
-				if (D < 2200 && abs(delX[2] < 200))
+
+				double r1 = listLA[i]->X[3] * 60;
+				double r2 = listLA[j]->X[3] * 60;
+
+				if (sqrt(delX[0] * delX[0] + delX[2] * delX[2]) < (r1 + r2) && abs(delX[1]) < 500)
+				{
+					listLA[i]->TCAS = 1;
+					listLA[j]->TCAS = 1;
+				}
+
+
+				r1 = listLA[i]->X[3] * 35;
+				r2 = listLA[j]->X[3] * 35;
+
+				if (sqrt(delX[0] * delX[0] + delX[2] * delX[2]) < (r1 + r2) && abs(delX[1]) < 200)
 				{
 					if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
 					{
-						if (listLA[i]->X[2] > listLA[j]->X[2])
-							addPPMs(listLA[i], 1);
-						else
-							addPPMs(listLA[i], -1);
+						listLA[i]->TCAS = 3;
+						listLA[j]->TCAS = 2;
+							if (listLA[i]->X[2] > listLA[j]->X[2])
+								addPPMs(listLA[i], 1);
+							else
+								addPPMs(listLA[i], -1);
 					}
 					//else
 					//	addPPMs(listLA[j], j);
+					break;
 				}
+				
+
+				// TODO Если курс встречный набор высоты и отворот, курс можно посчитать по разности векторов высчитав угол как арктангенс
+				//if (D < 2200 && abs(delX[1]) < 200)
+				//{
+				//	if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
+				//	{
+				//		listLA[i]->TCAS = 2;
+				//		if (listLA[i]->X[2] > listLA[j]->X[2])
+				//			addPPMs(listLA[i], 1);
+				//		else
+				//			addPPMs(listLA[i], -1);
+				//	}
+				//	//else
+				//	//	addPPMs(listLA[j], j);
+				//	break;
+				//}
+				//listLA[i]->TCAS = 0;
 			}
 		}
 	};
