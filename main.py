@@ -62,15 +62,16 @@ xm = [0]
 ym = [0]
 xc = []
 yc = []
-v = 100 * 45
-om = 15 * pi/180
+v = 25
+om = 6.8 * pi/180
 for i in range(45):
     angle = 0 + i * om
-    xm.append((v * cos(angle)))
-    ym.append(v * sin(angle))
+    xm.append(xm[-1] + (v * cos(angle)))
+    ym.append(ym[-1] +(v * sin(angle)))
 
 for i in range(len(xm)):
-    xm[i] += xm[1]
+    #xm[i] += xm[0]
+    pass
 # xm.append(0)
 # ym.append(0)
 # v = -100 * 45

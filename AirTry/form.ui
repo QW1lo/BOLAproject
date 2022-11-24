@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -47,6 +47,16 @@
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="MplWidget2" name="wdg2" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Tab3</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="MplWidget3" name="wdg3" native="true"/>
         </item>
        </layout>
       </widget>
@@ -80,6 +90,12 @@
    <class>MplWidget2</class>
    <extends>QWidget</extends>
    <header>mplwidget2.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MplWidget3</class>
+   <extends>QWidget</extends>
+   <header>mplwidget3.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

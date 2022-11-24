@@ -42,6 +42,7 @@ public:
 		
 		LA->list_rotation.clear();
 		LA->list_rotation.resize(4);
+		LA->TCAS = 3;
 
 	}
 
@@ -75,7 +76,6 @@ public:
 				if (sqrt(delX[0] * delX[0] + delX[2] * delX[2]) < (r1 + r2) && abs(delX[1]) < 500)
 				{
 					listLA[i]->TCAS = 1;
-					listLA[j]->TCAS = 1;
 				}
 
 
@@ -84,10 +84,11 @@ public:
 
 				if (sqrt(delX[0] * delX[0] + delX[2] * delX[2]) < (r1 + r2) && abs(delX[1]) < 200)
 				{
+					
+					listLA[i]->TCAS = 2;
 					if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
 					{
 						listLA[i]->TCAS = 3;
-						listLA[j]->TCAS = 2;
 							if (listLA[i]->X[2] > listLA[j]->X[2])
 								addPPMs(listLA[i], 1);
 							else

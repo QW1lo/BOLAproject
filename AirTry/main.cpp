@@ -91,7 +91,7 @@ int main()
 	double phiL = 56.1448638889 * M_PI / 180;
 	double lambdaL = 34.9926805556 * M_PI / 180;
 	double hL = 0;
-	double KL = 67.05457948536832 * M_PI / 180;		// Курс ВПП
+	double KL = (67.05457948536832 + 90) * M_PI / 180;		// Курс ВПП
 	double thetaL = 3 * GR2RAD;
 
 	// Начальные координаты ЛА
@@ -177,7 +177,8 @@ int main()
 
 	LA model4(X1, X_land,  KL + M_PI, thetaL, 50000, 1000, (65) * GR2RAD, 4);
 	LA model5(X1, X_land, KL + M_PI, thetaL, 18000, 1000, (-0.5)* GR2RAD, 5);
-	LA model7(X1, X_land, KL + M_PI, thetaL, 8100, 500, (-0.5)* GR2RAD, 7);
+	LA model7(X1, X_land, KL + M_PI, thetaL, 19200, 1100, (0.6)* GR2RAD, 7);
+	//LA model7(X1, X_land, KL + M_PI, thetaL, 8100, 500, (-0.5)* GR2RAD, 7);
 	LA model8(X1, X_land, KL + M_PI, thetaL, 12000, 630, 0.3 * GR2RAD, 8);
 	LA model9(X1, X_land, KL + M_PI, thetaL, 40000, 3000, (-0.8)* GR2RAD, 9);
 	LA model10(X1, X_land, KL + M_PI, thetaL, 15000, 800, 1 * GR2RAD, 10);
@@ -210,7 +211,9 @@ int main()
 	listLA.push_back(&model4);
 	listLA.push_back(&model5);
 	listLA.push_back(&model6);
-	//listLA.push_back(&model7);
+	listLA.push_back(&model7);
+
+
 	//listLA.push_back(&model8);
 	//listLA.push_back(&model9);
 	//listLA.push_back(&model10);
@@ -241,7 +244,7 @@ int main()
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.1));
+		listInteg.push_back(new TEuler(0, 1000, 0.4));
 	}
 	std::cout << "integrators\n";
 

@@ -22,14 +22,16 @@ class GPSVis(object):
         self.y_ticks = []
 
     def plot_map(self, canvas, coord):
-        self.get_ticks()
-        #fig, axis1 = plt.subplots(figsize=(10, 10))
-        canvas.axes1.imshow(self.result_image)
-        canvas.axes1.set_xlabel('Longitude')
-        canvas.axes1.set_ylabel('Latitude')
-        canvas.axes1.set_xticklabels(self.x_ticks)
-        canvas.axes1.set_yticklabels(self.y_ticks)
-        canvas.axes1.grid()
+        # self.get_ticks()
+        # #fig, axis1 = plt.subplots(figsize=(10, 10))
+        # canvas.axes1.imshow(self.result_image)
+        # canvas.axes1.set_xlabel('Longitude')
+        # canvas.axes1.set_ylabel('Latitude')
+        # canvas.axes1.set_xticklabels(self.x_ticks)
+        # canvas.axes1.set_yticklabels(self.y_ticks)
+        # canvas.axes1.grid()
+        # self.x_ticks = []
+        # self.y_ticks = []
 
         canvas.axes2.set_theta_zero_location('N')
         canvas.axes2.set_theta_direction(-1)
@@ -69,47 +71,83 @@ class GPSVis(object):
             x = LA[7]
             z = LA[8]
             a = (LA[9] * 30)                # длина прм-ка
-            anglePsi = math.pi + (-LA[10] + math.pi/4) / math.pi * 180
-            if (abs(LA[10]) > math.pi/2):
-                anglePsi = (LA[10] + math.pi /4 * 3)
-            else:
-                anglePsi = (-LA[10])
+
+            pospsi = LA[10]                 # PSI from [-pi;pi] to [0;2pi]
+            if LA[10] < 0:
+                pospsi += math.pi*2
+
+
+            if (pospsi  < math.pi/2):
+                anglePsi = (LA[10] + math.pi / 4 * 3) + math.pi
+            if (pospsi > math.pi and pospsi < math.pi * 3 / 2):
+                anglePsi = (LA[10] + math.pi / 4 * 3) + math.pi
+            if (pospsi  > math.pi * 3 / 2) or (pospsi > math.pi / 2 and pospsi < math.pi):
+                anglePsi = (LA[10] - math.pi / 4) + math.pi
+
             canvas.axes1.scatter(z, x, s=150)
 
             circle = patches.Circle((z,x), a, color=self.color_list_TCAS[LA[11]], fill = False)
+
+            safezoneback = 1220
+            safezoneside = 1220
+            a_el = (LA[9] * 30 + safezoneback)
+            b_el = safezoneside * 2
+
             ellipse = patches.Ellipse(
-                xy=(z, x),
-                width=a,
-                height=a,
-                angle= anglePsi / math.pi * 180,                    # TODO Рахмер эллипса и поворот
+                xy=(z + (a_el / 2 - safezoneside) * math.sin(anglePsi) , x + (a_el / 2 - safezoneside) * math.cos(anglePsi)),
+                width=a_el,
+                height=b_el,
+                angle= (math.pi/2 - anglePsi) / math.pi * 180,                    # TODO Рахмер эллипса и поворот
                 color=self.color_list_TCAS[LA[11]],
                 fill = False
             )
+            #canvas.axes1.scatter(ellipse.get_center()[0], ellipse.get_center()[1], s=150) # показывает центр эллипса
             arrow = patches.Arrow(
                 x = z,
                 y = x,
-                dx = LA[9] * 30 * math.sin(anglePsi),
-                dy = LA[9] * 30 * math.cos(anglePsi),
-                color= self.color_list_TCAS[LA[11]],
+                dx = -safezoneback* math.sin(anglePsi),
+                dy = -safezoneback* math.cos(anglePsi),
+                color= 'pink',
                 fill=False
             )
 
-            canvas.axes1.add_patch(circle)
-            canvas.axes1.add_patch(arrow)
+            arrow2 = patches.Arrow(
+                x=z,
+                y=x,
+                dx=LA[9] * 30 * math.sin(anglePsi),
+                dy=LA[9] * 30 * math.cos(anglePsi),
+                color=self.color_list_TCAS[LA[11]],
+                fill=False
+            )
 
+            canvas.axes1.add_patch(ellipse)
+            canvas.axes1.add_patch(arrow)
+            canvas.axes1.add_patch(arrow2)
 
 
             canvas.axes2.scatter(d, h, s=150)
+
             rectan = patches.Rectangle(
-                    (d - a / 2, h - 500 / 2),
+                    (d - a / 2, h - 200 / 2),
                     a,
-                    500,
+                    200,
                     edgecolor=self.color_list_TCAS[LA[11]],
                     fill=False
             )
             canvas.axes2.add_patch(rectan)
 
 
+    def plot_map2(self, canvas, coord):
+        self.get_ticks()
+        #fig, axis1 = plt.subplots(figsize=(10, 10))
+        canvas.axes1.imshow(self.result_image)
+        canvas.axes1.set_xlabel('Longitude')
+        canvas.axes1.set_ylabel('Latitude')
+        canvas.axes1.set_xticklabels(self.x_ticks)
+        canvas.axes1.set_yticklabels(self.y_ticks)
+        canvas.axes1.grid()
+        self.x_ticks = []
+        self.y_ticks = []
     
 
     def create_image(self, coord, color, width=2):

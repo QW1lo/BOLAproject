@@ -494,11 +494,11 @@ public:
             //nxa = 0;
             nxa = sin(theta);
 
-        tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg'
+        tmp[0] = v[3] * cos(theta) * cos(v[4]);          // xg' (1.5)
         tmp[1] = v[3] * sin(theta);                      // yg'
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
         tmp[3] = g * (nxa - sin(theta));                 // V' в траекторной СК
-        tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy
+        tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy (5.8-5.9)
 
         return tmp;
     }
