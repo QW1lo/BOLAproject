@@ -72,6 +72,7 @@ class GPSVis(object):
             z = LA[8]
             a = (LA[9] * 30)                # длина прм-ка
 
+
             pospsi = LA[10]                 # PSI from [-pi;pi] to [0;2pi]
             if LA[10] < 0:
                 pospsi += math.pi*2

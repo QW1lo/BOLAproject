@@ -457,7 +457,7 @@ public:
                 if ((delZ) < 0)
                 {
                     if (delZ < -400)
-                        gamma = 45 * GR2RAD;
+                        gamma = 15 * GR2RAD;
                     else
                         gamma = -delZ * 0.2 * GR2RAD;
                     
@@ -467,7 +467,7 @@ public:
                 else
                 {
                     if (delZ > 400)
-                        gamma = -45 * GR2RAD;
+                        gamma = -15 * GR2RAD;
                     else
                         gamma = -delZ * 0.2 * GR2RAD;
                     

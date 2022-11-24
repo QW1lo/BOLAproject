@@ -91,7 +91,7 @@ int main()
 	double phiL = 56.1448638889 * M_PI / 180;
 	double lambdaL = 34.9926805556 * M_PI / 180;
 	double hL = 0;
-	double KL = (67.05457948536832 + 90) * M_PI / 180;		// Курс ВПП
+	double KL = (67.05457948536832) * M_PI / 180;		// Курс ВПП
 	double thetaL = 3 * GR2RAD;
 
 	// Начальные координаты ЛА
@@ -244,7 +244,7 @@ int main()
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.4));
+		listInteg.push_back(new TEuler(0, 1000, 0.1));
 	}
 	std::cout << "integrators\n";
 

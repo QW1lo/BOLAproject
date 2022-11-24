@@ -167,6 +167,7 @@
     <ClInclude Include="atom.h" />
     <ClInclude Include="bin.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Ellipse.h" />
     <ClInclude Include="integrator.h" />
     <ClInclude Include="kmlTransformer.h" />
     <ClInclude Include="Lab2.h" />

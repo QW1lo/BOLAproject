@@ -53,14 +53,14 @@ ellipse = patches.Ellipse(
                 xy=(-10, 5),
                 width=a1,
                 height=b1,
-                angle= math.atan2(b1,a1) * 180 / math.pi,                    # TODO Рахмер эллипса и поворот
+                angle= math.atan2(b1,a1) * 180 / math.pi,
                 fill = False
             )
 ellipse2 = patches.Ellipse(
                 xy=(9, 2.772),
                 width=a2,
                 height=b2,
-                angle = math.atan2(b2,a2) * 180 / math.pi,                    # TODO Рахмер эллипса и поворот
+                angle = math.atan2(b2,a2) * 180 / math.pi,
                 color= 'red',
                 fill = False
             )
@@ -69,7 +69,7 @@ ellipse3 = patches.Ellipse(
                 xy=(-10, 5),
                 width=a3,
                 height=b3,
-                angle=math.atan2(w3[1], w3[0]) * 180 / math.pi,  # TODO Рахмер эллипса и поворот
+                angle=math.atan2(w3[1], w3[0]) * 180 / math.pi,
                 color= 'orange',
                 fill=False
                         )
@@ -107,7 +107,7 @@ print('delangle', anglePsi * 180/ pi)
 #                 xy=(xy[0] + (a/2 - safezoneside) * cos(w), xy[1] + (a/2 - safezoneside)* sin(w)),
 #                 width=a,
 #                 height=b,
-#                 angle=w * 180/ pi,  # TODO Рахмер эллипса и поворот
+#                 angle=w * 180/ pi,
 #                 color= 'orange',
 #                 fill=False
 #                         )
@@ -115,7 +115,7 @@ ellipseLA = patches.Ellipse(
                 xy= (xy[1] + (a/2 - safezoneside) * sin(anglePsi), xy[0] + (a/2 - safezoneside) * cos(anglePsi)),
                 width=a,
                 height=b,
-                angle=(pi/2 - anglePsi) * 180/ pi,  # TODO Рахмер эллипса и поворот
+                angle=(pi/2 - anglePsi) * 180/ pi,
                 color= 'orange',
                 fill=False
                         )
