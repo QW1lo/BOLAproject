@@ -77,13 +77,13 @@ class GPSVis(object):
             if LA[10] < 0:
                 pospsi += math.pi*2
 
-
-            if (pospsi  < math.pi/2):
-                anglePsi = (LA[10] + math.pi / 4 * 3) + math.pi
-            if (pospsi > math.pi and pospsi < math.pi * 3 / 2):
-                anglePsi = (LA[10] + math.pi / 4 * 3) + math.pi
-            if (pospsi  > math.pi * 3 / 2) or (pospsi > math.pi / 2 and pospsi < math.pi):
-                anglePsi = (LA[10] - math.pi / 4) + math.pi
+            anglePsi = LA[10] + math.pi/2
+            # if (pospsi  < math.pi/2):
+            #     anglePsi = (LA[10] + math.pi / 4 * 3) + math.pi
+            # if (pospsi > math.pi and pospsi < math.pi * 3 / 2):
+            #     anglePsi = (LA[10] + math.pi / 4 * 3) + math.pi
+            # if (pospsi  > math.pi * 3 / 2) or (pospsi > math.pi / 2 and pospsi < math.pi):
+            #     anglePsi = (LA[10] - math.pi / 4) + math.pi
 
             canvas.axes1.scatter(z, x, s=150)
 
@@ -95,10 +95,10 @@ class GPSVis(object):
             b_el = safezoneside * 2
 
             ellipse = patches.Ellipse(
-                xy=(z + (a_el / 2 - safezoneside) * math.sin(anglePsi) , x + (a_el / 2 - safezoneside) * math.cos(anglePsi)),
+                xy=(z + (a_el / 2 - safezoneside) * math.cos(anglePsi) , x + (a_el / 2 - safezoneside) * math.sin(anglePsi)),
                 width=a_el,
                 height=b_el,
-                angle= (math.pi/2 - anglePsi) / math.pi * 180,                    # TODO Рахмер эллипса и поворот
+                angle= (anglePsi) / math.pi * 180,                    # TODO Рахмер эллипса и поворот
                 color=self.color_list_TCAS[LA[11]],
                 fill = False
             )
@@ -112,12 +112,21 @@ class GPSVis(object):
                 fill=False
             )
 
+            arrow = patches.Arrow(
+                x=z,
+                y=x,
+                dx=LA[9] * 30 * math.cos(anglePsi),
+                dy=LA[9] * 30 * math.sin(anglePsi),
+                color=self.color_list_TCAS[LA[11]],
+                fill=False
+            )
+
             arrow2 = patches.Arrow(
                 x=z,
                 y=x,
-                dx=LA[9] * 30 * math.sin(anglePsi),
-                dy=LA[9] * 30 * math.cos(anglePsi),
-                color=self.color_list_TCAS[LA[11]],
+                dx=LA[13] * 30,
+                dy=LA[12] * 30,
+                color='black',
                 fill=False
             )
 

@@ -85,19 +85,19 @@ b = safezoneside * 2
 xy = [-2528.582594, -5973.969912]
 w = 20 * pi / 180
 
-PSI =-1.7
+PSI =0.4
 
-
+print('atana', atan2(100.218518, 4.186619))
 pospsi = PSI
 if PSI < 0:
-    pospsi += math.pi*2
-
-if (pospsi < math.pi / 2):
-    anglePsi = (PSI + math.pi / 4 * 3) + math.pi
-if (pospsi > math.pi and pospsi < math.pi * 3 / 2):
-    anglePsi = (PSI + math.pi / 4 * 3) + math.pi
-if (pospsi > math.pi * 3 / 2) or (pospsi > math.pi / 2 and pospsi < math.pi):
-    anglePsi = (PSI - math.pi / 4) + math.pi
+    pospsi += math.pi*2 + pi/2
+anglePsi = PSI
+# if (pospsi < math.pi / 2):
+#     anglePsi = (PSI + math.pi / 4 * 3) + math.pi
+# if (pospsi > math.pi and pospsi < math.pi * 3 / 2):
+#     anglePsi = (PSI + math.pi / 4 * 3) + math.pi
+# if (pospsi > math.pi * 3 / 2) or (pospsi > math.pi / 2 and pospsi < math.pi):
+#     anglePsi = (PSI - math.pi / 4) + math.pi
 
 #anglePsi -= 1.170334 + pi
 
@@ -112,18 +112,18 @@ print('delangle', anglePsi * 180/ pi)
 #                 fill=False
 #                         )
 ellipseLA = patches.Ellipse(
-                xy= (xy[1] + (a/2 - safezoneside) * sin(anglePsi), xy[0] + (a/2 - safezoneside) * cos(anglePsi)),
+                xy= (xy[1] + (a/2 - safezoneside) * cos(anglePsi), xy[0] + (a/2 - safezoneside) * sin(anglePsi)),
                 width=a,
                 height=b,
-                angle=(pi/2 - anglePsi) * 180/ pi,
+                angle=(anglePsi) * 180/ pi,
                 color= 'orange',
                 fill=False
                         )
 arrow = patches.Arrow(
                 x = xy[1],
                 y = xy[0],
-                dx = v * 30 * math.sin(anglePsi),
-                dy = v * 30 * math.cos(anglePsi),
+                dx = v * 30 * math.cos(anglePsi),
+                dy = v * 30 * math.sin(anglePsi),
                 color= 'orange',
                 fill=False
             )
@@ -131,17 +131,17 @@ arrow = patches.Arrow(
 arrow2 = patches.Arrow(
                 x = xy[1],
                 y = xy[0],
-                dx = -1220 * math.sin(anglePsi),
-                dy = -1220 * math.cos(anglePsi),
+                dx = -1220 * math.cos(anglePsi),
+                dy = -1220 * math.sin(anglePsi),
                 color= 'red',
                 fill=False
             )
 
 arrow_right = patches.Arrow(
-                x = xy[1] + (a/2 - safezoneside) * sin(anglePsi),
-                y = xy[0] + (a/2 - safezoneside) * cos(anglePsi),
-                dx = -1220 * math.sin(anglePsi + pi/2),
-                dy = -1220 * math.cos(anglePsi + pi/2),
+                x = xy[1] + (a/2 - safezoneside) * cos(anglePsi),
+                y = xy[0] + (a/2 - safezoneside) * sin(anglePsi),
+                dx = -1220 * math.cos(anglePsi + pi/2),
+                dy = -1220 * math.sin(anglePsi + pi/2),
                 color= 'blue',
                 fill=False
             )

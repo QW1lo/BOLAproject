@@ -31,6 +31,9 @@ void fill_struct_py(LA& obj, Plot_Python& struc)
 
 	struc.V = obj.X[3];
 	struc.PSI = obj.X[4];
+	struc.vx = obj.dvxz[0];
+	struc.vz = obj.dvxz[1];
+
 	struc.TCAS = obj.TCAS;
 }
 
@@ -91,7 +94,7 @@ int main()
 	double phiL = 56.1448638889 * M_PI / 180;
 	double lambdaL = 34.9926805556 * M_PI / 180;
 	double hL = 0;
-	double KL = (67.05457948536832) * M_PI / 180;		// Курс ВПП
+	double KL = (67.05457948536832 ) * M_PI / 180;		// Курс ВПП
 	double thetaL = 3 * GR2RAD;
 
 	// Начальные координаты ЛА
@@ -244,7 +247,7 @@ int main()
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.1));
+		listInteg.push_back(new TEuler(0, 1000, 0.4));
 	}
 	std::cout << "integrators\n";
 
@@ -278,7 +281,8 @@ int main()
 					str = std::to_string(p1.Number) + "|" + std::to_string(p1.phi) + "|" + std::to_string(p1.lbd) +
 						"|" + std::to_string(p1.D) + "|" + std::to_string(p1.Az) + "|" + std::to_string(p1.h) 
 						+ "|" + std::to_string(p1.delY) + "|" + std::to_string(p1.X) + "|" + std::to_string(p1.Z)
-						+ "|" + std::to_string(p1.V) + "|" + std::to_string(p1.PSI) + "|" + std::to_string(p1.TCAS);
+						+ "|" + std::to_string(p1.V) + "|" + std::to_string(p1.PSI) + "|" + std::to_string(p1.TCAS)
+						+ "|" + std::to_string(p1.vx) + "|" + std::to_string(p1.vz);
 					const char* buff = str.c_str();
 					for (int j = 0; j < str.size(); ++j)
 					{

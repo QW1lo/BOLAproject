@@ -115,6 +115,8 @@ public:
     double theta = 0;
     int TCAS;
 
+    Lin::Vector dvxz{ 2 };
+
     Lin::Vector del_glissade{ 3 };                               // невязки координат и глиссады
 
     // todo конструктор для программы с ВПП, начало ТСК на ВПП
@@ -499,6 +501,9 @@ public:
         tmp[2] = -v[3] * cos(theta) * sin(v[4]);         // zg'
         tmp[3] = g * (nxa - sin(theta));                 // V' в траекторной СК
         tmp[4] = -g / v[3] * tan(gamma);                 // PSI' = wy (5.8-5.9)
+        
+        dvxz[0] = tmp[0] ;
+        dvxz[1] = tmp[2] ;
 
         return tmp;
     }

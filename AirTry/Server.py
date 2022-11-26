@@ -27,6 +27,8 @@ class serv():
         V = data_split[9]
         PSI = data_split[10]
         TCAS = data_split[11]
+        vx = data_split[12]
+        vz = data_split[13]
 
 
         ch = False
@@ -43,7 +45,9 @@ class serv():
                 LA[8] = float(Z)
                 LA[9] = float(V)
                 LA[10] = float(PSI)
-                LA[11]= int(TCAS)
+                LA[11] = int(TCAS)
+                LA[12] = float(vx)
+                LA[13] = float(vz)
                 ch = True
 
         if not ch:

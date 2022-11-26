@@ -115,6 +115,9 @@ struct Plot_Python
     double V;           // Скорость ЛА в траекторной
     double PSI;         // угол рысканья
 
+    double vx;
+    double vz;
+
     int TCAS;
 
 };
