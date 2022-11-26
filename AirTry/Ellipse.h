@@ -190,33 +190,16 @@ public:
 
         a0 = (la0->X[3] * time_safe + safezoneback);
         b0 = safezoneside * 2;
-        double pospsi = la0->X[4];
-        if (pospsi < 0) 
-            pospsi += M_PI * 2;
-        if (pospsi < M_PI / 2)
-            theta0 = (la0->X[4] + M_PI / 4 * 3) + M_PI;
-        if (pospsi > M_PI and pospsi < M_PI * 3 / 2)
-            theta0 = (la0->X[4] + M_PI / 4 * 3) + M_PI;
-        if ((pospsi > M_PI * 3 / 2) || (pospsi > M_PI / 2 and pospsi < M_PI))
-            theta0 = (la0->X[4] - M_PI / 4) + M_PI;
-        x0 = la0->X[2] + (a0 / 2 - safezoneside) * sin(theta0);
-        y0 = la0->X[0] + (a0 / 2 - safezoneside) * cos(theta0);
+        theta0 = la0->X[4] + M_PI / 2;
+        x0 = la0->X[2] + (a0 / 2 - safezoneside) * cos(theta0);
+        y0 = la0->X[0] + (a0 / 2 - safezoneside) * sin(theta0);
 
 
         a1 = (la1->X[3] * time_safe + safezoneback);
         b1 = safezoneside * 2;
-        pospsi = la1->X[4];
-        if (pospsi < 0)
-            pospsi += M_PI * 2;
-        if (pospsi < M_PI / 2)
-            theta1 = (la1->X[4] + M_PI / 4 * 3) + M_PI;
-        if (pospsi > M_PI && pospsi < M_PI * 3 / 2)
-            theta1 = (la1->X[4] + M_PI / 4 * 3) + M_PI;
-        if ((pospsi > M_PI * 3 / 2) || (pospsi > M_PI / 2 and pospsi < M_PI))
-            theta1 = (la1->X[4] - M_PI / 4) + M_PI;
-
-        x1 = la1->X[2] + (a1 / 2 - safezoneside) * sin(theta1);
-        y1 = la1->X[0] + (a1 / 2 - safezoneside) * cos(theta1);
+        theta1 = la1->X[4] + M_PI / 2;
+        x1 = la1->X[2] + (a1 / 2 - safezoneside) * cos(theta1);
+        y1 = la1->X[0] + (a1 / 2 - safezoneside) * sin(theta1);
 
         return collide_ab(x0, y0, a0, b0, theta0, x1, y1, a1, b1, theta1);
     }

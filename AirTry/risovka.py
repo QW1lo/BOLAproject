@@ -70,7 +70,7 @@ class GPSVis(object):
                 self.Z0 = LA[8]
             x = LA[7]
             z = LA[8]
-            a = (LA[9] * 30)                # длина прм-ка
+            a = (LA[9] * 35)                # длина прм-ка
 
 
             pospsi = LA[10]                 # PSI from [-pi;pi] to [0;2pi]
@@ -91,7 +91,7 @@ class GPSVis(object):
 
             safezoneback = 1220
             safezoneside = 1220
-            a_el = (LA[9] * 30 + safezoneback)
+            a_el = (LA[9] * 35 + safezoneback)
             b_el = safezoneside * 2
 
             ellipse = patches.Ellipse(
@@ -115,8 +115,8 @@ class GPSVis(object):
             arrow = patches.Arrow(
                 x=z,
                 y=x,
-                dx=LA[9] * 30 * math.cos(anglePsi),
-                dy=LA[9] * 30 * math.sin(anglePsi),
+                dx=LA[9] * 35 * math.cos(anglePsi),
+                dy=LA[9] * 35 * math.sin(anglePsi),
                 color=self.color_list_TCAS[LA[11]],
                 fill=False
             )
@@ -124,8 +124,8 @@ class GPSVis(object):
             arrow2 = patches.Arrow(
                 x=z,
                 y=x,
-                dx=LA[13] * 30,
-                dy=LA[12] * 30,
+                dx=LA[13] * 35,
+                dy=LA[12] * 35,
                 color='black',
                 fill=False
             )
@@ -138,8 +138,8 @@ class GPSVis(object):
             canvas.axes2.scatter(d, h, s=150)
 
             rectan = patches.Rectangle(
-                    (d - a / 2, h - 200 / 2),
-                    a,
+                    (d - a_el / 2, h - 200 / 2),
+                    a_el,
                     200,
                     edgecolor=self.color_list_TCAS[LA[11]],
                     fill=False

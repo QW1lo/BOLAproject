@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Lin.h"
 #include "model.h"
+#include "Ellipse.h"
 #include <vector>
 
 class TCAS
@@ -11,6 +12,7 @@ public:
 	std::vector<LA*> listLA;
 	Lin::Vector Xi;
 	Lin::Vector Xtarget;
+	EllipseCollisionTest elipson{ 10 };
 
 	TCAS(std::vector<LA*> listLA0)
 	{
@@ -53,7 +55,9 @@ public:
 			listLA[i]->TCAS = 0;
 			if (listLA[i]->stop_integ == 1)
 				continue;
+			
 
+			
 			Xi = { listLA[i]->X[0], listLA[i]->X[1], listLA[i]->X[2] };
 			//if (Xi.length() < 3000)
 			//	continue;
@@ -63,13 +67,31 @@ public:
 				if (i == j || listLA[j]->stop_integ == 1)
 					continue;
 
-				
-
 				Xtarget = { listLA[j]->X[0], listLA[j]->X[1], listLA[j]->X[2] };
 				
 				Lin::Vector delX = (Xi - Xtarget);
 				double D = delX.length();
+				
+				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220., 1220.) && abs(delX[1]) < 500)
+				{
+					listLA[i]->TCAS = 1;
+				}
 
+				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 200)
+				{
+					listLA[i]->TCAS = 2;
+					if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
+					{
+						listLA[i]->TCAS = 3;
+						if (listLA[i]->X[2] > listLA[j]->X[2])
+							addPPMs(listLA[i], 1);
+						else
+							addPPMs(listLA[i], -1);
+					}
+					break;
+				}
+
+				/*
 				double r1 = listLA[i]->X[3] * 60;
 				double r2 = listLA[j]->X[3] * 60;
 
@@ -98,7 +120,7 @@ public:
 					//	addPPMs(listLA[j], j);
 					break;
 				}
-				
+				*/
 
 				// TODO Если курс встречный набор высоты и отворот, курс можно посчитать по разности векторов высчитав угол как арктангенс
 				//if (D < 2200 && abs(delX[1]) < 200)
