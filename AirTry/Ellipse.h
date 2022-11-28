@@ -172,12 +172,12 @@ public:
         double wx0, wy0, hw0, wx1, wy1, hw1;
         
         double tmp0 = tan(theta0);
-        wx0 = sqrt(a0 * a0 / (tmp0 * tmp0 + 1));
+        wx0 = sqrt(a0 * a0 / 4 / (tmp0 * tmp0 + 1));
         wy0 = wx0 * tmp0;
         hw0 = b0 / a0;
 
         double tmp1 = tan(theta0);
-        wx1 = sqrt(a1 * a1 / (tmp1 * tmp1 + 1));
+        wx1 = sqrt(a1 * a1 / 4 / (tmp1 * tmp1 + 1));
         wy1 = wx1 * tmp1;
         hw1 = b1 / a1;
 
@@ -201,6 +201,7 @@ public:
         x1 = la1->X[2] + (a1 / 2 - safezoneside) * cos(theta1);
         y1 = la1->X[0] + (a1 / 2 - safezoneside) * sin(theta1);
 
+        // Podaem a/2 & b/2 potomu chto zdes a - eto diagonal, a v algoritme a eto radius
         return collide_ab(x0, y0, a0, b0, theta0, x1, y1, a1, b1, theta1);
     }
 

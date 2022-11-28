@@ -266,7 +266,7 @@ int main()
 			std::string str;
 			Plot_Python p1;
 			
-			if (delay_tcas > 100)
+			if (delay_tcas > 10)
 			{
 				tcas.run();
 				delay_tcas = 0;

@@ -50,6 +50,7 @@ public:
 
 	void run()
 	{
+		double trash = 0;
 		for (int i = 0; i < listLA.size(); ++i)
 		{
 			listLA[i]->TCAS = 0;
@@ -76,7 +77,9 @@ public:
 				{
 					listLA[i]->TCAS = 1;
 				}
-
+				if (i == 4 && j == 6)
+					trash++;
+					
 				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 200)
 				{
 					listLA[i]->TCAS = 2;
