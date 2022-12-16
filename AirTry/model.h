@@ -176,31 +176,33 @@ public:
     };
 
 
-    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, int number) :TModel(X0)
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, double H0, int number) :TModel(X0)
     {
         // X0 - ВС формата {phi0, lbd0, h0, V0, PSI0}
         output = fopen("LAoutput.txt", "w");
 
+        // За [0, 0] берется аэродром орловка
         phi0 = 56.1448638889 * M_PI / 180;
         lambda0 = 34.9926805556 * M_PI / 180;
-        h0 = X0[2];
+        h0 = H0;
 
         Lin::Vector Xstart;
-        Xstart = { X[0], X[1], X[2] };
+        Xstart = { Init_ppms[0][0], Init_ppms[0][1], Init_ppms[0][2] };
         Xstart = Geo_TSK(Xstart, 0);
 
         X[0] = Xstart[0];
-        X[1] = X0[2];
+        X[1] = h0;
         X[2] = Xstart[2];
 
 
-        for (int i = 0; i < Init_ppms.size(); i++) {
+        for (int i = 1; i < Init_ppms.size(); i++) {
             Lin::Vector tmp;
             tmp = Geo_TSK(Init_ppms[i] * M_PI / 180, 0);
             list_ppm.push_back(tmp);
             list_rotation.push_back(0);
         }
-        mode = 2;
+        mode = 5;
+        count_targ++;
     };
 
 
