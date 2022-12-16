@@ -176,7 +176,7 @@ public:
         wy0 = wx0 * tmp0;
         hw0 = b0 / a0;
 
-        double tmp1 = tan(theta0);
+        double tmp1 = tan(theta1);
         wx1 = sqrt(a1 * a1 / 4 / (tmp1 * tmp1 + 1));
         wy1 = wx1 * tmp1;
         hw1 = b1 / a1;

@@ -205,4 +205,6 @@ ax1.scatter([xy[1],ellipseLA.get_center()[0]], [xy[0],ellipseLA.get_center()[1]]
 #ax1.plot([0,ellipseLA.get_center()[0]], [0,ellipseLA.get_center()[1]])
 ax1.grid()
 
+print(10* log10(2*10**4 + 10**4.5 + 10**4.5))
+
 plt.show()

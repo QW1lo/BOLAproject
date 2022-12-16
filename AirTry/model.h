@@ -127,15 +127,23 @@ public:
         // X0 - ВС формата {phi0, lbd0, h0, V0, PSI0}
         output = fopen("LAoutput.txt", "w");
 
-        phi0 = X[0];
-        lambda0 = X[1];
+        phi0 = 56.1448638889 * M_PI / 180;
+        lambda0 = 34.9926805556 * M_PI / 180;
         target = Geo_TSK(target0 * M_PI / 180, 0);
         target[1] = 0;
         //target[2] = 1000;
 
-        for (int i = 0; i < 3; i++) {
-            X[i] = 0;
-        }
+        //for (int i = 0; i < 3; i++) {
+        //    X[i] = 0;
+        //}
+        Lin::Vector Xstart;
+        Xstart = { X[0], X[1], X[2] };
+        Xstart = Geo_TSK(Xstart, 0);
+        
+        X[0] = Xstart[0];
+        X[1] = X0[2];
+        X[2] = Xstart[2];
+
 
         for (int i = 0; i < Init_ppms.size(); i++) {
             Lin::Vector tmp;

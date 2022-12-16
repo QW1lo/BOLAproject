@@ -55,7 +55,7 @@ class GPSVis(object):
         canvas.axes2.grid()
 
         for LA in coord:
-            if LA[0] == '3':          # Номер ЛА как начало координат
+            if LA[0] == '1':          # Номер ЛА как начало координат
                 self.X0 = LA[7]
                 self.Z0 = LA[8]
                 break
@@ -102,6 +102,22 @@ class GPSVis(object):
                 color=self.color_list_TCAS[LA[11]],
                 fill = False
             )
+
+            safezoneback = 1220
+            safezoneside = 1220
+            a_el = (LA[9] * 60 + safezoneback)
+            b_el = safezoneside * 2
+
+            ellipsewarning = patches.Ellipse(
+                xy=(
+                z + (a_el / 2 - safezoneside) * math.cos(anglePsi), x + (a_el / 2 - safezoneside) * math.sin(anglePsi)),
+                width=a_el,
+                height=b_el,
+                angle=(anglePsi) / math.pi * 180,  # TODO Рахмер эллипса и поворот
+                color=self.color_list_TCAS[LA[11]],
+                fill=False
+            )
+
             #canvas.axes1.scatter(ellipse.get_center()[0], ellipse.get_center()[1], s=150) # показывает центр эллипса
             arrow = patches.Arrow(
                 x = z,
@@ -131,6 +147,7 @@ class GPSVis(object):
             )
 
             canvas.axes1.add_patch(ellipse)
+            canvas.axes1.add_patch(ellipsewarning)
             canvas.axes1.add_patch(arrow)
             canvas.axes1.add_patch(arrow2)
 

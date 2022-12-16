@@ -108,6 +108,16 @@ int main()
 	double lambda0 = 39.03 * M_PI / 180;				//
 	double h0 = 0;										//
 
+
+
+	double phi1 = 56.077251 * M_PI / 180;					// Первый ЛА ВКР
+	double lambda1 = 34.828938 * M_PI / 180;				//
+	double h1 = 2500;										//
+
+	double phi2 = 56.08094624641132 * M_PI / 180;					// Первый ЛА ВКР
+	double lambda2 = 35.32249558691617 * M_PI / 180;				//
+	double h2 = 2500;												//
+
 	Lin::Vector X_land;
 	//X = { phi0, lambda0, h0, 0.001, 0 };
 	X_land = { phiL, lambdaL, hL, 0, KL };
@@ -116,16 +126,21 @@ int main()
 	Lin::Vector X;
 	X = { phi0, lambda0, h0, 50, M_PI - KL + 2 * GR2RAD};
 	
-
+	Lin::Vector X_VKR1;
+	Lin::Vector X_VKR2;
+	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * 25 };
+	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * -25 };
 
 	// Массив ппм
 	KML_Transformer kml_trns;
 	
 	vector<Lin::Vector> vec_coord;
+	vector<Lin::Vector> vec_coord2;
 	//vec_coord = parser("pyt.kml");	
 	// Для первого маршрута
-	vec_coord = parser("pyt5.kml");					    // Для второого маршрута
-	
+	vec_coord = parser("PYT_VKR1.kml");					    // Для второого маршрута
+	vec_coord2 = parser("PYT_VKR2.kml");
+
 	// Характеристики ОПС
 	double gam_max = 45;
 	double gam_min = -45;
@@ -135,15 +150,23 @@ int main()
 
 	// Цель ОПС в гео координатах
 	Lin::Vector tar;
+	Lin::Vector tar2;
+	tar = vec_coord[1];
+	tar2 = vec_coord2[1];
 
-	tar = vec_coord[2];
+	
 
 	// Нач вектор состояния АСП
 	Lin::Vector X_asp;
     X_asp = { 0, 6000, 0, 300, 0 * 3.14 / 180., 0 };
 
 
-	//LA model(X, vec_coord, tar);
+	LA modelVKR1(X_VKR1, vec_coord, tar);
+	modelVKR1.N = 1;
+
+	LA modelVKR2(X_VKR2, vec_coord2, tar2);
+	modelVKR2.N = 2;
+	
 	LA model(X, X_land, KL, thetaL, 80000, 4200, 2 * GR2RAD, 1);
 	std::cout << "model\n";
 	
@@ -208,13 +231,13 @@ int main()
 
 
 	vector<LA*> listLA;
-	listLA.push_back(&model);
-	listLA.push_back(&model2);
-	listLA.push_back(&model3);
-	listLA.push_back(&model4);
-	listLA.push_back(&model5);
-	listLA.push_back(&model6);
-	listLA.push_back(&model7);
+	//listLA.push_back(&model);
+	//listLA.push_back(&model2);
+	//listLA.push_back(&model3);
+	//listLA.push_back(&model4);
+	//listLA.push_back(&model5);
+	//listLA.push_back(&model6);
+	//listLA.push_back(&model7);
 
 
 	//listLA.push_back(&model8);
@@ -241,13 +264,14 @@ int main()
 	//listLA.push_back(&model29);
 	//listLA.push_back(&model30);
 	
-	
+	listLA.push_back(&modelVKR1);
+	listLA.push_back(&modelVKR2);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.4));
+		listInteg.push_back(new TEuler(0, 1000, 0.03));
 	}
 	std::cout << "integrators\n";
 
@@ -259,14 +283,14 @@ int main()
 	std::this_thread::sleep_for(std::chrono::milliseconds(7000));
 
 	auto tcas = TCAS(listLA);
-	int delay_tcas = 110;
+	int delay_tcas = 11;
 
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
 			std::string str;
 			Plot_Python p1;
 			
-			if (delay_tcas > 10)
+			if (delay_tcas > 5)
 			{
 				tcas.run();
 				delay_tcas = 0;
