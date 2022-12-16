@@ -129,6 +129,7 @@ public:
 
         phi0 = 56.1448638889 * M_PI / 180;
         lambda0 = 34.9926805556 * M_PI / 180;
+        h0 = X0[2];
         target = Geo_TSK(target0 * M_PI / 180, 0);
         target[1] = 0;
         //target[2] = 1000;
@@ -164,7 +165,8 @@ public:
 
         phi0 = Land[0];
         lambda0 = Land[1];
-      
+        h0 = H_La0;
+
         K_land = K_land0;
         theta_land = theta_land0;
         // Определение нач координат ЛА в ТСК 
@@ -172,6 +174,35 @@ public:
         mode = 1;
         N = number;
     };
+
+
+    LA(Lin::Vector& X0, std::vector<Lin::Vector>& Init_ppms, int number) :TModel(X0)
+    {
+        // X0 - ВС формата {phi0, lbd0, h0, V0, PSI0}
+        output = fopen("LAoutput.txt", "w");
+
+        phi0 = 56.1448638889 * M_PI / 180;
+        lambda0 = 34.9926805556 * M_PI / 180;
+        h0 = X0[2];
+
+        Lin::Vector Xstart;
+        Xstart = { X[0], X[1], X[2] };
+        Xstart = Geo_TSK(Xstart, 0);
+
+        X[0] = Xstart[0];
+        X[1] = X0[2];
+        X[2] = Xstart[2];
+
+
+        for (int i = 0; i < Init_ppms.size(); i++) {
+            Lin::Vector tmp;
+            tmp = Geo_TSK(Init_ppms[i] * M_PI / 180, 0);
+            list_ppm.push_back(tmp);
+            list_rotation.push_back(0);
+        }
+        mode = 2;
+    };
+
 
     Lin::Vector Rotate(char axis, Lin::Vector vec, double angle) {
 
@@ -639,7 +670,11 @@ public:
         Glissade = Rotate('z', Glissade, -theta_land);
         Glissade = Rotate('y', Glissade, K_land);
 
-        double h = Glissade[1];
+        double h;
+        if (theta_land == 0)
+            h = h0;
+        else
+            h = Glissade[1];
         
         Lin::Vector geo;
         Lin::Vector tsk;

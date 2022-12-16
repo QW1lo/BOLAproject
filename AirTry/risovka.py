@@ -22,6 +22,7 @@ class GPSVis(object):
         self.y_ticks = []
 
     def plot_map(self, canvas, coord):
+        # Радар и дальность здесь
         # self.get_ticks()
         # #fig, axis1 = plt.subplots(figsize=(10, 10))
         # canvas.axes1.imshow(self.result_image)
@@ -193,10 +194,10 @@ class GPSVis(object):
         
         for LA in coord:
                 x1, y1 = self.scale_to_img((float(LA[1]),float(LA[2])), (self.result_image.size[0], self.result_image.size[1]))
-                size = 10
+                size = 5
 
                 draw.ellipse((x1-size,y1-size,x1+size,y1+size), fill=self.color_list[ind_color])
-                draw.text((x1-8,y1-8),LA[0],fill='#FFFFFF',font=ImageFont.truetype("arial.ttf", 15))
+                draw.text((x1-8,y1-8),LA[0],fill='#FFFFFF',font=ImageFont.truetype("arial.ttf", 10))
                 ind_color += 1
                 if ind_color > 9:
                     ind_color = 0

@@ -96,7 +96,7 @@ int main()
 	double hL = 0;
 	double KL = (67.05457948536832 ) * M_PI / 180;		// Курс ВПП
 	double thetaL = 3 * GR2RAD;
-
+	thetaL = 0 * GR2RAD;
 	// Начальные координаты ЛА
 
 	//Точка старта в гео
@@ -161,8 +161,8 @@ int main()
     X_asp = { 0, 6000, 0, 300, 0 * 3.14 / 180., 0 };
 
 
-	LA modelVKR1(X_VKR1, vec_coord, tar);
-	modelVKR1.N = 1;
+	LA modelVKR1(X_VKR1, vec_coord, 1);
+	//modelVKR1.N = 1;
 
 	LA modelVKR2(X_VKR2, vec_coord2, tar2);
 	modelVKR2.N = 2;
@@ -264,14 +264,16 @@ int main()
 	//listLA.push_back(&model29);
 	//listLA.push_back(&model30);
 	
+	// ППМ ДЛЯ ВКР
+
 	listLA.push_back(&modelVKR1);
-	listLA.push_back(&modelVKR2);
+	//listLA.push_back(&modelVKR2);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.03));
+		listInteg.push_back(new TEuler(0, 1000, 0.3));
 	}
 	std::cout << "integrators\n";
 
