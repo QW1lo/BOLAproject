@@ -187,21 +187,23 @@ public:
         h0 = H0;
 
         Lin::Vector Xstart;
-        Xstart = { Init_ppms[0][0], Init_ppms[0][1], Init_ppms[0][2] };
+        Xstart = { Init_ppms[0][0] * M_PI / 180, Init_ppms[0][1] * M_PI / 180, Init_ppms[0][2] };
         Xstart = Geo_TSK(Xstart, 0);
 
         X[0] = Xstart[0];
-        X[1] = h0;
+        X[1] = Xstart[1];
         X[2] = Xstart[2];
 
 
-        for (int i = 1; i < Init_ppms.size(); i++) {
-            Lin::Vector tmp;
-            tmp = Geo_TSK(Init_ppms[i] * M_PI / 180, 0);
+        for (int i = 0; i < Init_ppms.size(); i++) {
+            Lin::Vector tmp(3);
+            tmp = { Init_ppms[i][0] * M_PI / 180, Init_ppms[i][1] * M_PI / 180, Init_ppms[i][2]};
+            tmp = Geo_TSK(tmp, 0);
             list_ppm.push_back(tmp);
             list_rotation.push_back(0);
         }
         mode = 5;
+        N = number;
         count_targ++;
     };
 
@@ -347,7 +349,7 @@ public:
         nxa = 0;
         
 
-        if (mode == 0 || mode == 2)
+        if (mode == 0 || mode == 2 || mode == 5)
         {
             ppm = list_ppm[count_targ];
 
@@ -380,64 +382,82 @@ public:
                 count = 1;
             }
 
-            if (v[3] > 50 && v[1] < ppm[1])
-                theta = 20 * GR2RAD;
-            else theta = 0;
-
-            
-            
-            Lin::Vector v_sv;
-            Lin::Vector target_sv;
-
-
-            v_sv = { v[0], v[1], v[2] };
-
-            target_sv = norm2svyaz(ppm, gamma, theta, v[4]);
-            v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
-            gamma = 0;
-
-
-            centerrad(v, ppm, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
-
-            // Логика совершения маневров 
-            if (list_rotation[count_targ] == 1)
+            if (mode == 0 || mode == 2)
             {
-                if (abs(v_sv[2] - target_sv[2]) > 10)
+                if (v[3] > 50 && v[1] < ppm[1])
+                    theta = 20 * GR2RAD;
+                else theta = 0;
+
+                if (abs(X[1] - ppm[1]) > 0.5)
                 {
-                    if ((v_sv[2] - target_sv[2]) < 0)
+                    if ((X[1] - ppm[1]) < 0)
                     {
-                        //centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
-                        gamma = 45 * GR2RAD;
+                        theta = 15 * GR2RAD;
 
                     }
                     else
                     {
-                        //centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
-                        gamma = -45 * GR2RAD;
+                        theta = -15 * GR2RAD;
                     }
 
                 }
-                else
+
+                Lin::Vector v_sv;
+                Lin::Vector target_sv;
+
+
+                v_sv = { v[0], v[1], v[2] };
+
+                target_sv = norm2svyaz(ppm, gamma, theta, v[4]);
+                v_sv = norm2svyaz(v_sv, gamma, theta, v[4]);
+                gamma = 0;
+
+
+                centerrad(v, ppm, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ], (v_sv[2] - target_sv[2]));
+
+                // Логика совершения маневров 
+                if (list_rotation[count_targ] == 1)
                 {
-                    gamma = 0;
+                    if (abs(v_sv[2] - target_sv[2]) > 10)
+                    {
+                        if ((v_sv[2] - target_sv[2]) < 0)
+                        {
+                            //centerrad(v, target, -g / v[3] * tan(15 * GR2RAD), &list_rotation[count_targ]);
+                            gamma = 45 * GR2RAD;
+
+                        }
+                        else
+                        {
+                            //centerrad(v, target, -g / v[3] * tan(-15 * GR2RAD), &list_rotation[count_targ]);
+                            gamma = -45 * GR2RAD;
+                        }
+
+                    }
+                    else
+                    {
+                        gamma = 0;
+                    }
+                }
+                if (mode == 2)
+                {
+                    Lin::Vector ppmgl;
+                    ppmgl = glissade();
+                    v_sv = { v[0], v[1], v[2] };
+                    target_sv = norm2svyaz(ppm, 0, 0, v[4]);
+                    v_sv = norm2svyaz(v_sv, 0, 0, v[4]);
+                    del_glissade = target_sv - v_sv;
                 }
             }
-            if (mode == 2)
-            {
-                Lin::Vector ppmgl;
-                ppmgl = glissade();
-                v_sv = { v[0], v[1], v[2] };
-                target_sv = norm2svyaz(ppm, 0, 0, v[4]);
-                v_sv = norm2svyaz(v_sv, 0, 0, v[4]);
-                del_glissade = target_sv - v_sv;
-            }
         }
-        else
+        if (mode == 1 || mode == 5)
         {
             Lin::Vector v_sv;
             Lin::Vector target_sv;
             //
-            ppm = glissade();
+            if (mode == 1)
+                ppm = glissade();
+            else
+                ppm = airway();
             //
             v_sv = { v[0], v[1], v[2] };
             //target_sv = ppm - v_sv;
@@ -694,6 +714,24 @@ public:
         Glissade[1] = h;
 
         return Glissade;     
+    }
+
+    Lin::Vector airway()
+    {
+        // По аналогии с глиссадой, предполагается, что самолет будет пытаться лететь в точку, находящуюся между ним и ППМ на расстоянии
+        // от себя в 1км
+        Lin::Vector X_la;
+        Lin::Vector way;
+        Lin::Vector D;
+        X_la = { X[0], X[1], X[2] };
+        D = {ppm[0], ppm[1], ppm[2]};
+        way = D-X_la;
+        
+        way = way.norm();
+        way = way * 1000;
+        way = X_la + way;
+
+        return way;
     }
 };
 

@@ -2,6 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
 	<name>PYT_VKR6.kml</name>
+	<open>1</open>
 	<StyleMap id="m_ylw-pushpin">
 		<Pair>
 			<key>normal</key>
@@ -37,7 +38,7 @@
 		<LineString>
 			<tessellate>1</tessellate>
 			<coordinates>
-				35.06538454262752,56.01037574673762,0 35.07404551912699,56.18304612188084,0 35.07746942123192,56.33323900849226,0 
+				35.03645813640524,56.01918494756263,2500 35.07746942123192,56.33323900849225,2500 
 			</coordinates>
 		</LineString>
 	</Placemark>

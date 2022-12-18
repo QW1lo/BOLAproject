@@ -2,6 +2,8 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
 	<name>PYT_VKR1.kml</name>
+	<visibility>0</visibility>
+	<open>1</open>
 	<StyleMap id="m_ylw-pushpin">
 		<Pair>
 			<key>normal</key>
@@ -32,11 +34,12 @@
 	</Style>
 	<Placemark>
 		<name>PYT_VKR1</name>
+		<visibility>0</visibility>
 		<styleUrl>#m_ylw-pushpin</styleUrl>
 		<LineString>
 			<tessellate>1</tessellate>
 			<coordinates>
-				34.82893815694496,56.07725110180803,0 35.11068426868513,56.20070603224655,0 35.283497445731,56.3020610661434,0 
+				34.82893815694496,56.07725110180803,2500 35.283497445731,56.3020610661434,2500 
 			</coordinates>
 		</LineString>
 	</Placemark>

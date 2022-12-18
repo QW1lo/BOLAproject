@@ -128,8 +128,8 @@ int main()
 	
 	Lin::Vector X_VKR1;
 	Lin::Vector X_VKR2;
-	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * 25 };
-	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * -25 };
+	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * -25 };
+	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * 25 };
 
 	// Ìàññèâ ïïì
 	KML_Transformer kml_trns;
@@ -161,11 +161,11 @@ int main()
     X_asp = { 0, 6000, 0, 300, 0 * 3.14 / 180., 0 };
 
 
-	LA modelVKR1(X_VKR1, vec_coord, 1);
+	LA modelVKR1(X_VKR1, vec_coord, 2500, 1);
 	//modelVKR1.N = 1;
 
-	LA modelVKR2(X_VKR2, vec_coord2, tar2);
-	modelVKR2.N = 2;
+	LA modelVKR2(X_VKR2, vec_coord2, 2500, 2);
+	//modelVKR2.N = 2;
 	
 	LA model(X, X_land, KL, thetaL, 80000, 4200, 2 * GR2RAD, 1);
 	std::cout << "model\n";
@@ -267,7 +267,7 @@ int main()
 	// ÏÏÌ ÄËß ÂÊÐ
 
 	listLA.push_back(&modelVKR1);
-	//listLA.push_back(&modelVKR2);
+	listLA.push_back(&modelVKR2);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)

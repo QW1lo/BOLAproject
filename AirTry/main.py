@@ -32,7 +32,7 @@ class MatplotlibWidget(QMainWindow):
         #self.graph = risovka.GPSVis(map_path='map.png', points=(56.4336, 34.6014, 55.7920, 36.4032), coord_centr=crd_centr)
         self.graph = risovka.GPSVis(map_path='map2.png', points=(56.4579, 34.4174, 55.8163, 36.2192),
                                     coord_centr=crd_centr)
-        self.timer.start(100)
+        self.timer.start(200)
         threading.Thread(target=self.servak.star_serv).start()
 
 

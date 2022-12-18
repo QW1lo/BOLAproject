@@ -65,7 +65,7 @@ class GPSVis(object):
         for LA in coord:
             d = math.sqrt((LA[7] - self.X0)**2 + (LA[8] - self.Z0)**2)
             h = LA[5]
-            if (LA[0] == '3'):
+            if (LA[0] == '1'):
                 d = 0
                 self.X0 = LA[7]
                 self.Z0 = LA[8]
