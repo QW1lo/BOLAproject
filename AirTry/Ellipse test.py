@@ -9,6 +9,12 @@ from scipy.linalg import eigh
 from scipy.optimize import minimize_scalar
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
+
+m = [ [[],[]], [[]], [[]] ]
+m[0][0].append(3)
+m[0][1].append(1)
+print(m)
+
 a01 = 22.360679774997896964091736687313
 b01 = 10
 theta01 = 45

@@ -52,6 +52,7 @@ class serv():
 
         if not ch:
             self.coord.append(data_split)
+        #print(self.coord)
         
 
     def star_serv(self):

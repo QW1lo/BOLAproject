@@ -20,6 +20,7 @@ class GPSVis(object):
         self.result_image = Image
         self.x_ticks = []
         self.y_ticks = []
+        self.wayLA = [ [[], []], [[], []], [[], []], [[], []], [[], []] ]
 
     def plot_map(self, canvas, coord):
         # Радар и дальность здесь
@@ -174,6 +175,8 @@ class GPSVis(object):
         canvas.axes1.set_xticklabels(self.x_ticks)
         canvas.axes1.set_yticklabels(self.y_ticks)
         canvas.axes1.grid()
+        for LA in coord:
+            canvas.axes1.plot(self.wayLA[int(LA[0]) - 1][0], self.wayLA[int(LA[0]) - 1][1])
         self.x_ticks = []
         self.y_ticks = []
     
@@ -185,17 +188,26 @@ class GPSVis(object):
         ind_color = 0
         drom1 = (56.1439, 34.9885)
         drom2 = (56.1424, 34.9824)
-        x_droml1, y_droml1 = self.scale_to_img((56.0545, 34.6232), (self.result_image.size[0], self.result_image.size[1]))
-        x_droml2, y_droml2 = self.scale_to_img((56.4184, 36.1558), (self.result_image.size[0], self.result_image.size[1]))
+        x_droml11, y_droml11 = self.scale_to_img((56.077251, 34.8289), (self.result_image.size[0], self.result_image.size[1]))
+        x_droml12, y_droml12 = self.scale_to_img((56.302061, 35.283497), (self.result_image.size[0], self.result_image.size[1]))
+
+        x_droml21, y_droml21 = self.scale_to_img((56.08095, 35.3224956),
+                                                 (self.result_image.size[0], self.result_image.size[1]))
+        x_droml22, y_droml22 = self.scale_to_img((56.31982, 34.748876),
+                                                 (self.result_image.size[0], self.result_image.size[1]))
+
         x_drom, y_drom = self.scale_to_img((56.1439, 34.9885), (self.result_image.size[0], self.result_image.size[1]))
         size = 8
-        draw.line([x_droml1, y_droml1, x_droml2, y_droml2], fill='red', width=3)
+        draw.line([x_droml11, y_droml11, x_droml12, y_droml12], fill='red', width=3)
+        draw.line([x_droml21, y_droml21, x_droml22, y_droml22], fill='red', width=3)
         draw.ellipse((x_drom-size,y_drom-size,x_drom+size,y_drom+size), fill='red')
         
         for LA in coord:
                 x1, y1 = self.scale_to_img((float(LA[1]),float(LA[2])), (self.result_image.size[0], self.result_image.size[1]))
                 size = 5
-
+                if (x1 > 0) and (y1 > 0):
+                    self.wayLA[int(LA[0]) - 1][0].append(x1)
+                    self.wayLA[int(LA[0]) - 1][1].append(y1)
                 draw.ellipse((x1-size,y1-size,x1+size,y1+size), fill=self.color_list[ind_color])
                 draw.text((x1-8,y1-8),LA[0],fill='#FFFFFF',font=ImageFont.truetype("arial.ttf", 10))
                 ind_color += 1

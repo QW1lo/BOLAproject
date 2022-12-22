@@ -4,97 +4,43 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from PIL import Image, ImageDraw, ImageFont
 
-class GPSVis(object):
-    X0 = 0
-    Z0 = 0
-    def __init__(self, map_path, points, coord_centr):
+xla = [16004,21707 ]
+ppm2 = [-7509, -10165]
+ppm1 = [17524, 17948]
 
-        self.color_list = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
-        self.color_list_TCAS = ['green', 'yellow', 'red', 'black']
-        self.points = points
-        self.map_path = map_path
+dor = []
+for i in range(len(ppm1)):
+    dor.append(ppm1[i] - ppm2[i])
 
-        self.centr = coord_centr
+way = []
+for i in range(len(ppm1)):
+    way.append(xla[i] - ppm2[i])
 
-        self.result_image = Image
-        self.x_ticks = []
-        self.y_ticks = []
+plt.plot([0, ppm1[0]], [0, ppm1[1]], color='orange') #ppm1
+plt.plot([0, ppm2[0]], [0, ppm2[1]], color='orange') # ppm2
+plt.plot([0, xla[0]], [0, xla[1]], color ='blue') # LA
 
-    def get_ticks(self):
-        self.x_ticks = map(
-            lambda x: round(x, 4),
-            np.linspace(self.points[1], self.points[3], num=7))
-        y_ticks = map(
-            lambda x: round(x, 4),
-            np.linspace(self.points[2], self.points[0], num=8))
-        self.y_ticks = sorted(y_ticks, reverse=True)
+# plt.plot([-10165, 28113 -10165], [-7509, 25033 -7509], color='black') #dor = ppm2 - ppm1
+# plt.plot([17948, xla[0] - ppm2[0] +17948], [17524, xla[1] - ppm2[1] +17524], color='red') #way2 =  X-la - ppm2
 
-    def scale_to_img(self, lat_lon, h_w):
-        old = (self.points[2], self.points[0])
-        new = (0, h_w[1])
-        y = ((lat_lon[0] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
-        old = (self.points[1], self.points[3])
-        new = (0, h_w[0])
-        x = ((lat_lon[1] - old[0]) * (new[1] - new[0]) / (old[1] - old[0])) + new[0]
-        return int(x), h_w[1] - int(y)
+# plt.plot([0, dor[0]], [0, dor[1]], color='pink')
+plt.plot([ppm2[0], dor[0] + ppm2[0]], [ppm2[1], dor[1] + ppm2[1]], color='pink', linewidth=5)
+# plt.plot([0, way[0]], [0, way[1] ], color='black')
 
-    def create_image(self, coord, color, width=2):
+sin1 = dor[0] * way[1] - way[0] * dor[1]
+cos1 = dor[0] * way[0] + dor[1] * way[1]
+angle = -atan2(sin1, cos1)
+print(angle * 180 / pi)
+print(atan2(dor[1], dor[0]) * 180 / pi)
+print(atan2(way[1], way[0]) * 180 / pi)
 
-        self.result_image = Image.open(self.map_path, 'r')
-        draw = ImageDraw.Draw(self.result_image)
-        ind_color = 0
-        drom1 = (56.1439, 34.9885)
-        drom2 = (56.1424, 34.9824)
-        x_droml1, y_droml1 = self.scale_to_img((56.0545, 34.6232),
-                                               (self.result_image.size[0], self.result_image.size[1]))
-        x_droml2, y_droml2 = self.scale_to_img((56.4184, 36.1558),
-                                               (self.result_image.size[0], self.result_image.size[1]))
-        x_drom, y_drom = self.scale_to_img((56.1439, 34.9885), (self.result_image.size[0], self.result_image.size[1]))
-        size = 8
-        draw.line([x_droml1, y_droml1, x_droml2, y_droml2], fill='red', width=3)
-        draw.ellipse((x_drom - size, y_drom - size, x_drom + size, y_drom + size), fill='red')
-
-        for LA in coord:
-            x1, y1 = self.scale_to_img((float(LA[1]), float(LA[2])),
-                                       (self.result_image.size[0], self.result_image.size[1]))
-            size = 5
-
-            draw.ellipse((x1 - size, y1 - size, x1 + size, y1 + size), fill=self.color_list[ind_color])
-            draw.text((x1 - 8, y1 - 8), LA[0], fill='#FFFFFF', font=ImageFont.truetype("arial.ttf", 10))
-            ind_color += 1
-            if ind_color > 9:
-                ind_color = 0
-
-
-# Пустой желтый фон.
-im = Image.new('RGB', (1313, 835))
-draw = ImageDraw.Draw(im)
-
-ax1 = plt.figure()
-
-crd_centr = (56.1431, 34.9884) #(55.558738, 37.37884)   # координаты орловки аэродрома
-crd_centr = (crd_centr[0]*pi/180, crd_centr[1]*pi/180)
-graph = GPSVis(map_path='map2.png', points=(56.4579, 34.4174, 55.8163, 36.2192),
-                                    coord_centr=crd_centr)
-result_image = graph.result_image = Image.open(graph.map_path, 'r')
-ax1.clear()
-
-draw = ImageDraw.Draw(im)
-ind_color = 0
-
-x_droml1, y_droml1 = graph.scale_to_img((56.0545, 34.6232), (graph.result_image.size[0], graph.result_image.size[1]))
-x_droml2, y_droml2 = graph.scale_to_img((56.4184, 36.1558), (graph.result_image.size[0], graph.result_image.size[1]))
-x_drom, y_drom = graph.scale_to_img((56.1439, 34.9885), (graph.result_image.size[0], graph.result_image.size[1]))
-size = 8
-draw.line([x_droml1, y_droml1, x_droml2, y_droml2], fill='red', width=3)
-draw.ellipse((x_drom - size, y_drom - size, x_drom + size, y_drom + size), fill='red')
-
-plt.imshow(im)
-plt.imshow(result_image)
-
-
-
-
-# Рисуем красный эллипс с черной оконтовкой.
-draw.ellipse((100, 100, 150, 200), fill='red', outline=(0, 0, 0))
+xway = way[0] * cos(angle) - way[1] * sin(angle)
+yway = way[0] * sin(angle) + way[1] * cos(angle)
+xway_n = xway / sqrt(xway**2 + yway**2)
+yway_n = yway / sqrt(xway**2 + yway**2)
+xway -= xway_n * 7000
+yway -= yway_n * 7000
+print('x ',xway , 'y ', yway)
+plt.plot([ppm2[0], xway+ppm2[0]], [ppm2[1], yway+ppm2[1]], color='black')
+plt.grid()
 plt.show()

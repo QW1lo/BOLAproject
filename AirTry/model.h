@@ -519,8 +519,8 @@ public:
 
                 if ((delZ) < 0)
                 {
-                    if (delZ < -400)
-                        gamma = 15 * GR2RAD;
+                    if (delZ < -190)
+                        gamma = 38 * GR2RAD;
                     else
                         gamma = -delZ * 0.2 * GR2RAD;
                     
@@ -529,8 +529,8 @@ public:
                 }
                 else
                 {
-                    if (delZ > 400)
-                        gamma = -15 * GR2RAD;
+                    if (delZ > 190)
+                        gamma = -38 * GR2RAD;
                     else
                         gamma = -delZ * 0.2 * GR2RAD;
                     
@@ -722,16 +722,69 @@ public:
         // от себя в 1км
         Lin::Vector X_la;
         Lin::Vector way;
-        Lin::Vector D;
-        X_la = { X[0], X[1], X[2] };
-        D = {ppm[0], ppm[1], ppm[2]};
-        way = D-X_la;
+        Lin::Vector way2;
+        Lin::Vector D1;
+        Lin::Vector ppm1;
+        Lin::Vector ppm2;
+        int i = 1;
+        int j = 0;
+        
+        if (count_targ == 1)
+        {
+            i = 0;
+            j = 1;
+        }
+
+        X_la = { X[0], 0, X[2] };
+
+        D1 = {ppm[0], 0, ppm[2]};
+        way = D1-X_la;
         
         way = way.norm();
         way = way * 1000;
         way = X_la + way;
+        way[1] = h0;
 
-        return way;
+
+       
+        
+        ppm1 = { list_ppm[i][0], 0, list_ppm[i][2] };
+        ppm2 = { list_ppm[j][0], 0, list_ppm[j][2] };
+        Lin::Vector way22;
+        way22 = X_la - ppm2;
+        Lin::Vector dor;
+        
+        dor = ppm1 - ppm2;
+        //double angle = acos(dor * way2 / (dor.length() * way2.length()));
+        //double angle1 = atan2(dor.cross(way2).length(), dor * way2);
+        double sin1 = dor[0] * way22[2] - way22[0] * dor[2];
+        double cos1 = dor[0] * way22[0] + dor[2] * way22[2];
+        double angle = -atan2(sin1, cos1);
+        Lin::Vector tmp;
+        tmp = way22.norm();
+        tmp = tmp * 1000;
+        way2 = way22 - tmp;
+
+        way2 = Rotate('y', way2, angle);
+        way2[1] = h0;
+        way2 = way2 + ppm2;
+        
+        //double zway = way[2] * cos(angle) - way[0] * sin(angle);
+        //double xway = way[2] * sin(angle) + way[0] * cos(angle);
+        //double xway_n = xway / sqrt(xway * xway + zway * zway);
+        //double  zway_n = zway / sqrt(xway * xway + zway * zway);
+        //xway -= xway_n * 800;
+        //zway -= zway_n * 800;
+        //way2[0] = xway + ppm2[0];
+        //way2[1] = h0;
+        //way2[2] = zway + ppm2[2];
+        // D1 - D2 =vektor dorogi
+        // angle(doroga, way2)
+        // way 2 povernut na angle и вычесть из него 1к
+
+
+
+        return way2;
     }
 };
 
