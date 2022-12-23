@@ -21,6 +21,8 @@ public:
 
 	void addPPMs(LA* LA, int ind)
 	{
+		// Старые повороты
+		/*
 		// Кто наверх летит а кто остается выполнять свой маршрут(глисада или второй круг)?
 		LA->mode = 2;
 		LA->list_ppm.clear();
@@ -45,7 +47,9 @@ public:
 		LA->list_rotation.clear();
 		LA->list_rotation.resize(4);
 		LA->TCAS = 3;
-
+		*/
+		LA->mode = 10;
+		LA->TCAS = 3;
 	}
 
 	void run()
@@ -76,12 +80,12 @@ public:
 				if (i == 0)
 					trash++;
 				
-				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220., 1220.) && abs(delX[1]) < 500)
+				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220. * 60./35, 1220. * 60./35.) && abs(delX[1]) < 500)
 				{
 					listLA[i]->TCAS = 1;
 				}
 					
-				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 200)
+				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
 				{
 					listLA[i]->TCAS = 2;
 					if (listLA[i]->X[0] - listLA[j]->X[0] > 0)

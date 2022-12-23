@@ -105,8 +105,8 @@ class GPSVis(object):
                 fill = False
             )
 
-            safezoneback = 1220
-            safezoneside = 1220
+            safezoneback = 1220 * 60/35
+            safezoneside = 1220 * 60/35
             a_el = (LA[9] * 60 + safezoneback)
             b_el = safezoneside * 2
 
@@ -198,8 +198,8 @@ class GPSVis(object):
 
         x_drom, y_drom = self.scale_to_img((56.1439, 34.9885), (self.result_image.size[0], self.result_image.size[1]))
         size = 8
-        draw.line([x_droml11, y_droml11, x_droml12, y_droml12], fill='red', width=3)
-        draw.line([x_droml21, y_droml21, x_droml22, y_droml22], fill='red', width=3)
+        draw.line([x_droml11, y_droml11, x_droml12, y_droml12], fill='black', width=3)
+        draw.line([x_droml21, y_droml21, x_droml22, y_droml22], fill='black', width=3)
         draw.ellipse((x_drom-size,y_drom-size,x_drom+size,y_drom+size), fill='red')
         
         for LA in coord:
