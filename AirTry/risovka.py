@@ -176,7 +176,7 @@ class GPSVis(object):
         canvas.axes1.set_yticklabels(self.y_ticks)
         canvas.axes1.grid()
         for LA in coord:
-            canvas.axes1.plot(self.wayLA[int(LA[0]) - 1][0], self.wayLA[int(LA[0]) - 1][1])
+            canvas.axes1.plot(self.wayLA[int(LA[0]) - 1][0], self.wayLA[int(LA[0]) - 1][1], linewidth = 3)
         self.x_ticks = []
         self.y_ticks = []
     
@@ -191,20 +191,25 @@ class GPSVis(object):
         x_droml11, y_droml11 = self.scale_to_img((56.077251, 34.8289), (self.result_image.size[0], self.result_image.size[1]))
         x_droml12, y_droml12 = self.scale_to_img((56.302061, 35.283497), (self.result_image.size[0], self.result_image.size[1]))
 
-        x_droml21, y_droml21 = self.scale_to_img((56.08095, 35.3224956),
+        # x_droml21, y_droml21 = self.scale_to_img((56.08095, 35.3224956),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml22, y_droml22 = self.scale_to_img((56.31982, 34.748876),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        x_droml21, y_droml21 = self.scale_to_img((56.186645, 35.21232),
                                                  (self.result_image.size[0], self.result_image.size[1]))
-        x_droml22, y_droml22 = self.scale_to_img((56.31982, 34.748876),
+        x_droml22, y_droml22 = self.scale_to_img((56.20168, 34.716096),
                                                  (self.result_image.size[0], self.result_image.size[1]))
+
 
         x_drom, y_drom = self.scale_to_img((56.1439, 34.9885), (self.result_image.size[0], self.result_image.size[1]))
         size = 8
         draw.line([x_droml11, y_droml11, x_droml12, y_droml12], fill='black', width=3)
-        draw.line([x_droml21, y_droml21, x_droml22, y_droml22], fill='black', width=3)
+        draw.line([x_droml21, y_droml21, x_droml22, y_droml22], fill='black', width=4)
         draw.ellipse((x_drom-size,y_drom-size,x_drom+size,y_drom+size), fill='red')
         
         for LA in coord:
                 x1, y1 = self.scale_to_img((float(LA[1]),float(LA[2])), (self.result_image.size[0], self.result_image.size[1]))
-                size = 5
+                size = 8
                 if (x1 > 0) and (y1 > 0):
                     self.wayLA[int(LA[0]) - 1][0].append(x1)
                     self.wayLA[int(LA[0]) - 1][1].append(y1)

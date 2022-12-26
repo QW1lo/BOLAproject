@@ -129,7 +129,7 @@ int main()
 	Lin::Vector X_VKR1;
 	Lin::Vector X_VKR2;
 	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * -25 };
-	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * 80 };
+	X_VKR2 = { phi2, lambda2, h2, 180, M_PI / 180 * 80 };
 
 	// Массив ппм
 	KML_Transformer kml_trns;
@@ -139,7 +139,7 @@ int main()
 	//vec_coord = parser("pyt.kml");	
 	// Для первого маршрута
 	vec_coord = parser("PYT_VKR1.kml");					    // Для второого маршрута
-	vec_coord2 = parser("PYT_VKR31.kml");
+	vec_coord2 = parser("PYT_VKR3.kml");
 
 	// Характеристики ОПС
 	double gam_max = 45;

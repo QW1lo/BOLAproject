@@ -95,7 +95,7 @@ private:
                                               // Режим полета 0 - ППМ, 1 - посадка по глиссаде
     double K_land = 0;                                      // Курс ВПП
     double theta_land = 0;                                  // Угол наклона глиссады
-    int count_t = 0;
+    
     
 
 public:
@@ -108,7 +108,7 @@ public:
     std::vector<Lin::Vector> Way_glis;
     int mode = 0;
     Lin::Vector target;                                     // Вектор В ТСК цели
-
+    int count_t = 0;
     Lin::Vector ppm;                                        // Вектор в ТСК текущего ппм
 
     double gamma = 0;
@@ -118,7 +118,7 @@ public:
     Lin::Vector dvxz{ 2 };
 
     Lin::Vector del_glissade{ 3 };                               // невязки координат и глиссады
-
+    Lin::Vector vxyz{3};
     double T0 = 0;
 
     // todo конструктор для программы с ВПП, начало ТСК на ВПП
@@ -561,13 +561,18 @@ public:
                 count_t++;
             }
             gamma = -38 * GR2RAD;
-            if (t - T0 > 40)
+            if (t - T0 > 45)
             {
                 mode = 5;
           
             }
         }
 
+        if (mode == 15)
+        {
+            theta = 0;
+            gamma = 0;
+        }
 
         if (v[3] < 100)
             nxa = P / (m * g);
@@ -583,6 +588,10 @@ public:
         
         dvxz[0] = tmp[0] ;
         dvxz[1] = tmp[2] ;
+
+        vxyz[0] = tmp[0];
+        vxyz[1] = tmp[1];
+        vxyz[2] = tmp[2];
 
         return tmp;
     }

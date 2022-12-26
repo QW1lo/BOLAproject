@@ -13,7 +13,7 @@ public:
 	Lin::Vector Xi;
 	Lin::Vector Xtarget;
 	EllipseCollisionTest elipson{ 10 };
-
+	double D_min = 20000;
 	TCAS(std::vector<LA*> listLA0)
 	{
 		listLA = listLA0;
@@ -48,12 +48,17 @@ public:
 		LA->list_rotation.resize(4);
 		LA->TCAS = 3;
 		*/
-		LA->mode = 10;
-		LA->TCAS = 3;
+		if (LA->N == 1)
+		{
+			LA->mode = 10;
+			LA->TCAS = 3;
+		}
+		
 	}
 
 	void run()
 	{
+		double DMOD = 1220;
 		double trash = 0;
 		for (int i = 0; i < listLA.size(); ++i)
 		{
@@ -74,11 +79,17 @@ public:
 
 				Xtarget = { listLA[j]->X[0], listLA[j]->X[1], listLA[j]->X[2] };
 				
-				Lin::Vector delX = (Xi - Xtarget);
+				Lin::Vector delX = (Xtarget - Xi);
+				Lin::Vector eD = delX.norm();
+				Lin::Vector Vdot = listLA[j]->vxyz - listLA[i]->vxyz;
+				
 				double D = delX.length();
-
-				if (i == 0)
-					trash++;
+				if (D < D_min)
+					D_min = D;
+				double V_rad;
+				V_rad = (listLA[j]->vxyz - listLA[i]->vxyz) * eD;
+				double t_cpa = (delX[0] * Vdot[0] + delX[2] * Vdot[2]) / (Vdot[0] * Vdot[0] + Vdot[2] * Vdot[2]);
+				double mod_tau = (DMOD * DMOD - D * D) / (D * V_rad);
 				
 				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220. * 60./35, 1220. * 60./35.) && abs(delX[1]) < 500)
 				{
@@ -87,18 +98,42 @@ public:
 					
 				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
 				{
+					double sin1 = listLA[i]->vxyz[0] * delX[2] - listLA[i]->vxyz[0] * Vdot[2];
+					double cos1 = listLA[i]->vxyz[0] * delX[0] + listLA[i]->vxyz[2] * delX[2];
+					double angle = -atan2(sin1, cos1) * 180. / M_PI;			// угол между вектором скорости и дельностью до другого ла
+
 					listLA[i]->TCAS = 2;
-					if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
+					
+					//Старое
+					//if (listLA[i]->X[0] - listLA[j]->X[0] < 0)
+					//{
+					//	//listLA[i]->TCAS = 3;
+					//	if (listLA[i]->X[2] > listLA[j]->X[2])
+					//		addPPMs(listLA[i], 1);
+					//	else
+					//		addPPMs(listLA[i], -1);
+					//}
+					//break;
+
+					if (angle > - 90 && angle < 15)
 					{
-						listLA[i]->TCAS = 3;
+						//listLA[i]->TCAS = 3;
 						if (listLA[i]->X[2] > listLA[j]->X[2])
 							addPPMs(listLA[i], 1);
 						else
 							addPPMs(listLA[i], -1);
 					}
-					break;
+					if (abs(mod_tau) > 40)
+					{
+						listLA[i]->TCAS = 2;
+						listLA[i]->count_t = 0;
+						listLA[i]->mode = 15;
+					}
 				}
-
+				
+				if (listLA[i]->TCAS == 1 && listLA[i]->mode != 5)
+					listLA[i]->mode = 5;
+				
 				/*
 				double r1 = listLA[i]->X[3] * 60;
 				double r2 = listLA[j]->X[3] * 60;
