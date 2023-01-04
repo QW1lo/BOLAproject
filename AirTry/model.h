@@ -100,6 +100,7 @@ private:
 
 public:
     std::vector<int> list_rotation{ 1};
+    std::vector<int> list_tcas{ 5 };
     std::vector<Lin::Vector> list_ppm;
     FILE* output;
     int N;
@@ -552,7 +553,7 @@ public:
             
 
         }
-
+        // vlevo
         if (mode == 10)
         {
             if (count_t == 0)
@@ -565,6 +566,22 @@ public:
             {
                 mode = 5;
           
+            }
+        }
+
+        // vpravo
+        if (mode == 11)
+        {
+            if (count_t == 0)
+            {
+                T0 = t;
+                count_t++;
+            }
+            gamma = 38 * GR2RAD;
+            if (t - T0 > 45)
+            {
+                mode = 5;
+
             }
         }
 

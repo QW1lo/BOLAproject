@@ -98,12 +98,23 @@ public:
 					
 				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
 				{
-					double sin1 = listLA[i]->vxyz[0] * delX[2] - listLA[i]->vxyz[0] * Vdot[2];
+					double sin1 = listLA[i]->vxyz[0] * delX[2] - listLA[i]->vxyz[0] * delX[2];
 					double cos1 = listLA[i]->vxyz[0] * delX[0] + listLA[i]->vxyz[2] * delX[2];
 					double angle = -atan2(sin1, cos1) * 180. / M_PI;			// угол между вектором скорости и дельностью до другого ла
 
 					listLA[i]->TCAS = 2;
 					
+					auto check = [listLA = this->listLA, i, j]()
+					{
+						for (int k = 0; k < listLA[j]->list_tcas.size(); k++)
+						{
+							if (listLA[j]->list_tcas[k] == listLA[i]->N)
+								return 1;
+						}
+						return 0;
+					};
+					if (check() == 1)
+						break;
 					//Старое
 					//if (listLA[i]->X[0] - listLA[j]->X[0] < 0)
 					//{
@@ -115,15 +126,38 @@ public:
 					//}
 					//break;
 
-					if (angle > - 90 && angle < 15)
+					if (angle > -10 && angle < 10)
 					{
+						double sin_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[2] - listLA[i]->vxyz[0] * listLA[j]->vxyz[2];
+						double cos_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[0] + listLA[i]->vxyz[2] * listLA[j]->vxyz[2];
+						double ang_v = -atan2(sin_v, cos_v) * 180. / M_PI;			// угол между векторами скорости 
+
+						if (ang_v < -5 && ang_v > -85)
+						{
+							listLA[i]->mode = 10;
+							listLA[i]->TCAS = 3;
+							listLA[i]->count_t = 0;
+							listLA[i]->list_tcas[0] = listLA[j]->N;
+						}
+						else
+						{
+							listLA[i]->mode = 11;
+							listLA[i]->TCAS = 3;
+							listLA[i]->count_t = 0;
+							listLA[i]->list_tcas[0] = listLA[j]->N;
+						}
+					}
+
+					if (angle > - 90 && angle < -10)
+					{
+						listLA[i]->list_tcas.push_back(listLA[j]->N);
 						//listLA[i]->TCAS = 3;
 						if (listLA[i]->X[2] > listLA[j]->X[2])
 							addPPMs(listLA[i], 1);
 						else
 							addPPMs(listLA[i], -1);
 					}
-					if (abs(mod_tau) > 40)
+					if (abs(mod_tau) > 70)
 					{
 						listLA[i]->TCAS = 2;
 						listLA[i]->count_t = 0;
@@ -131,8 +165,12 @@ public:
 					}
 				}
 				
-				if (listLA[i]->TCAS == 1 && listLA[i]->mode != 5)
+				if (listLA[i]->TCAS == 0 && listLA[i]->mode != 5)
+				{
 					listLA[i]->mode = 5;
+					//listLA[i]->list_tcas[0] = 0;
+				}
+					
 				
 				/*
 				double r1 = listLA[i]->X[3] * 60;
