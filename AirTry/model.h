@@ -100,7 +100,7 @@ private:
 
 public:
     std::vector<int> list_rotation{ 1};
-    std::vector<int> list_tcas{ 5 };
+    std::vector<std::array<int, 2>> list_tcas{ 0 };
     std::vector<Lin::Vector> list_ppm;
     FILE* output;
     int N;

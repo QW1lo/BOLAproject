@@ -287,6 +287,14 @@ int main()
 	auto tcas = TCAS(listLA);
 	int delay_tcas = 11;
 
+	for (int i = 0; i < listInteg.size(); ++i)
+	{
+		for (int j = 0; j < listInteg.size(); ++j)
+		{
+			listLA[i]->list_tcas.push_back({ 0,0 });
+		}
+	}
+
 	timer.add(std::chrono::microseconds(5), [&]() 
 		{
 			std::string str;

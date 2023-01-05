@@ -108,7 +108,7 @@ public:
 					{
 						for (int k = 0; k < listLA[j]->list_tcas.size(); k++)
 						{
-							if (listLA[j]->list_tcas[k] == listLA[i]->N)
+							if (listLA[j]->list_tcas[k][0] == listLA[i]->N)
 								return 1;
 						}
 						return 0;
@@ -137,20 +137,20 @@ public:
 							listLA[i]->mode = 10;
 							listLA[i]->TCAS = 3;
 							listLA[i]->count_t = 0;
-							listLA[i]->list_tcas[0] = listLA[j]->N;
+							listLA[i]->list_tcas[0][0] = listLA[j]->N;
 						}
 						else
 						{
 							listLA[i]->mode = 11;
 							listLA[i]->TCAS = 3;
 							listLA[i]->count_t = 0;
-							listLA[i]->list_tcas[0] = listLA[j]->N;
+							listLA[i]->list_tcas[0][0] = listLA[j]->N;
 						}
 					}
 
 					if (angle > - 90 && angle < -10)
 					{
-						listLA[i]->list_tcas.push_back(listLA[j]->N);
+						listLA[i]->list_tcas.push_back({ listLA[j]->N, 0 });
 						//listLA[i]->TCAS = 3;
 						if (listLA[i]->X[2] > listLA[j]->X[2])
 							addPPMs(listLA[i], 1);
@@ -165,7 +165,7 @@ public:
 					}
 				}
 				
-				if (listLA[i]->TCAS == 0 && listLA[i]->mode != 5)
+				if (listLA[i]->TCAS == 1 && listLA[i]->mode != 5)
 				{
 					listLA[i]->mode = 5;
 					//listLA[i]->list_tcas[0] = 0;
