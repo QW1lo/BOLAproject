@@ -104,25 +104,30 @@ public:
 			{
 				LA_self->list_tcas[LA_target->N][0] = 1;
 				LA_self->list_tcas[LA_target->N][1] = 1;
+				return 0;
 			}
-			if (ang_v > 10 && ang_v < 90)
+			else
 			{
-
+				LA_self->list_tcas[LA_target->N][0] = 0;
+				LA_self->list_tcas[LA_target->N][1] = 1;
+				return 0;
 			}
-			return 0;
+			return -1;
 		}
 
 		// Слева сзади (3пп)
 		if (angle > 90 && angle < 180)
 		{
-
+			LA_self->list_tcas[LA_target->N][0] = 1;
+			LA_self->list_tcas[LA_target->N][1] = 1;
 			return 0;
 		}
 
 		// справа сзади (4пп)
 		if (angle < -90 && angle > -180)
 		{
-
+			LA_self->list_tcas[LA_target->N][0] = 1;
+			LA_self->list_tcas[LA_target->N][1] = 1;
 			return 0;
 		}
 
@@ -171,6 +176,7 @@ public:
 					
 				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
 				{
+					solve_benefit(listLA[i], listLA[j], delX);
 					double sin1 = listLA[i]->vxyz[0] * delX[2] - delX[0] * listLA[i]->vxyz[2];
 					double cos1 = listLA[i]->vxyz[0] * delX[0] + listLA[i]->vxyz[2] * delX[2];
 					double angle = -atan2(sin1, cos1) * 180. / M_PI;			// угол между вектором скорости и дельностью до другого ла
