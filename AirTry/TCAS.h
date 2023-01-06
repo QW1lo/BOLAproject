@@ -56,7 +56,7 @@ public:
 		
 	}
 
-	int solve_benefit(LA* LA_self, LA* LA_target)
+	int solve_benefit(LA* LA_self, LA* LA_target, Lin::Vector delX)
 	{
 		if (LA_self->list_tcas[LA_target->N][1] == 1)
 			return 1;
@@ -71,6 +71,16 @@ public:
 
 		// Сюда закинуть проверку углов для подсчета привелегий
 		// А снизу просто выбирать куда маневрировать по сути НЕ МНОГО ЭТО
+
+
+		double sin1 = LA_self->vxyz[0] * delX[2] - delX[0] * LA_self->vxyz[2];
+		double cos1 = LA_self->vxyz[0] * delX[0] + LA_self->vxyz[2] * delX[2];
+		double angle = -atan2(sin1, cos1) * 180. / M_PI;			// угол между вектором скорости и дельностью до другого ла
+
+		double sin_v = LA_self->vxyz[0] * LA_target->vxyz[2] - LA_target->vxyz[0] * LA_self->vxyz[2];
+		double cos_v = LA_self->vxyz[0] * LA_target->vxyz[0] + LA_self->vxyz[2] * LA_target->vxyz[2];
+		double ang_v = -atan2(sin_v, cos_v) * 180. / M_PI;			// угол между векторами скорости 
+
 		return 0;
 	}
 
@@ -116,7 +126,7 @@ public:
 					
 				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
 				{
-					double sin1 = listLA[i]->vxyz[0] * delX[2] - listLA[i]->vxyz[0] * delX[2];
+					double sin1 = listLA[i]->vxyz[0] * delX[2] - delX[0] * listLA[i]->vxyz[2];
 					double cos1 = listLA[i]->vxyz[0] * delX[0] + listLA[i]->vxyz[2] * delX[2];
 					double angle = -atan2(sin1, cos1) * 180. / M_PI;			// угол между вектором скорости и дельностью до другого ла
 
@@ -146,7 +156,7 @@ public:
 
 					if (angle > -10 && angle < 10)
 					{
-						double sin_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[2] - listLA[i]->vxyz[0] * listLA[j]->vxyz[2];
+						double sin_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[2] - listLA[j]->vxyz[0] * listLA[i]->vxyz[2];
 						double cos_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[0] + listLA[i]->vxyz[2] * listLA[j]->vxyz[2];
 						double ang_v = -atan2(sin_v, cos_v) * 180. / M_PI;			// угол между векторами скорости 
 
@@ -175,7 +185,7 @@ public:
 						else
 							addPPMs(listLA[i], -1);
 					}
-					if (abs(mod_tau) > 70)
+					if (abs(mod_tau) > 40)
 					{
 						listLA[i]->TCAS = 2;
 						listLA[i]->count_t = 0;

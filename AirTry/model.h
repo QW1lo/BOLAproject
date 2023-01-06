@@ -351,6 +351,8 @@ public:
         double nxa;
         nxa = 0;
         
+        double gamma_max = atan(v[3] * 3 * M_PI / 180 / -g) * -180/ M_PI;  // 3 гр/с макс угл скорость
+        
 
         if (mode == 0 || mode == 2 || mode == 5)
         {
@@ -519,13 +521,13 @@ public:
                 //{
                 //    gamma = -45 * GR2RAD;
                 //}
-
+                double K1 = gamma_max / 190;
                 if ((delZ) < 0)
                 {
                     if (delZ < -190)
-                        gamma = 38 * GR2RAD;
+                        gamma = gamma_max * GR2RAD;
                     else
-                        gamma = -delZ * 0.2 * GR2RAD;
+                        gamma = -delZ * K1 * GR2RAD;
                     
                     if (gamma < 5 * GR2RAD)
                         gamma = 5 * GR2RAD;
@@ -533,9 +535,9 @@ public:
                 else
                 {
                     if (delZ > 190)
-                        gamma = -38 * GR2RAD;
+                        gamma = -gamma_max * GR2RAD;
                     else
-                        gamma = -delZ * 0.2 * GR2RAD;
+                        gamma = -delZ * K1 * GR2RAD;
                     
                     if (gamma > -5 * GR2RAD)
                         gamma = -5 * GR2RAD;
@@ -561,7 +563,7 @@ public:
                 T0 = t;
                 count_t++;
             }
-            gamma = -38 * GR2RAD;
+            gamma = -gamma_max * GR2RAD;
             if (t - T0 > 45)
             {
                 mode = 5;
@@ -577,7 +579,7 @@ public:
                 T0 = t;
                 count_t++;
             }
-            gamma = 38 * GR2RAD;
+            gamma = gamma_max * GR2RAD;
             if (t - T0 > 45)
             {
                 mode = 5;
