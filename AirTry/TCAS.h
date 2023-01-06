@@ -81,7 +81,52 @@ public:
 		double cos_v = LA_self->vxyz[0] * LA_target->vxyz[0] + LA_self->vxyz[2] * LA_target->vxyz[2];
 		double ang_v = -atan2(sin_v, cos_v) * 180. / M_PI;			// угол между векторами скорости 
 
-		return 0;
+		//  перед нами
+		if (angle < 10 && angle > -10)
+		{
+			LA_self->list_tcas[LA_target->N][0] = 0;
+			LA_self->list_tcas[LA_target->N][1] = 1;
+			return 0;
+		}
+
+		// Справа впереди (1пп)
+		if (angle < -10 && angle > -90)
+		{
+			LA_self->list_tcas[LA_target->N][0] = 0;
+			LA_self->list_tcas[LA_target->N][1] = 1;
+			return 0;
+		}
+
+		// Слева впереди (2пп)
+		if (angle > 10 && angle < 90)
+		{
+			if (ang_v < -25 && ang_v > -180)
+			{
+				LA_self->list_tcas[LA_target->N][0] = 1;
+				LA_self->list_tcas[LA_target->N][1] = 1;
+			}
+			if (ang_v > 10 && ang_v < 90)
+			{
+
+			}
+			return 0;
+		}
+
+		// Слева сзади (3пп)
+		if (angle > 90 && angle < 180)
+		{
+
+			return 0;
+		}
+
+		// справа сзади (4пп)
+		if (angle < -90 && angle > -180)
+		{
+
+			return 0;
+		}
+
+		return -1;
 	}
 
 	void run()

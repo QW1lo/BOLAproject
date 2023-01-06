@@ -128,7 +128,7 @@ int main()
 	
 	Lin::Vector X_VKR1; // -25 1
 	Lin::Vector X_VKR2; // 80 3
-	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * -25 };
+	X_VKR1 = { phi1, lambda1, h1, 400, M_PI / 180 * -25 };
 	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * 80 };
 
 	// Массив ппм
@@ -273,7 +273,7 @@ int main()
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.1));
+		listInteg.push_back(new TEuler(0, 1000, 0.01));
 	}
 	std::cout << "integrators\n";
 

@@ -32,22 +32,32 @@ def solvew(a,b,theta):
     h = b/a
     return w, h
 
-
+def solvew1(a,b,theta):
+    tmp = tan(theta)
+    w = []
+    w.append( a/2 * cos(theta))
+    w.append(a/2 * sin(theta))
+    h = b/a
+    return w, h
 
 w3, h3 = solvew(a01, b01, theta01)
 
 ax1 = plt.subplot(1,1,1)
 
-w1 = [2695.8893969814308,3946.6397796208653]
-h1 = 0.510511809000677
-w2 = [5,-4]
-h2 = 1
+w1 = [5538.8893969814308,-285.6397796208653]
+h1 = 0.37714755381604695
+w2 = [14352,12520]
+h2 = 0.10981
 
+w4 = [100, 0]
 print(atan2(w1[1],w1[0]))
 print(tan(63.43494882292201 / 180 * pi))
 
-a1 =  sqrt(w1[0]**2 + w1[1]**2)
-b1 =  sqrt(w1[0]**2 + w1[1]**2) * h1
+w1,h1 = solvew1(11091.428571428572, 4182.8571428571431,3.0900380367025195)
+w2,h2 = solvew1(38091.428571428572, 4182.8571428571431,0.71732623130891504)
+
+a1 = 2* sqrt(w1[0]**2 + w1[1]**2)
+b1 = 2* sqrt(w1[0]**2 + w1[1]**2) * h1
 
 a2 = 2 * sqrt(w2[0] ** 2 + w2[1] ** 2)
 b2 = 2 * sqrt(w2[0] ** 2 + w2[1] ** 2) * h2
@@ -56,26 +66,27 @@ a3 = 2 * sqrt(w3[0] ** 2 + w3[1] ** 2)
 b3 = 2 * sqrt(w3[0] ** 2 + w3[1] ** 2) * h3
 
 ellipse = patches.Ellipse(
-                xy=(-10, 5),
+                xy=(16217, 4575),
                 width=a1,
                 height=b1,
-                angle= math.atan2(b1,a1) * 180 / math.pi,
+                angle= math.atan2(w1[1],w1[0]) * 180 / math.pi,
                 fill = False
             )
 ellipse2 = patches.Ellipse(
-                xy=(9, 2.772),
+                xy=(15813, 15576),
                 width=a2,
                 height=b2,
-                angle = math.atan2(b2,a2) * 180 / math.pi,
+                angle = math.atan2(w2[1],w2[0]) * 180 / math.pi,
                 color= 'red',
                 fill = False
             )
+print('ATAN = ', math.atan2(w2[1],w2[0]))
 angle=math.atan2(w3[1], w3[0]) * 180 / math.pi
 ellipse3 = patches.Ellipse(
-                xy=(-10, 5),
-                width=a3,
-                height=b3,
-                angle=math.atan2(w3[1], w3[0]) * 180 / math.pi,
+                xy=(0, 0),
+                width=500,
+                height=1000,
+                angle=math.atan2(w4[1], w4[0]) * 180 / math.pi,
                 color= 'orange',
                 fill=False
                         )
@@ -196,17 +207,17 @@ arrow22 = patches.Arrow(
                 color= 'orange',
                 fill=False
             )
-#ax1.add_patch(ellipse)
-# ax1.add_patch(ellipse2)
-# ax1.add_patch(ellipse3)
-ax1.add_patch(ellipseLA)
-ax1.add_patch(ellipseLA2)
-ax1.add_patch(arrow)
-ax1.add_patch(arrow2)
-ax1.add_patch(arrow_v)
-ax1.add_patch(arrow_v2)
-ax1.add_patch(arrow22)
-ax1.add_patch(arrow_right)
+ax1.add_patch(ellipse)
+ax1.add_patch(ellipse2)
+ax1.add_patch(ellipse3)
+# ax1.add_patch(ellipseLA)
+# ax1.add_patch(ellipseLA2)
+# ax1.add_patch(arrow)
+# ax1.add_patch(arrow2)
+# ax1.add_patch(arrow_v)
+# ax1.add_patch(arrow_v2)
+# ax1.add_patch(arrow22)
+# ax1.add_patch(arrow_right)
 ax1.scatter([xy[1],ellipseLA.get_center()[0]], [xy[0],ellipseLA.get_center()[1]])
 #ax1.plot([0,ellipseLA.get_center()[0]], [0,ellipseLA.get_center()[1]])
 ax1.grid()
