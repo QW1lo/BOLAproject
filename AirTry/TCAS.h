@@ -58,7 +58,8 @@ public:
 
 	int solve_benefit(LA* LA_self, LA* LA_target, Lin::Vector delX)
 	{
-		if (LA_self->list_tcas[LA_target->N][1] == 1)
+		int N = LA_target->N - 1;
+		if (LA_self->list_tcas[N][1] == 1)
 			return 1;
 	
 		// Ставим в [0] есть ли преимущество: 1 - есть, 0 - нет.
@@ -84,16 +85,16 @@ public:
 		//  перед нами
 		if (angle < 10 && angle > -10)
 		{
-			LA_self->list_tcas[LA_target->N][0] = 0;
-			LA_self->list_tcas[LA_target->N][1] = 1;
+			LA_self->list_tcas[N][0] = 0;
+			LA_self->list_tcas[N][1] = 1;
 			return 0;
 		}
 
 		// Справа впереди (1пп)
 		if (angle < -10 && angle > -90)
 		{
-			LA_self->list_tcas[LA_target->N][0] = 0;
-			LA_self->list_tcas[LA_target->N][1] = 1;
+			LA_self->list_tcas[N][0] = 0;
+			LA_self->list_tcas[N][1] = 1;
 			return 0;
 		}
 
@@ -102,14 +103,14 @@ public:
 		{
 			if (ang_v < -25 && ang_v > -180)
 			{
-				LA_self->list_tcas[LA_target->N][0] = 1;
-				LA_self->list_tcas[LA_target->N][1] = 1;
+				LA_self->list_tcas[N][0] = 1;
+				LA_self->list_tcas[N][1] = 1;
 				return 0;
 			}
 			else
 			{
-				LA_self->list_tcas[LA_target->N][0] = 0;
-				LA_self->list_tcas[LA_target->N][1] = 1;
+				LA_self->list_tcas[N][0] = 0;
+				LA_self->list_tcas[N][1] = 1;
 				return 0;
 			}
 			return -1;
@@ -118,16 +119,16 @@ public:
 		// Слева сзади (3пп)
 		if (angle > 90 && angle < 180)
 		{
-			LA_self->list_tcas[LA_target->N][0] = 1;
-			LA_self->list_tcas[LA_target->N][1] = 1;
+			LA_self->list_tcas[N][0] = 1;
+			LA_self->list_tcas[N][1] = 1;
 			return 0;
 		}
 
 		// справа сзади (4пп)
 		if (angle < -90 && angle > -180)
 		{
-			LA_self->list_tcas[LA_target->N][0] = 1;
-			LA_self->list_tcas[LA_target->N][1] = 1;
+			LA_self->list_tcas[N][0] = 1;
+			LA_self->list_tcas[N][1] = 1;
 			return 0;
 		}
 
@@ -143,10 +144,20 @@ public:
 			listLA[i]->TCAS = 0;
 			if (listLA[i]->stop_integ == 1)
 				continue;
-			
+
+			Xi = { listLA[i]->X[0], listLA[i]->X[1], listLA[i]->X[2] };
+			for (int j = 0; j < listLA.size(); ++j)
+			{
+				Xtarget = { listLA[j]->X[0], listLA[j]->X[1], listLA[j]->X[2] };
+
+				Lin::Vector delX1 = (Xtarget - Xi);
+				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220. * 60. / 35, 1220. * 60. / 35.) && abs(delX1[1]) < 500)
+				{
+					listLA[i]->TCAS = 1;
+				}
+			}
 
 			
-			Xi = { listLA[i]->X[0], listLA[i]->X[1], listLA[i]->X[2] };
 			//if (Xi.length() < 3000)
 			//	continue;
 			
@@ -167,44 +178,27 @@ public:
 				double V_rad;
 				V_rad = (listLA[j]->vxyz - listLA[i]->vxyz) * eD;
 				double t_cpa = (delX[0] * Vdot[0] + delX[2] * Vdot[2]) / (Vdot[0] * Vdot[0] + Vdot[2] * Vdot[2]);
-				double mod_tau = (DMOD * DMOD - D * D) / (D * V_rad);
+				double mod_tau = abs((DMOD * DMOD - D * D) / (D * V_rad));
 				
-				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220. * 60./35, 1220. * 60./35.) && abs(delX[1]) < 500)
-				{
-					listLA[i]->TCAS = 1;
-				}
+				
 					
 				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
 				{
+					if (listLA[i]->TCAS != 3)
+						listLA[i]->TCAS = 2;
 					solve_benefit(listLA[i], listLA[j], delX);
+					// Если есть преимущество на дороге и до столкновения больше 23 секунд
+					if (listLA[i]->list_tcas[j][0] == 1 && mod_tau > 23)
+						break;
+					if (mod_tau < 23)
+					{
+						mod_tau += 0.00001;
+					}
 					double sin1 = listLA[i]->vxyz[0] * delX[2] - delX[0] * listLA[i]->vxyz[2];
 					double cos1 = listLA[i]->vxyz[0] * delX[0] + listLA[i]->vxyz[2] * delX[2];
 					double angle = -atan2(sin1, cos1) * 180. / M_PI;			// угол между вектором скорости и дельностью до другого ла
 
-					listLA[i]->TCAS = 2;
-					
-					auto check = [listLA = this->listLA, i, j]()
-					{
-						for (int k = 0; k < listLA[j]->list_tcas.size(); k++)
-						{
-							if (listLA[j]->list_tcas[k][0] == listLA[i]->N)
-								return 1;
-						}
-						return 0;
-					};
-					if (check() == 1)
-						break;
-					//Старое
-					//if (listLA[i]->X[0] - listLA[j]->X[0] < 0)
-					//{
-					//	//listLA[i]->TCAS = 3;
-					//	if (listLA[i]->X[2] > listLA[j]->X[2])
-					//		addPPMs(listLA[i], 1);
-					//	else
-					//		addPPMs(listLA[i], -1);
-					//}
-					//break;
-
+					//Якобы завершенная логика
 					if (angle > -10 && angle < 10)
 					{
 						double sin_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[2] - listLA[j]->vxyz[0] * listLA[i]->vxyz[2];
@@ -216,27 +210,30 @@ public:
 							listLA[i]->mode = 10;
 							listLA[i]->TCAS = 3;
 							listLA[i]->count_t = 0;
-							listLA[i]->list_tcas[0][0] = listLA[j]->N;
 						}
 						else
 						{
 							listLA[i]->mode = 11;
 							listLA[i]->TCAS = 3;
 							listLA[i]->count_t = 0;
-							listLA[i]->list_tcas[0][0] = listLA[j]->N;
 						}
 					}
 
 					if (angle > - 90 && angle < -10)
 					{
-						listLA[i]->list_tcas.push_back({ listLA[j]->N, 0 });
-						//listLA[i]->TCAS = 3;
-						if (listLA[i]->X[2] > listLA[j]->X[2])
-							addPPMs(listLA[i], 1);
-						else
-							addPPMs(listLA[i], -1);
+
+						listLA[i]->mode = 10;
+						listLA[i]->TCAS = 3;
+						listLA[i]->count_t = 0;
 					}
-					if (abs(mod_tau) > 40)
+					if (angle < 90 && angle > 10)
+					{
+
+						listLA[i]->mode = 11;
+						listLA[i]->TCAS = 3;
+						listLA[i]->count_t = 0;
+					}
+					if (abs(mod_tau) > 60)
 					{
 						listLA[i]->TCAS = 2;
 						listLA[i]->count_t = 0;
@@ -244,7 +241,7 @@ public:
 					}
 				}
 				
-				if (listLA[i]->TCAS == 1 && listLA[i]->mode != 5)
+				if ((listLA[i]->TCAS == 1 || listLA[i]->TCAS == 0) && listLA[i]->mode != 5)
 				{
 					listLA[i]->mode = 5;
 					//listLA[i]->list_tcas[0] = 0;

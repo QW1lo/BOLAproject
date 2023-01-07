@@ -128,18 +128,35 @@ int main()
 	
 	Lin::Vector X_VKR1; // -25 1
 	Lin::Vector X_VKR2; // 80 3
-	X_VKR1 = { phi1, lambda1, h1, 400, M_PI / 180 * -25 };
-	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * 80 };
+	Lin::Vector X_VKR3; 
+	Lin::Vector X_VKR4; 
+	Lin::Vector X_VKR6; 
+	Lin::Vector X_VKR5; 
+
+	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * 0 };
+	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * 120 };
+	X_VKR3 = { phi1, lambda1, h1, 150, M_PI / 180 * -120 };
+	X_VKR4 = { phi2, lambda2, h2, 150, M_PI / 180 * 0 };
+	X_VKR5 = { phi1, lambda1, h1, 150, M_PI / 180 * 0 };
+	//X_VKR6 = { phi2, lambda2, h2, 150, M_PI / 180 * 80 };
 
 	// Массив ппм
 	KML_Transformer kml_trns;
 	
 	vector<Lin::Vector> vec_coord;
 	vector<Lin::Vector> vec_coord2;
+	vector<Lin::Vector> vec_coord3;
+	vector<Lin::Vector> vec_coord4;
+	vector<Lin::Vector> vec_coord5;
+	vector<Lin::Vector> vec_coord6;
 	//vec_coord = parser("pyt.kml");	
 	// Для первого маршрута
-	vec_coord = parser("PYT_VKR1.kml");					    // Для второого маршрута
-	vec_coord2 = parser("PYT_VKR3.kml");
+	vec_coord = parser("PYT_VKR6-6.kml");					    // Для второого маршрута
+	vec_coord2 = parser("PYT_VKR6-2.kml");
+	vec_coord3 = parser("PYT_VKR6-10.kml");					    // Для второого маршрута
+	vec_coord4 = parser("PYT_VKR6left.kml");					    // Для второого маршрута
+	vec_coord5 = parser("PYT_VKR6right.kml");
+	vec_coord6 = parser("PYT_VKR3.kml");
 
 	// Характеристики ОПС
 	double gam_max = 45;
@@ -165,8 +182,11 @@ int main()
 	//modelVKR1.N = 1;
 
 	LA modelVKR2(X_VKR2, vec_coord2, 3000, 2);
-	//modelVKR2.N = 2;
-	
+	LA modelVKR3(X_VKR3, vec_coord3, 3000, 3);
+	LA modelVKR4(X_VKR4, vec_coord4, 3000, 4);
+	LA modelVKR5(X_VKR5, vec_coord5, 3000, 5);
+	//LA modelVKR6(X_VKR2, vec_coord2, 3000, 2);
+
 	LA model(X, X_land, KL, thetaL, 80000, 4200, 2 * GR2RAD, 1);
 	std::cout << "model\n";
 	
@@ -268,12 +288,15 @@ int main()
 
 	listLA.push_back(&modelVKR1);
 	listLA.push_back(&modelVKR2);
+	listLA.push_back(&modelVKR3);
+	listLA.push_back(&modelVKR4);
+	listLA.push_back(&modelVKR5);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.01));
+		listInteg.push_back(new TEuler(0, 1000, 0.05));
 	}
 	std::cout << "integrators\n";
 
