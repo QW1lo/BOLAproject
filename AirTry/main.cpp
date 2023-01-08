@@ -289,8 +289,8 @@ int main()
 	listLA.push_back(&modelVKR1);
 	listLA.push_back(&modelVKR2);
 	listLA.push_back(&modelVKR3);
-	listLA.push_back(&modelVKR4);
-	listLA.push_back(&modelVKR5);
+	//listLA.push_back(&modelVKR4);
+	//listLA.push_back(&modelVKR5);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)

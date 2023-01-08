@@ -220,7 +220,11 @@ public:
 					
 					// Если есть преимущество на дороге и до столкновения больше 23 секунд
 					if (listLA[i]->list_tcas[j][0] == 1 && mod_tau > 23)
+					{
+						if (listLA[i]->mode == 5)
+							listLA[i]->mode = 15;
 						continue;
+					}
 					if (mod_tau < 23)
 					{
 						mod_tau += 0.00001;
