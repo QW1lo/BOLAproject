@@ -81,7 +81,7 @@ private:
     
     double last_psi = 0;
     
-    int count_targ = 0;
+    
     double m = 40000;   // масса ВС
     
     int count = 1;      
@@ -91,7 +91,7 @@ private:
 
     double phi0 = 0;			                            // Начальная широта, долгота и
     double lambda0 = 0;		                                // нулевая высота т.к. стартовая
-    double h0 = 0;											// точка на поверхности Земли
+
                                               // Режим полета 0 - ППМ, 1 - посадка по глиссаде
     double K_land = 0;                                      // Курс ВПП
     double theta_land = 0;                                  // Угол наклона глиссады
@@ -99,10 +99,14 @@ private:
     
 
 public:
+
+    double h0 = 0;											// точка на поверхности Земли
+    int count_targ = 0;
     std::vector<int> list_rotation{ 1};
     std::vector<std::array<int, 2>> list_tcas{ 0 };
     std::vector<Lin::Vector> list_ppm;
     FILE* output;
+    int conflict = 0;
     int N;
     std::vector<Lin::Vector> Way;                           // Для КМЛ путь в ГСК
     int stop_integ = 0;
@@ -110,6 +114,7 @@ public:
     int mode = 0;
     Lin::Vector target;                                     // Вектор В ТСК цели
     int count_t = 0;
+    int count_vert = 0;
     Lin::Vector ppm;                                        // Вектор в ТСК текущего ппм
 
     double gamma = 0;
@@ -454,7 +459,7 @@ public:
                 }
             }
         }
-        if (mode == 1 || mode == 5)
+        if (mode == 1 || mode == 5 || mode == 20 || mode == 21)
         {
             Lin::Vector v_sv;
             Lin::Vector target_sv;

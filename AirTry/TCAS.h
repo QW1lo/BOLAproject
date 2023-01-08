@@ -14,6 +14,7 @@ public:
 	Lin::Vector Xtarget;
 	EllipseCollisionTest elipson{ 10 };
 	double D_min = 20000;
+	double mod_tau_min = 20000;
 	TCAS(std::vector<LA*> listLA0)
 	{
 		listLA = listLA0;
@@ -87,6 +88,19 @@ public:
 		{
 			LA_self->list_tcas[N][0] = 0;
 			LA_self->list_tcas[N][1] = 1;
+			
+			if (ang_v < -5 && ang_v > -85)
+			{
+				LA_self->list_tcas[N][0] = 3; //Влево
+				LA_self->TCAS = 3;
+				LA_self->count_t = 0;
+			}
+			else
+			{
+				LA_self->list_tcas[N][0] = 4; //Вправо
+				LA_self->TCAS = 3;
+				LA_self->count_t = 0;
+			}
 			return 0;
 		}
 
@@ -95,6 +109,11 @@ public:
 		{
 			LA_self->list_tcas[N][0] = 0;
 			LA_self->list_tcas[N][1] = 1;
+
+			LA_self->list_tcas[N][0] = 3; //Влево
+			LA_self->TCAS = 3;
+			LA_self->count_t = 0;
+
 			return 0;
 		}
 
@@ -109,8 +128,9 @@ public:
 			}
 			else
 			{
-				LA_self->list_tcas[N][0] = 0;
-				LA_self->list_tcas[N][1] = 1;
+				LA_self->list_tcas[N][0] = 4;
+				LA_self->TCAS = 3;
+				LA_self->count_t = 0;
 				return 0;
 			}
 			return -1;
@@ -141,6 +161,7 @@ public:
 		double trash = 0;
 		for (int i = 0; i < listLA.size(); ++i)
 		{
+			listLA[i]->conflict = 0;
 			listLA[i]->TCAS = 0;
 			if (listLA[i]->stop_integ == 1)
 				continue;
@@ -148,6 +169,9 @@ public:
 			Xi = { listLA[i]->X[0], listLA[i]->X[1], listLA[i]->X[2] };
 			for (int j = 0; j < listLA.size(); ++j)
 			{
+				if (i == j || listLA[j]->stop_integ == 1)
+					continue;
+
 				Xtarget = { listLA[j]->X[0], listLA[j]->X[1], listLA[j]->X[2] };
 
 				Lin::Vector delX1 = (Xtarget - Xi);
@@ -179,14 +203,21 @@ public:
 				V_rad = (listLA[j]->vxyz - listLA[i]->vxyz) * eD;
 				double t_cpa = (delX[0] * Vdot[0] + delX[2] * Vdot[2]) / (Vdot[0] * Vdot[0] + Vdot[2] * Vdot[2]);
 				double mod_tau = abs((DMOD * DMOD - D * D) / (D * V_rad));
+				if (mod_tau < mod_tau_min)
+					mod_tau_min = mod_tau;
 				
 				
 					
 				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
 				{
+					listLA[i]->conflict++;
+					
 					if (listLA[i]->TCAS != 3)
 						listLA[i]->TCAS = 2;
+					
+					//Расчет преимуществ в движении
 					solve_benefit(listLA[i], listLA[j], delX);
+					
 					// Если есть преимущество на дороге и до столкновения больше 23 секунд
 					if (listLA[i]->list_tcas[j][0] == 1 && mod_tau > 23)
 						break;
@@ -198,103 +229,77 @@ public:
 					double cos1 = listLA[i]->vxyz[0] * delX[0] + listLA[i]->vxyz[2] * delX[2];
 					double angle = -atan2(sin1, cos1) * 180. / M_PI;			// угол между вектором скорости и дельностью до другого ла
 
-					//Якобы завершенная логика
-					if (angle > -10 && angle < 10)
+					if (listLA[i]->list_tcas[j][0] == 3)
 					{
-						double sin_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[2] - listLA[j]->vxyz[0] * listLA[i]->vxyz[2];
-						double cos_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[0] + listLA[i]->vxyz[2] * listLA[j]->vxyz[2];
-						double ang_v = -atan2(sin_v, cos_v) * 180. / M_PI;			// угол между векторами скорости 
-
-						if (ang_v < -5 && ang_v > -85)
-						{
-							listLA[i]->mode = 10;
-							listLA[i]->TCAS = 3;
-							listLA[i]->count_t = 0;
-						}
-						else
-						{
-							listLA[i]->mode = 11;
-							listLA[i]->TCAS = 3;
-							listLA[i]->count_t = 0;
-						}
-					}
-
-					if (angle > - 90 && angle < -10)
-					{
-
 						listLA[i]->mode = 10;
 						listLA[i]->TCAS = 3;
 						listLA[i]->count_t = 0;
 					}
-					if (angle < 90 && angle > 10)
+					if (listLA[i]->list_tcas[j][0] == 4)
 					{
-
 						listLA[i]->mode = 11;
 						listLA[i]->TCAS = 3;
 						listLA[i]->count_t = 0;
 					}
-					if (abs(mod_tau) > 60)
+
+					//Якобы завершенная логика
+				//	if (angle > -10 && angle < 10)
+				//	{
+				//		double sin_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[2] - listLA[j]->vxyz[0] * listLA[i]->vxyz[2];
+				//		double cos_v = listLA[i]->vxyz[0] * listLA[j]->vxyz[0] + listLA[i]->vxyz[2] * listLA[j]->vxyz[2];
+				//		double ang_v = -atan2(sin_v, cos_v) * 180. / M_PI;			// угол между векторами скорости 
+
+				//		if (ang_v < -5 && ang_v > -85)
+				//		{
+				//			listLA[i]->mode = 10;
+				//			listLA[i]->TCAS = 3;
+				//			listLA[i]->count_t = 0;
+				//		}
+				//		else
+				//		{
+				//			listLA[i]->mode = 11;
+				//			listLA[i]->TCAS = 3;
+				//			listLA[i]->count_t = 0;
+				//		}
+				//	}
+
+				//	if (angle > - 95 && angle < -10)
+				//	{
+
+				//		listLA[i]->mode = 10;
+				//		listLA[i]->TCAS = 3;
+				//		listLA[i]->count_t = 0;
+				//	}
+				//	if (angle < 90 && angle > 10)
+				//	{
+
+				//		listLA[i]->mode = 11;
+				//		listLA[i]->TCAS = 3;
+				//		listLA[i]->count_t = 0;
+				//	}
+					if (abs(mod_tau) > 60 && (listLA[i]->mode == 10 || listLA[i]->mode == 11))
 					{
 						listLA[i]->TCAS = 2;
 						listLA[i]->count_t = 0;
 						listLA[i]->mode = 15;
 					}
 				}
-				
-				if ((listLA[i]->TCAS == 1 || listLA[i]->TCAS == 0) && listLA[i]->mode != 5)
-				{
-					listLA[i]->mode = 5;
-					//listLA[i]->list_tcas[0] = 0;
-				}
-					
-				
-				/*
-				double r1 = listLA[i]->X[3] * 60;
-				double r2 = listLA[j]->X[3] * 60;
+			}
+			if ((listLA[i]->TCAS == 1 || listLA[i]->TCAS == 0) && listLA[i]->mode != 5 &&
+				(listLA[i]->TCAS != 21 || listLA[i]->TCAS != 20))
+			{
+				listLA[i]->mode = 5;
+			}
 
-				if (sqrt(delX[0] * delX[0] + delX[2] * delX[2]) < (r1 + r2) && abs(delX[1]) < 500)
-				{
-					listLA[i]->TCAS = 1;
-				}
+			// if mode = поворот
+			// проверяем пересечение окружности разворота со всеми БВС чей TCAS = 0
+			// Если пересекается -> Вертикальное эщелонирование
 
-
-				r1 = listLA[i]->X[3] * 35;
-				r2 = listLA[j]->X[3] * 35;
-
-				if (sqrt(delX[0] * delX[0] + delX[2] * delX[2]) < (r1 + r2) && abs(delX[1]) < 200)
-				{
-					
-					listLA[i]->TCAS = 2;
-					if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
-					{
-						listLA[i]->TCAS = 3;
-							if (listLA[i]->X[2] > listLA[j]->X[2])
-								addPPMs(listLA[i], 1);
-							else
-								addPPMs(listLA[i], -1);
-					}
-					//else
-					//	addPPMs(listLA[j], j);
-					break;
-				}
-				*/
-
-				// TODO Если курс встречный набор высоты и отворот, курс можно посчитать по разности векторов высчитав угол как арктангенс
-				//if (D < 2200 && abs(delX[1]) < 200)
-				//{
-				//	if (listLA[i]->X[0] - listLA[j]->X[0] > 0)
-				//	{
-				//		listLA[i]->TCAS = 2;
-				//		if (listLA[i]->X[2] > listLA[j]->X[2])
-				//			addPPMs(listLA[i], 1);
-				//		else
-				//			addPPMs(listLA[i], -1);
-				//	}
-				//	//else
-				//	//	addPPMs(listLA[j], j);
-				//	break;
-				//}
-				//listLA[i]->TCAS = 0;
+			if (listLA[i]->conflict > 1 && listLA[i]->count_vert==0)
+			{
+				listLA[i]->mode = 20;
+				//listLA[i]->h0 = listLA[i]->h0 + 350;
+				listLA[i]->count_vert++;
 			}
 		}
 	};
