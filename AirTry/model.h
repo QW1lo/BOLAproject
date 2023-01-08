@@ -494,12 +494,12 @@ public:
             {
                 if ((X[1] - ppm[1]) < 0)
                 {
-                    theta = 15 * GR2RAD;
+                    theta = 7.5 * GR2RAD;
             
                 }
                 else
                 {
-                    theta = -15 * GR2RAD;
+                    theta = -7.5 * GR2RAD;
                 }
             
             }

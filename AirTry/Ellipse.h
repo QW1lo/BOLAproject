@@ -184,7 +184,7 @@ public:
         return collide(x0, y0, wx0, wy0, hw0, x1, y1, wx1, wy1, hw1);
     }
 
-    bool collide_la(LA* la0, LA* la1,double time_safe, double safezoneback, double safezoneside) const
+    bool collide_la(LA* la0, LA* la1, double time_safe, double safezoneback, double safezoneside) const
     {
         double x0, y0, a0, b0, theta0, x1, y1, a1, b1, theta1;
 
@@ -202,6 +202,42 @@ public:
         y1 = la1->X[0] + (a1 / 2 - safezoneside) * sin(theta1);
 
         // Podaem a/2 & b/2 potomu chto zdes a - eto diagonal, a v algoritme a eto radius
+        return collide_ab(x0, y0, a0, b0, theta0, x1, y1, a1, b1, theta1);
+    }
+
+    bool collide_maneuver(LA* la0, LA* la1, double time_safe, double safezoneback, double safezoneside, int mode) const
+    {
+        double x0, y0, a0, b0, theta0, x1, y1, a1, b1, theta1;
+        double R;
+        double w = 3 * M_PI / 180;
+
+
+        R = la0->X[3] / w;
+        R = R + la0->X[3] * 20;
+        a0 = 2 * R;
+        b0 = 2 * R;
+        theta0 = 0;
+
+        Lin::Vector res(3);
+        res[0] = la0->X[3] * cos(la0->X[4]);
+        res[2] = -la0->X[3] * sin(la0->X[4]);
+
+        if (mode == 11)
+            res = res.rotateByRodrig(res, -90 * M_PI / 180, 2);
+        else
+            res = res.rotateByRodrig(res, 90 * M_PI / 180, 2);
+        
+        res = res * R;
+        x0 = la0->X[2] - res[2]; 
+        y0 = la0->X[0] - res[0];
+        
+
+        a1 = (la1->X[3] * time_safe + safezoneback);
+        b1 = safezoneside * 2;
+        theta1 = la1->X[4] + M_PI / 2;
+        x1 = la1->X[2] + (a1 / 2 - safezoneside) * cos(theta1);
+        y1 = la1->X[0] + (a1 / 2 - safezoneside) * sin(theta1);
+
         return collide_ab(x0, y0, a0, b0, theta0, x1, y1, a1, b1, theta1);
     }
 

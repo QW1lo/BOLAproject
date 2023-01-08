@@ -175,7 +175,7 @@ public:
 				Xtarget = { listLA[j]->X[0], listLA[j]->X[1], listLA[j]->X[2] };
 
 				Lin::Vector delX1 = (Xtarget - Xi);
-				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220. * 60. / 35, 1220. * 60. / 35.) && abs(delX1[1]) < 500)
+				if (elipson.collide_la(listLA[i], listLA[j], 60., 1220. * 60. / 35, 1220. * 60. / 35.) && abs(delX1[1]) < 260)
 				{
 					listLA[i]->TCAS = 1;
 				}
@@ -208,7 +208,7 @@ public:
 				
 				
 					
-				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 300)
+				if (elipson.collide_la(listLA[i], listLA[j], 35., 1220., 1220.) && abs(delX[1]) < 185)
 				{
 					listLA[i]->conflict++;
 					
@@ -220,7 +220,7 @@ public:
 					
 					// Если есть преимущество на дороге и до столкновения больше 23 секунд
 					if (listLA[i]->list_tcas[j][0] == 1 && mod_tau > 23)
-						break;
+						continue;
 					if (mod_tau < 23)
 					{
 						mod_tau += 0.00001;
@@ -296,13 +296,41 @@ public:
 			// Если пересекается -> Вертикальное эщелонирование
 			// Для начала сделать так чтобы синий взлетел оранжевый снизил
 
-			if (listLA[i]->conflict > 1 && listLA[i]->count_vert==0)
+			//if (listLA[i]->conflict > 1 && listLA[i]->count_vert==0)
+			//{
+			//	// Чтобы избежать h0 + миллион можно проверять h0 которую хотим и h таргета а мб и h0
+			//	// А воззможно это условие и после проверки всех i стоит ебануть
+			//	listLA[i]->mode = 20;
+			//	//listLA[i]->h0 = listLA[i]->h0 + 350;
+			//	listLA[i]->count_vert++;
+			//}
+
+			
+		}
+		for (int i = 0; i < listLA.size(); ++i)
+		{
+			if (listLA[i]->mode == 10 || listLA[i]->mode == 11)
 			{
-				// Чтобы избежать h0 + миллион можно проверять h0 которую хотим и h таргета а мб и h0
-				// А воззможно это условие и после проверки всех i стоит ебануть
-				listLA[i]->mode = 20;
-				//listLA[i]->h0 = listLA[i]->h0 + 350;
-				listLA[i]->count_vert++;
+				for (int j = 0; j < listLA.size(); ++j)
+				{
+					// Спорный момент про tCAS != 0 
+					if (i == j || listLA[j]->stop_integ == 1 || listLA[j]->TCAS > 1)
+						continue;
+					if (elipson.collide_maneuver(listLA[i], listLA[j], 35., 1220., 1220., listLA[i]->mode) && 
+						abs(listLA[i]->X[1] - listLA[j]->X[1]) < 180)
+					{
+						int one = 1;
+						listLA[i]->mode = 20;
+						if (abs(listLA[i]->h0 - listLA[j]->h0) < 200)
+						{
+							if (listLA[i]->N == 1)
+								one = -1;
+							listLA[i]->h0 = listLA[i]->h0 + 350 * one;
+						}
+					}
+
+
+				}
 			}
 		}
 	};

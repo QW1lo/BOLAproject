@@ -91,6 +91,24 @@ ellipse3 = patches.Ellipse(
                 fill=False
                         )
 
+ellipse4 = patches.Ellipse(
+                xy=(10823.601729819708, 4352.7058610719114),
+                width=11729.577951308233,
+                height=11729.577951308233,
+                angle=math.atan2(0, w4[0]) * 180 / math.pi,
+                color= 'orange',
+                fill=False
+                        )
+ellipse5 = patches.Ellipse(
+                xy=(10317.428005094915, 5466.5797499472728),
+                width=6470.0000000000000,
+                height=2440.0000000000000,
+                angle=1.4700295629911875 * 180 / math.pi,
+                color= 'orange',
+                fill=False
+                        )
+
+
 x1 = -4469.881
 z1 = -15315.85921
 
@@ -207,9 +225,9 @@ arrow22 = patches.Arrow(
                 color= 'orange',
                 fill=False
             )
-ax1.add_patch(ellipse)
-ax1.add_patch(ellipse2)
-ax1.add_patch(ellipse3)
+#ax1.add_patch(ellipse)
+ax1.add_patch(ellipse4)
+ax1.add_patch(ellipse5)
 # ax1.add_patch(ellipseLA)
 # ax1.add_patch(ellipseLA2)
 # ax1.add_patch(arrow)
