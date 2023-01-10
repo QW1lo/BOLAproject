@@ -133,11 +133,11 @@ int main()
 	Lin::Vector X_VKR6; 
 	Lin::Vector X_VKR5; 
 
-	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * 0 };
-	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * 120 };
-	X_VKR3 = { phi1, lambda1, h1, 150, M_PI / 180 * -120 };
-	X_VKR4 = { phi2, lambda2, h2, 150, M_PI / 180 * 0 };
-	X_VKR5 = { phi1, lambda1, h1, 150, M_PI / 180 * 0 };
+	X_VKR1 = { phi1, lambda1, h1, 200, M_PI / 180 * 0 };
+	X_VKR2 = { phi2, lambda2, h2, 200, M_PI / 180 * 120 };
+	X_VKR3 = { phi1, lambda1, h1, 200, M_PI / 180 * -120 };
+	X_VKR4 = { phi2, lambda2, h2, 200, M_PI / 180 * 0 };
+	X_VKR5 = { phi1, lambda1, h1, 200, M_PI / 180 * 0 };
 	//X_VKR6 = { phi2, lambda2, h2, 150, M_PI / 180 * 80 };
 
 	// Ìàññèâ ïïì
@@ -284,13 +284,13 @@ int main()
 	//listLA.push_back(&model29);
 	//listLA.push_back(&model30);
 	
-	// ÏÏÌ ÄËß ÂÊÐ
+	// ËÀ ÄËß ÂÊÐ
 
 	listLA.push_back(&modelVKR1);
 	listLA.push_back(&modelVKR2);
 	listLA.push_back(&modelVKR3);
-	//listLA.push_back(&modelVKR4);
-	//listLA.push_back(&modelVKR5);
+	listLA.push_back(&modelVKR4);
+	listLA.push_back(&modelVKR5);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)

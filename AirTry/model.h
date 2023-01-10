@@ -563,6 +563,20 @@ public:
         // vlevo
         if (mode == 10)
         {
+            ppm = airway();
+            if (abs(X[1] - ppm[1]) > 0.5)
+            {
+                if ((X[1] - ppm[1]) < 0)
+                {
+                    theta = 7.5 * GR2RAD;
+
+                }
+                else
+                {
+                    theta = -7.5 * GR2RAD;
+                }
+
+            }
             if (count_t == 0)
             {
                 T0 = t;
@@ -579,6 +593,21 @@ public:
         // vpravo
         if (mode == 11)
         {
+            ppm = airway();
+            if (abs(X[1] - ppm[1]) > 0.5)
+            {
+                if ((X[1] - ppm[1]) < 0)
+                {
+                    theta = 7.5 * GR2RAD;
+
+                }
+                else
+                {
+                    theta = -7.5 * GR2RAD;
+                }
+
+            }
+
             if (count_t == 0)
             {
                 T0 = t;
