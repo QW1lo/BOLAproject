@@ -842,7 +842,7 @@ public:
         double angle = -atan2(sin1, cos1);
         Lin::Vector tmp;
         tmp = way22.norm();
-        tmp = tmp * 1000;
+        tmp = tmp * 2500;
         way2 = way22 - tmp;
 
         way2 = Rotate('y', way2, angle);

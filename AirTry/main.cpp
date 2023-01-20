@@ -138,7 +138,11 @@ int main()
 	X_VKR3 = { phi1, lambda1, h1, 200, M_PI / 180 * -120 };
 	X_VKR4 = { phi2, lambda2, h2, 200, M_PI / 180 * 0 };
 	X_VKR5 = { phi1, lambda1, h1, 200, M_PI / 180 * 0 };
+
 	//X_VKR6 = { phi2, lambda2, h2, 150, M_PI / 180 * 80 };
+
+	X_VKR1 = { phi1, lambda1, h1, 150, M_PI / 180 * -25 };
+	X_VKR2 = { phi2, lambda2, h2, 150, M_PI / 180 * 90 };
 
 	// Массив ппм
 	KML_Transformer kml_trns;
@@ -153,11 +157,14 @@ int main()
 	// Для первого маршрута
 	vec_coord = parser("PYT_VKR6-6.kml");					    // Для второого маршрута
 	vec_coord2 = parser("PYT_VKR6-2.kml");
+	
 	vec_coord3 = parser("PYT_VKR6-10.kml");					    // Для второого маршрута
 	vec_coord4 = parser("PYT_VKR6left.kml");					    // Для второого маршрута
 	vec_coord5 = parser("PYT_VKR6right.kml");
-	vec_coord6 = parser("PYT_VKR3.kml");
+	//vec_coord6 = parser("PYT_VKR3.kml");
 
+	vec_coord = parser("PYT_VKR1.kml");
+	vec_coord2 = parser("PYT_VKR31.kml");
 	// Характеристики ОПС
 	double gam_max = 45;
 	double gam_min = -45;
@@ -288,15 +295,15 @@ int main()
 
 	listLA.push_back(&modelVKR1);
 	listLA.push_back(&modelVKR2);
-	listLA.push_back(&modelVKR3);
-	listLA.push_back(&modelVKR4);
-	listLA.push_back(&modelVKR5);
+	//listLA.push_back(&modelVKR3);
+	//listLA.push_back(&modelVKR4);
+	//listLA.push_back(&modelVKR5);
 
 	vector<TEuler*> listInteg;
 	for (int i = 0; i < listLA.size(); ++i)
 	{
 		//TEuler *X = new TEuler(0, 1000, 0.1);
-		listInteg.push_back(new TEuler(0, 1000, 0.05));
+		listInteg.push_back(new TEuler(0, 1000, 0.1));
 	}
 	std::cout << "integrators\n";
 

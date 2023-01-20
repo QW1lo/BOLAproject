@@ -281,7 +281,7 @@ public:
 				//		listLA[i]->TCAS = 3;
 				//		listLA[i]->count_t = 0;
 				//	}
-					if (abs(mod_tau) > 60 && (listLA[i]->mode == 10 || listLA[i]->mode == 11))
+					if (abs(mod_tau) > 37 && (listLA[i]->mode == 10 || listLA[i]->mode == 11))
 					{
 						listLA[i]->TCAS = 2;
 						listLA[i]->count_t = 0;

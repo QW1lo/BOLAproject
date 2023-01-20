@@ -157,9 +157,9 @@ class GPSVis(object):
             canvas.axes2.scatter(d, h, s=150)
 
             rectan = patches.Rectangle(
-                    (d - a_el / 2, h - 200 / 2),
-                    a_el,
-                    200,
+                    (d - 300 / 2, h - 185 / 2),
+                    300,
+                    185,
                     edgecolor=self.color_list_TCAS[LA[11]],
                     fill=False
             )
@@ -188,23 +188,51 @@ class GPSVis(object):
         ind_color = 0
         drom1 = (56.1439, 34.9885)
         drom2 = (56.1424, 34.9824)
+
+        # Второй сценарий
+
         x_droml11, y_droml11 = self.scale_to_img((56.077251, 34.8289), (self.result_image.size[0], self.result_image.size[1]))
         x_droml12, y_droml12 = self.scale_to_img((56.302061, 35.283497), (self.result_image.size[0], self.result_image.size[1]))
-
-        # x_droml21, y_droml21 = self.scale_to_img((56.08095, 35.3224956),
+        # x_droml21, y_droml21 = self.scale_to_img((56.186645, 35.21232),
         #                                          (self.result_image.size[0], self.result_image.size[1]))
-        # x_droml22, y_droml22 = self.scale_to_img((56.31982, 34.748876),
+        # x_droml22, y_droml22 = self.scale_to_img((56.20168, 34.716096),
         #                                          (self.result_image.size[0], self.result_image.size[1]))
-        x_droml21, y_droml21 = self.scale_to_img((56.186645, 35.21232),
+
+        x_droml21, y_droml21 = self.scale_to_img((56.08095, 35.3224956),
                                                  (self.result_image.size[0], self.result_image.size[1]))
-        x_droml22, y_droml22 = self.scale_to_img((56.20168, 34.716096),
+        x_droml22, y_droml22 = self.scale_to_img((56.31982, 34.748876),
                                                  (self.result_image.size[0], self.result_image.size[1]))
 
+        # x_droml11, y_droml11 = self.scale_to_img((55.963820, 35.041349),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml12, y_droml12 = self.scale_to_img((56.47100, 35.095398),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml21, y_droml21 = self.scale_to_img((56.297306, 35.407468),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml22, y_droml22 = self.scale_to_img((56.099554, 34.78608),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        #
+        # x_droml31, y_droml31 = self.scale_to_img((56.325373, 34.75626),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml32, y_droml32 = self.scale_to_img((56.07454, 35.31111),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml41, y_droml41 = self.scale_to_img((55.96699, 34.972325),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml42, y_droml42 = self.scale_to_img((56.476774, 34.98946),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        #
+        # x_droml51, y_droml51 = self.scale_to_img((55.9625717, 35.1166329),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
+        # x_droml52, y_droml52 = self.scale_to_img((56.461605, 35.20948),
+        #                                          (self.result_image.size[0], self.result_image.size[1]))
 
         x_drom, y_drom = self.scale_to_img((56.1439, 34.9885), (self.result_image.size[0], self.result_image.size[1]))
         size = 8
-        draw.line([x_droml11, y_droml11, x_droml12, y_droml12], fill='black', width=3)
+        draw.line([x_droml11, y_droml11, x_droml12, y_droml12], fill='black', width=4)
         draw.line([x_droml21, y_droml21, x_droml22, y_droml22], fill='black', width=4)
+        #draw.line([x_droml31, y_droml31, x_droml32, y_droml32], fill='black', width=4)
+        #draw.line([x_droml41, y_droml41, x_droml42, y_droml42], fill='black', width=4)
+        #draw.line([x_droml51, y_droml51, x_droml52, y_droml52], fill='black', width=4)
         draw.ellipse((x_drom-size,y_drom-size,x_drom+size,y_drom+size), fill='red')
         
         for LA in coord:
